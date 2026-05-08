@@ -1,0 +1,222 @@
+{
+  "$schema": "https://opencode.ai/theme.json",
+  "defs": {
+    "dark2": "#19181a",
+    "dark1": "#221f22",
+    "background": "#2d2a2e",
+    "text": "#fcfcfa",
+    "accent1": "#ff6188",
+    "accent2": "#fc9867",
+    "accent3": "#ffd866",
+    "accent4": "#a9dc76",
+    "accent5": "#78dce8",
+    "accent6": "#ab9df2",
+    "dimmed1": "#c1c0c0",
+    "dimmed2": "#939293",
+    "dimmed3": "#727072",
+    "dimmed4": "#5b595c",
+    "dimmed5": "#403e41"
+  },
+  "theme": {
+    "primary": {
+      "dark": "accent6",
+      "light": "accent1"
+    },
+    "secondary": {
+      "dark": "accent5",
+      "light": "accent5"
+    },
+    "accent": {
+      "dark": "accent3",
+      "light": "accent3"
+    },
+    "error": {
+      "dark": "accent1",
+      "light": "accent1"
+    },
+    "warning": {
+      "dark": "accent2",
+      "light": "accent2"
+    },
+    "success": {
+      "dark": "accent4",
+      "light": "accent4"
+    },
+    "info": {
+      "dark": "accent5",
+      "light": "accent5"
+    },
+    "text": {
+      "dark": "text",
+      "light": "dark2"
+    },
+    "textMuted": {
+      "dark": "dimmed1",
+      "light": "dimmed4"
+    },
+    "background": {
+      "dark": "background",
+      "light": "text"
+    },
+    "backgroundPanel": {
+      "dark": "dark1",
+      "light": "dimmed1"
+    },
+    "backgroundElement": {
+      "dark": "dark1",
+      "light": "dimmed1"
+    },
+    "border": {
+      "dark": "dimmed4",
+      "light": "dimmed2"
+    },
+    "borderActive": {
+      "dark": "dimmed3",
+      "light": "dimmed3"
+    },
+    "borderSubtle": {
+      "dark": "dimmed5",
+      "light": "dimmed1"
+    },
+    "diffAdded": {
+      "dark": "accent4",
+      "light": "accent4"
+    },
+    "diffRemoved": {
+      "dark": "accent1",
+      "light": "accent1"
+    },
+    "diffContext": {
+      "dark": "dimmed3",
+      "light": "dimmed2"
+    },
+    "diffHunkHeader": {
+      "dark": "dimmed4",
+      "light": "dimmed2"
+    },
+    "diffHighlightAdded": {
+      "dark": "accent4",
+      "light": "accent4"
+    },
+    "diffHighlightRemoved": {
+      "dark": "accent1",
+      "light": "accent1"
+    },
+    "diffAddedBg": {
+      "dark": "#1a2f1a",
+      "light": "#e8f5e9"
+    },
+    "diffRemovedBg": {
+      "dark": "#2f1a1a",
+      "light": "#ffebee"
+    },
+    "diffContextBg": {
+      "dark": "dark1",
+      "light": "dimmed1"
+    },
+    "diffLineNumber": {
+      "dark": "dimmed3",
+      "light": "dimmed2"
+    },
+    "diffAddedLineNumberBg": {
+      "dark": "#1a2f1a",
+      "light": "#e8f5e9"
+    },
+    "diffRemovedLineNumberBg": {
+      "dark": "#2f1a1a",
+      "light": "#ffebee"
+    },
+    "markdownText": {
+      "dark": "text",
+      "light": "dark2"
+    },
+    "markdownHeading": {
+      "dark": "accent5",
+      "light": "accent5"
+    },
+    "markdownLink": {
+      "dark": "accent6",
+      "light": "accent6"
+    },
+    "markdownLinkText": {
+      "dark": "accent5",
+      "light": "accent5"
+    },
+    "markdownCode": {
+      "dark": "accent4",
+      "light": "accent4"
+    },
+    "markdownBlockQuote": {
+      "dark": "dimmed2",
+      "light": "dimmed3"
+    },
+    "markdownEmph": {
+      "dark": "accent2",
+      "light": "accent2"
+    },
+    "markdownStrong": {
+      "dark": "accent3",
+      "light": "accent3"
+    },
+    "markdownHorizontalRule": {
+      "dark": "dimmed4",
+      "light": "dimmed2"
+    },
+    "markdownListItem": {
+      "dark": "accent5",
+      "light": "accent5"
+    },
+    "markdownListEnumeration": {
+      "dark": "accent2",
+      "light": "accent2"
+    },
+    "markdownImage": {
+      "dark": "accent6",
+      "light": "accent6"
+    },
+    "markdownImageText": {
+      "dark": "accent5",
+      "light": "accent5"
+    },
+    "markdownCodeBlock": {
+      "dark": "text",
+      "light": "dark2"
+    },
+    "syntaxComment": {
+      "dark": "dimmed3",
+      "light": "dimmed2"
+    },
+    "syntaxKeyword": {
+      "dark": "accent1",
+      "light": "accent1"
+    },
+    "syntaxFunction": {
+      "dark": "accent4",
+      "light": "accent4"
+    },
+    "syntaxVariable": {
+      "dark": "text",
+      "light": "dark2"
+    },
+    "syntaxString": {
+      "dark": "accent3",
+      "light": "accent3"
+    },
+    "syntaxNumber": {
+      "dark": "accent6",
+      "light": "accent6"
+    },
+    "syntaxType": {
+      "dark": "accent5",
+      "light": "accent5"
+    },
+    "syntaxOperator": {
+      "dark": "accent1",
+      "light": "accent1"
+    },
+    "syntaxPunctuation": {
+      "dark": "text",
+      "light": "dark2"
+    }
+  }
+}

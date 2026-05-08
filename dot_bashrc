@@ -1,0 +1,110 @@
+# Enable the subsequent settings only in interactive sessions
+case $- in
+  *i*) ;;
+    *) return;;
+esac
+
+# User configuration
+
+# remove switch to zsh warning
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+#vscode as default editor
+export EDITOR="codium"
+export GIT_EDITOR="codium"
+export VISUAL="codium"
+
+# brew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH=/usr/local/bin:$PATH
+
+#fzf
+set rtp+=/opt/homebrew/opt/fzf
+
+#bat
+export BAT_THEME="MonokaiPro"
+
+# bash completion
+[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+
+# mac ports
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+
+# playdate
+export PLAYDATE_SDK_PATH="/Users/jennyleidig/Developer/PlaydateSDK"
+export PATH="/Users/jennyleidig/Developer/PlaydateSDK/bin:$PATH"
+
+# aliases
+alias pico8="/Applications/PICO-8.app/Contents/MacOS/pico8; exit"
+alias hg="history | grep"
+alias cat="bat --paging=never"
+alias grep="rg"
+alias ls="eza"
+alias cd="z"
+alias cdi="zi"
+alias processing="/Applications/Processing.app/Contents/MacOS/Processing"
+alias processing-cli="/Applications/Processing.app/Contents/MacOS/Processing cli"
+
+#python
+export PATH="$HOME/.local/bin:$PATH"
+
+# Load Angular CLI autocompletion.
+source <(ng completion script)
+
+#flash player
+export FLEX_HOME="/Users/jennyleidig/Documents/Adobe/Flash/apache-flex-4.16.1-air-51.1.3.12/apache-flex-sdk-4.16.1-bin"
+
+# Docker
+#expose docker to colima
+export DOCKER_HOST="unix://$HOME/.colima/docker.sock"
+
+# qdrant
+alias qdrant="docker-compose --file=$HOME/.roo/indexing/qdrant/docker-compose.yaml up -d"
+
+#mise
+eval "$(mise activate bash)"
+
+#clangd
+export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
+
+# oh my bash
+
+# Path to your oh-my-bash installation.
+export OSH='/Users/jennyleidig/.oh-my-bash'
+
+OSH_THEME="ht"
+
+OMB_USE_SUDO=true
+
+completions=(
+  git
+  composer
+  ssh
+  mise
+)
+
+aliases=(
+  general
+)
+
+plugins=(
+  git
+  bashmarks
+  zoxide
+)
+
+source "$OSH"/oh-my-bash.sh
+
+# pnpm
+export PNPM_HOME="/Users/jennyleidig/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+# theos
+export THEOS=~/theos
+
+export PATH=$PATH:/Users/jennyleidig/.spicetify

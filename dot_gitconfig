@@ -1,0 +1,14 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+	name = jennymaeleidig
+	email = jennymaeleidig@gmail.com
+[init]
+	defaultBranch = main
+[push]
+	default = current
+[pull]
+	ff = only
+[core]
+	editor = codium -n --wait
+	excludesfile = /Users/jennyleidig/.gitignore

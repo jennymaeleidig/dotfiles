@@ -1,0 +1,22 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "auto_collapse_reasoning": true,
+  "permission": {
+    "bash": "allow"
+  },
+  "compaction": {
+    "auto": true,
+    "prune": true
+  },
+  "experimental": {
+    "codebase_search": true,
+    "semantic_indexing": true,
+    "openTelemetry": true
+  },
+  "indexing": {
+    "enabled": true,
+    "provider": "ollama",
+    "model": "mxbai-embed-large:latest",
+    "dimension": 1024
+  }
+}
