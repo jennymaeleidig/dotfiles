@@ -1,14 +1,17 @@
+{{ $mistralEnv := env "RAYCAST_MISTRAL_API_KEY" }}
+{{ $nvidiaEnv := env "RAYCAST_NVIDIA_API_KEY" }}
 {{ $mistralKey := "" }}
 {{ $nvidiaKey := "" }}
-{{- if not .chezmoi.env.RAYCAST_MISTRAL_API_KEY -}}
+
+{{- if not $mistralEnv -}}
 {{   $mistralKey = promptString "Enter your Mistral API key" -}}
 {{ end -}}
-{{- if not .chezmoi.env.RAYCAST_NVIDIA_API_KEY -}}
+{{- if not $nvidiaEnv -}}
 {{   $nvidiaKey = promptString "Enter your NVIDIA API key" -}}
 {{ end -}}
 
-{{ $mistralKey = or $mistralKey .chezmoi.env.RAYCAST_MISTRAL_API_KEY | default "" }}
-{{ $nvidiaKey = or $nvidiaKey .chezmoi.env.RAYCAST_NVIDIA_API_KEY | default "" }}
+{{ $mistralKey = or $mistralKey $mistralEnv | default "" }}
+{{ $nvidiaKey = or $nvidiaKey $nvidiaEnv | default "" }}
 
 [data]
     raycast_mistral_api_key = {{ $mistralKey | quote }}
