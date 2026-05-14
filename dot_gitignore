@@ -17,6 +17,3 @@ Icon?
 # Compiled code & logs
 *.log
 __pycache__/
-
-# Third Party Tools
-.kilo/

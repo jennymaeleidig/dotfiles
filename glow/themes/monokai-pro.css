@@ -1,0 +1,88 @@
+/* Monokai Pro Theme for highlight.js
+ * Based on Monokai Pro colors (https://monokai.pro/)
+ * Adapted from highlight.js monokai theme format
+ */
+
+pre code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 1em;
+}
+
+code.hljs {
+  padding: 3px 5px;
+}
+
+.hljs {
+  background: #2c292d;
+  color: #fdf9f3;
+}
+
+.hljs-keyword,
+.hljs-literal,
+.hljs-name,
+.hljs-selector-tag,
+.hljs-strong,
+.hljs-tag {
+  color: #ff6188;
+}
+
+.hljs-code {
+  color: #ffd866;
+}
+
+.hljs-attribute,
+.hljs-link,
+.hljs-regexp,
+.hljs-symbol {
+  color: #ab9df2;
+}
+
+.hljs-addition,
+.hljs-built_in,
+.hljs-bullet,
+.hljs-emphasis,
+.hljs-section,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-string,
+.hljs-subst,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-title,
+.hljs-type,
+.hljs-variable {
+  color: #a9dc76;
+}
+
+.hljs-class .hljs-title,
+.hljs-title.class_ {
+  color: #fdf9f3;
+}
+
+.hljs-comment,
+.hljs-deletion,
+.hljs-meta,
+.hljs-quote {
+  color: #727072;
+}
+
+.hljs-doctag,
+.hljs-keyword,
+.hljs-literal,
+.hljs-section,
+.hljs-selector-id,
+.hljs-selector-tag,
+.hljs-title,
+.hljs-type {
+  font-weight: 700;
+}
+
+.hljs-number,
+.hljs-operator {
+  color: #fc9867;
+}
+
+.hljs-attr {
+  color: #78dce8;
+}
