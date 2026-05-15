@@ -1,3 +1,6 @@
 openspec/
 .vscode/
-glow/themes/
+# pi agent files - sensitive data (auth, sessions) excluded
+dot_pi/agent/auth.json
+dot_pi/agent/sessions/
+dot_pi/agent/bin/

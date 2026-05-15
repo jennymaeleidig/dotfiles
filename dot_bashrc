@@ -82,6 +82,8 @@ completions=(
   composer
   ssh
   mise
+  pi
+  glow
 )
 
 aliases=(
