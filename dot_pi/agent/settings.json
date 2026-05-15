@@ -6,8 +6,9 @@
     "npm:pi-island",
     "../../Documents/Tools/pi-search-hub",
     "npm:context-mode",
-    "npm:pi-opencode-bridge"
+    "npm:pi-workspace-history"
   ],
+
   "defaultProvider": "github-copilot",
   "defaultModel": "claude-haiku-4.5",
   "defaultThinkingLevel": "medium",
