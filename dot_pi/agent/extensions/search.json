@@ -1,0 +1,17 @@
+{
+  "defaultBackend": "searxng",
+  "backends": {
+    "duckduckgo": { "enabled": false },
+    "jina":       { "enabled": false, "apiKey": "JINA_API_KEY" },
+    "marginalia": { "enabled": false },
+    "serper":     { "enabled": false, "apiKey": "SERPER_API_KEY" },
+    "tavily":     { "enabled": false, "apiKey": "TAVILY_API_KEY" },
+    "brave":      { "enabled": false, "apiKey": "BRAVE_API_KEY" },
+    "exa":        { "enabled": false, "apiKey": "EXA_API_KEY" },
+    "firecrawl":  { "enabled": false, "apiKey": "FIRECRAWL_API_KEY" },
+    "langsearch": { "enabled": false, "apiKey": "LANGSEARCH_API_KEY" },
+    "websearchapi":{ "enabled": false, "apiKey": "WEBSEARCHAPI_API_KEY" },
+    "perplexity": { "enabled": false, "apiKey": "PERPLEXITY_API_KEY" },
+    "searxng":    { "enabled": true, "instanceUrl": "https://search.barb.date" }
+  }
+}
