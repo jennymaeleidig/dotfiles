@@ -44,6 +44,7 @@ alias cd="z"
 alias cdi="zi"
 alias processing="/Applications/Processing.app/Contents/MacOS/Processing"
 alias processing-cli="/Applications/Processing.app/Contents/MacOS/Processing cli"
+alas code="codium"
 
 #scripts
 export PATH="${HOME}/.local/share/chezmoi/scripts:$PATH"
