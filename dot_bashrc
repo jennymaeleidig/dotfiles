@@ -45,6 +45,9 @@ alias cdi="zi"
 alias processing="/Applications/Processing.app/Contents/MacOS/Processing"
 alias processing-cli="/Applications/Processing.app/Contents/MacOS/Processing cli"
 
+#scripts
+export PATH="${HOME}/.local/share/chezmoi/scripts:$PATH"
+
 #python
 export PATH="$HOME/.local/bin:$PATH"
 

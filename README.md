@@ -7,12 +7,7 @@
 
 ## todo
 
-- AI:
-  - Quick web search command / alias for use in terminal.
-    - always provide links
-    - be consise
-    - direct answers, do not speculate
-  - Quick ask command / alias for use in terminal.
+- lazy nvim updates
 - config
   - cleanup bashrc / templatize
 - style

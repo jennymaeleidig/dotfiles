@@ -4,3 +4,5 @@ openspec/
 dot_pi/agent/auth.json
 dot_pi/agent/sessions/
 dot_pi/agent/bin/
+.pi/
+openspec/

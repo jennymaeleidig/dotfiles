@@ -6,7 +6,8 @@
     "npm:pi-island",
     "../../Documents/Tools/pi-search-hub",
     "npm:context-mode",
-    "npm:pi-workspace-history"
+    "npm:pi-workspace-history",
+    "npm:@dreki-gg/pi-context7"
   ],
 
   "defaultProvider": "github-copilot",

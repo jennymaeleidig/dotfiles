@@ -1,3 +1,4 @@
-**/private_*
 **/literal_*
 .vscode/
+.pi/
+openspec/

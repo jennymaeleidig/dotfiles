@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# Search web agent command
+# Usage: search-web <query>
+
+SEARCH_PROMPT_FILE="${HOME}/.pi/agent/prompts/search-web.md"
+SEARCH_HUB_EXTENSION="${HOME}/Documents/Tools/pi-search-hub"
+ISLAND_EXTENSION="/opt/homebrew/lib/node_modules/pi-island"
+CONTEXT7_EXTENSION="/opt/homebrew/lib/node_modules/@dreki-gg/pi-context7/extensions/context7"
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: web [OPTIONS] <query>"
+  exit 1
+fi
+
+if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
+  cat << 'EOF'
+Usage: web [OPTIONS] <query>
+
+Search the web using pi agent with web_search and web_read tools.
+
+OPTIONS:
+  -h, --help    Show this help message and exit
+
+EXAMPLES:
+  web "how to use bash arrays"
+  web --help
+EOF
+  exit 0
+fi
+
+# Read the search-web prompt as system prompt
+SYSTEM_PROMPT=$(cat "$SEARCH_PROMPT_FILE")
+
+# Run pi with:
+# - System prompt from search-web.md
+# - Only search-hub and island extensions loaded
+# - No built-in tools
+# - No prompt templates
+# - Print mode
+# - The query as the message
+# - Output piped through mq and glow
+pi \
+  --thinking off \
+  --system-prompt "$SYSTEM_PROMPT" \
+  --no-extensions \
+  -e "$SEARCH_HUB_EXTENSION" \
+  -e "$ISLAND_EXTENSION" \
+  -e "$CONTEXT7_EXTENSION" \
+  --no-builtin-tools \
+  --no-prompt-templates \
+  --no-skills \
+  -p \
+  "$*" | mq -I markdown '.' | glow

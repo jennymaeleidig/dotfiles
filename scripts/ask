@@ -1,0 +1,86 @@
+#!/bin/bash
+
+# Ask agent command - reasoning and thoughtful answers
+# Usage: ask <query>
+
+ASK_PROMPT_FILE="${HOME}/.pi/agent/prompts/ask-llm.md"
+SEARCH_HUB_EXTENSION="${HOME}/Documents/Tools/pi-search-hub"
+ISLAND_EXTENSION="/opt/homebrew/lib/node_modules/pi-island"
+CONTEXT7_EXTENSION="/opt/homebrew/lib/node_modules/@dreki-gg/pi-context7"
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: ask [OPTIONS] <query>"
+  exit 1
+fi
+
+THINKING_LEVEL=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --help|-h)
+      cat << 'EOF'
+Usage: ask [OPTIONS] <query>
+
+Get thoughtful, reasoned answers with deep thinking and practical guidance.
+Has access to web search for current information when needed.
+
+OPTIONS:
+  -h, --help              Show this help message and exit
+  --thinking <level>      Set thinking level for reasoning capability
+                          Levels: off, minimal, low, medium, high, xhigh
+                          Default: high
+
+EXAMPLES:
+  ask "how do i apply a texture in unity"
+  ask --thinking xhigh "design a scalable microservices architecture"
+  ask "what's the best way to structure a react component"
+  ask --help
+EOF
+      exit 0
+      ;;
+    --thinking)
+      shift
+      THINKING_LEVEL="$1"
+      shift
+      ;;
+    *)
+      # First non-option argument is the query
+      break
+      ;;
+  esac
+done
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: ask [OPTIONS] <query>"
+  exit 1
+fi
+
+# Read the ask-llm prompt as system prompt
+SYSTEM_PROMPT=$(cat "$ASK_PROMPT_FILE")
+
+# Default thinking level for ask
+if [[ -z "$THINKING_LEVEL" ]]; then
+  THINKING_LEVEL="high"
+fi
+
+# Run pi with:
+# - System prompt from ask-llm.md
+# - Only search-hub and island extensions loaded
+# - No built-in tools
+# - No prompt templates
+# - Print mode
+# - Extended thinking capability
+# - The query as the message
+# - Output piped through mq and glow
+pi \
+  --thinking "$THINKING_LEVEL" \
+  --system-prompt "$SYSTEM_PROMPT" \
+  --no-extensions \
+  -e "$SEARCH_HUB_EXTENSION" \
+  -e "$ISLAND_EXTENSION" \
+  -e "$CONTEXT7_EXTENSION" \
+  --no-builtin-tools \
+  --no-prompt-templates \
+  --no-skills \
+  -p \
+  "$*" | mq -I markdown '.' | glow
