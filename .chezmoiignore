@@ -1,8 +1,9 @@
 openspec/
 .vscode/
 # pi agent files - sensitive data (auth, sessions) excluded
-dot_pi/agent/auth.json
-dot_pi/agent/sessions/
-dot_pi/agent/bin/
-.pi/
-openspec/
+.pi/agent/auth.json
+.pi/gent/sessions/
+.pi/agent/bin/
+.pi/prompts/
+.pi/skills/
+

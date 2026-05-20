@@ -1,15 +1,14 @@
 {
-  "lastChangelogVersion": "0.74.0",
+  "lastChangelogVersion": "0.75.3",
   "packages": [
     "npm:@ff-labs/pi-fff",
-    "../../Documents/Tools/pi-ide-bridge/pi-extension",
     "npm:pi-island",
-    "../../Documents/Tools/pi-search-hub",
     "npm:context-mode",
     "npm:pi-workspace-history",
-    "npm:@dreki-gg/pi-context7"
+    "npm:@dreki-gg/pi-context7",
+    "npm:pi-search-hub",
+    "npm:@m4riok/pi-ide-bridge"
   ],
-
   "defaultProvider": "github-copilot",
   "defaultModel": "claude-haiku-4.5",
   "defaultThinkingLevel": "medium",
