@@ -40,3 +40,11 @@ Apply in this order:
 - **Always** batch queries in ctx_search (one call, multiple queries)
 
 This strategy applies to all sessions. Override available on explicit request with reasoning noted.
+
+# Investigation Before Solution
+
+Never assume—always investigate first:
+- Read docs, examples, and existing code before proposing solutions
+- Verify APIs, paths, model names, and CLI flags against documentation
+- Ask for clarity rather than guessing when context is ambiguous
+- Show your investigation work (cite what you found)
