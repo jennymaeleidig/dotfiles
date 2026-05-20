@@ -4,9 +4,9 @@
 # Usage: ask <query>
 
 ASK_PROMPT_FILE="${HOME}/.pi/agent/prompts/ask-llm.md"
-SEARCH_HUB_EXTENSION="${HOME}/Documents/Tools/pi-search-hub"
-ISLAND_EXTENSION="/opt/homebrew/lib/node_modules/pi-island"
-CONTEXT7_EXTENSION="/opt/homebrew/lib/node_modules/@dreki-gg/pi-context7"
+SEARCH_HUB_EXTENSION="${HOME}/.pi/agent/npm/node_modules/pi-search-hub"
+ISLAND_EXTENSION="${HOME}/.pi/agent/npm/node_modules/pi-island"
+CONTEXT7_EXTENSION="${HOME}/.pi/agent/npm/node_modules/@dreki-gg/pi-context7"
 
 if [[ $# -eq 0 ]]; then
   echo "Usage: ask [OPTIONS] <query>"
