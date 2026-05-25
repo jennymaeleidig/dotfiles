@@ -73,6 +73,7 @@ fi
 # - The query as the message
 # - Output piped through mq and glow
 pi \
+  --model "opencode-go/deepseek-v4-pro" \
   --thinking "$THINKING_LEVEL" \
   --system-prompt "$SYSTEM_PROMPT" \
   --no-extensions \
@@ -83,4 +84,4 @@ pi \
   --no-prompt-templates \
   --no-skills \
   -p \
-  "$*" | mq -I markdown '.' | glow
+  "$*" | mq -I markdown '.' | txc -f - -c -n | glow

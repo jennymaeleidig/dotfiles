@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.75.3",
+  "lastChangelogVersion": "0.75.5",
   "packages": [
     "npm:@ff-labs/pi-fff",
     "npm:pi-island",
@@ -7,13 +7,17 @@
     "npm:pi-workspace-history",
     "npm:@dreki-gg/pi-context7",
     "npm:pi-search-hub",
-    "npm:@m4riok/pi-ide-bridge"
+    "npm:@m4riok/pi-ide-bridge",
+    "npm:pi-bar",
+    "npm:pi-qq",
+    "git:github.com/jonjonrankin/pi-caveman"
   ],
-  "defaultProvider": "github-copilot",
-  "defaultModel": "claude-haiku-4.5",
-  "defaultThinkingLevel": "medium",
+  "defaultProvider": "opencode-go",
+  "defaultModel": "deepseek-v4-pro",
+  "defaultThinkingLevel": "high",
   "theme": "monokai-pro",
   "enableInstallTelemetry": false,
   "collapseChangelog": true,
-  "quietStartup": true
+  "quietStartup": true,
+  "hideThinkingBlock": true
 }

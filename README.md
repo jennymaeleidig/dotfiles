@@ -1,12 +1,6 @@
-## chores
-
-- Sync [pi-ide-bridge](https://github.com/jennymaeleidig/pi-ide-bridge) fork.
-  - `pi install {repo-path}/pi-extension`
-- Sync [pi-search-hub](https://github.com/jennymaeleidig/pi-search-hub) fork.
-  - `pi install {repo-path}`
-
 ## todo
 
+- web search script --old flag
 - lazy nvim updates
 - config
   - cleanup bashrc / templatize
@@ -21,6 +15,7 @@
   - sketchybar
   - aerospace
 - things to backup / automate
-  - npm install script
+  - npm install -g script
   - oh my bash install script
   - homebrew install script
+    - non brew mac apps

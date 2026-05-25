@@ -10,5 +10,5 @@
 [pull]
 	ff = only
 [core]
-	editor = codium -n --wait
+	editor = code -n --wait
 	excludesfile = /Users/jennyleidig/.gitignore

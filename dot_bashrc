@@ -10,9 +10,9 @@ esac
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 #vscode as default editor
-export EDITOR="codium"
-export GIT_EDITOR="codium"
-export VISUAL="codium"
+export EDITOR="code"
+export GIT_EDITOR="code"
+export VISUAL="code"
 
 # brew
 eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -44,7 +44,6 @@ alias cd="z"
 alias cdi="zi"
 alias processing="/Applications/Processing.app/Contents/MacOS/Processing"
 alias processing-cli="/Applications/Processing.app/Contents/MacOS/Processing cli"
-alias code="codium"
 
 #scripts
 export PATH="${HOME}/.local/share/chezmoi/scripts:$PATH"
@@ -71,6 +70,9 @@ eval "$(mise activate bash)"
 #clangd
 export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
+
+#unity
+UNITY_NOPROXY=localhost,127.0.0.1
 
 # oh my bash
 
@@ -109,8 +111,3 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
-
-# theos
-export THEOS=~/theos
-
-export PATH=$PATH:/Users/jennyleidig/.spicetify
