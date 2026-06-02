@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Search web agent command
-# Usage: search-web <query>
+# Usage: web [OPTIONS] <query>
 
 SEARCH_PROMPT_FILE="${HOME}/.pi/agent/prompts/search-web.md"
 SEARCH_HUB_EXTENSION="${HOME}/.pi/agent/npm/node_modules/pi-search-hub"
@@ -9,47 +9,75 @@ ISLAND_EXTENSION="${HOME}/.pi/agent/npm/node_modules/pi-island"
 CONTEXT7_EXTENSION="${HOME}/.pi/agent/npm/node_modules/@dreki-gg/pi-context7"
 
 if [[ $# -eq 0 ]]; then
-  echo "Usage: web [OPTIONS] <query>"
+  echo "Usage: web [OPTIONS] [query]"
+  echo "       web -c        continue most recent session interactively"
   exit 1
 fi
 
-if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
-  cat << 'EOF'
-Usage: web [OPTIONS] <query>
+CONTINUE=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --help|-h)
+      cat << 'EOF'
+Usage: web [OPTIONS] [query]
 
 Search the web using pi agent with web_search and web_read tools.
 
 OPTIONS:
-  -h, --help    Show this help message and exit
+  -h, --help     Show this help message and exit
+  -c, --continue Continue the most recent session
+                 Without query: opens session interactively with default pi config
+                 With query:    sends query in print mode with web config
 
 EXAMPLES:
   web "how to use bash arrays"
+  web -c                                 # continue previous session interactively
+  web -c "what about associative arrays?"  # continue with follow-up question
   web --help
 EOF
-  exit 0
+      exit 0
+      ;;
+    -c|--continue)
+      CONTINUE=true
+      shift
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+# Validate: need either --continue or a query
+if [[ $# -eq 0 ]] && ! $CONTINUE; then
+  echo "Usage: web [OPTIONS] [query]"
+  echo "       web -c        continue most recent session interactively"
+  exit 1
 fi
 
-# Read the search-web prompt as system prompt
+if $CONTINUE && [[ $# -eq 0 ]]; then
+  # Interactive continue: bare pi with full defaults
+  pi -c
+  exit $?
+fi
+
+# Terminal mode (new session or continue with query)
 SYSTEM_PROMPT=$(cat "$SEARCH_PROMPT_FILE")
 
-# Run pi with:
-# - System prompt from search-web.md
-# - Only search-hub and island extensions loaded
-# - No built-in tools
-# - No prompt templates
-# - Print mode
-# - The query as the message
-# - Output piped through mq and glow
-pi \
-  --model "claude-haiku-4.5" \
-  --thinking off \
-  --system-prompt "$SYSTEM_PROMPT" \
-  --no-extensions \
-  -e "$SEARCH_HUB_EXTENSION" \
-  -e "$ISLAND_EXTENSION" \
-  -e "$CONTEXT7_EXTENSION" \
-  --no-builtin-tools \
-  --no-prompt-templates \
-  --no-skills \
-  -p \
-  "$*" | mq -I markdown '.' | txc -f - -c -n | glow
+PI_ARGS=(
+  --model "github-copilot/claude-haiku-4.5"
+  --thinking off
+  --system-prompt "$SYSTEM_PROMPT"
+  --no-extensions
+  -e "$SEARCH_HUB_EXTENSION"
+  -e "$ISLAND_EXTENSION"
+  -e "$CONTEXT7_EXTENSION"
+  --no-builtin-tools
+  --no-prompt-templates
+  --no-skills
+  -p
+)
+
+$CONTINUE && PI_ARGS+=(-c)
+
+pi "${PI_ARGS[@]}" "$*" | mq -I markdown '.' | txc-safe -f - -c -n | glow

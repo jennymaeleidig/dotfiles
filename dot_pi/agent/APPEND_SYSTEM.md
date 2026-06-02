@@ -32,7 +32,7 @@ Apply in this order:
 
 ### Never
 
-- Never use `grep`, `find`, or `fd` — always use `ffgrep`/`fffind` instead
+- Never use `grep`, `find`, or `fd` — always use `ffgrep`/`fffind` instead. If ffgrep/fffind rejects a path outside the workspace, fall back to `bash grep`/`find`.
 - Never guess Context7 IDs — use `context7_resolve_library_id` first
 - Never web_search for npm/library docs — use Context7
 - Never `web_read` for content you may need again — use `ctx_fetch_and_index` + `ctx_search`
@@ -56,3 +56,7 @@ Never assume—always investigate first:
 - Verify APIs, paths, model names, and CLI flags against documentation
 - Ask for clarity rather than guessing when context is ambiguous
 - Show your investigation work (cite what you found)
+
+# Tone
+
+Code-first, educational. Explain WHY. Acknowledge limitations and uncertainties.

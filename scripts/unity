@@ -1,0 +1,78 @@
+#!/bin/bash
+
+# Unity agent command - Unity-aware coding assistant
+# Usage: unity [OPTIONS] [query]
+
+UNITY_BASE_PROMPT="${HOME}/.pi/agent/prompts/unity-base.md"
+
+if [[ $# -eq 0 ]]; then
+  # Interactive mode: bare unity launches interactive session with Unity prompt
+  SYSTEM_PROMPT=$(cat "$UNITY_BASE_PROMPT")
+  PI_ARGS=(
+    --model "opencode-go/deepseek-v4-pro"
+    --thinking high
+    --append-system-prompt "$SYSTEM_PROMPT"
+  )
+  exec pi "${PI_ARGS[@]}"
+fi
+
+CONTINUE=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --help|-h)
+      cat << 'EOF'
+Usage: unity [OPTIONS] [query]
+
+Launch pi in Unity-aware coding mode with Unity domain guidance.
+Preserves all default pi configurations (extensions, built-in tools, skills).
+
+OPTIONS:
+  -h, --help     Show this help message and exit
+  -c, --continue Continue the most recent session
+                 Without query: opens session interactively with bare defaults
+                 With query:    sends query in print mode with Unity config
+
+EXAMPLES:
+  unity                                    # interactive Unity session
+  unity "how do I set up URP"              # one-shot answer
+  unity -c                                 # continue previous session
+  unity -c "what about normal maps?"       # continue with follow-up
+  unity --help
+EOF
+      exit 0
+      ;;
+    -c|--continue)
+      CONTINUE=true
+      shift
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+# Mode: continue without query → bare pi -c (interactive, defaults)
+if $CONTINUE && [[ $# -eq 0 ]]; then
+  exec pi -c
+fi
+
+# ─────────────────────────────────────────────────────────────────────
+# Build PI_ARGS
+# ─────────────────────────────────────────────────────────────────────
+
+SYSTEM_PROMPT=$(cat "$UNITY_BASE_PROMPT")
+
+PI_ARGS=(
+  --model "opencode-go/deepseek-v4-pro"
+  --thinking high
+  --append-system-prompt "$SYSTEM_PROMPT"
+)
+
+# Continue mode: add -c to continue previous session
+$CONTINUE && PI_ARGS+=(-c)
+
+# Print mode: query present (or continue with query)
+PI_ARGS+=(-p)
+
+pi "${PI_ARGS[@]}" "$*" | mq -I markdown '.' | txc-safe -f - -c -n | glow
