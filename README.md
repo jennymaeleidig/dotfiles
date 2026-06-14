@@ -1,12 +1,18 @@
 ## todo
 
-- web search script --old flag
+- obsidian monokai synatx highlighting
+  - unify with `bat` syntax
+- nix for os config?
+  - remove old config
+- configure searxng
 - lazy nvim updates
 - config
   - cleanup bashrc / templatize
 - style
   - orange / monokai
+    - unify these
   - flashing pipe cursor
+    - vim mode
   - commit mono
   - kebab-case / snake_case
   - styling on commit

@@ -16,7 +16,7 @@
     "muted": "#939293",
     "dim": "#727072",
     "border": "#5b595c",
-    "borderMuted": "#403e41",
+    "borderMuted": "#5b595c",
     "bg": "#2d2a2e",
     "bgCard": "#353236",
     "bgSubtle": "#403e41",
@@ -83,26 +83,5 @@
     "pageBg": "bg",
     "cardBg": "bgCard",
     "infoBg": "bgSubtle"
-  },
-  "extras": {
-    "assistantPrefix": "λ",
-    "assistantPrefixColor": "#ff6188",
-    "userPrefixColor": "#fcfcfa",
-    "dividerChar": "─",
-    "dividerColor": "#727072",
-    "showDivider": "true",
-    "quoteStyle": "true",
-    "userPrefix": "│",
-    "quoteColor": "#ff6188",
-    "inputBorderColor": "#ff6188",
-    "bashPromptColor": "#a9dc76",
-    "tagBgColor": "#ff6188",
-    "slashSelectedColor": "#ff6188",
-    "slashCommandColor": "#fcfcfa",
-    "slashDescriptionColor": "#939293",
-    "slashHintColor": "#727072",
-    "userBoxBorderColor": "#5b595c",
-    "parensTextColor": "#ff6188",
-    "parensBracketColor": "#ab9df2"
   }
 }

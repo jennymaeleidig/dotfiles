@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.78.0",
+  "lastChangelogVersion": "0.79.3",
   "packages": [
     "npm:@ff-labs/pi-fff",
     "npm:pi-island",
@@ -10,14 +10,23 @@
     "npm:@m4riok/pi-ide-bridge",
     "npm:pi-bar",
     "npm:pi-qq",
-    "git:github.com/jonjonrankin/pi-caveman"
+    "git:github.com/jonjonrankin/pi-caveman",
+    "npm:@juicesharp/rpiv-voice",
+    "npm:pi-vim",
+    "npm:oppi-mirror"
   ],
-  "defaultProvider": "opencode-go",
-  "defaultModel": "deepseek-v4-pro",
+  "defaultProvider": "mistral",
+  "defaultModel": "devstral-latest",
   "defaultThinkingLevel": "high",
   "theme": "monokai-pro",
   "enableInstallTelemetry": false,
   "collapseChangelog": true,
   "quietStartup": true,
-  "hideThinkingBlock": true
+  "hideThinkingBlock": true,
+  "oppiMirror": {
+    "autoStart": false,
+    "workspaceCreation": "ask"
+  },
+  "steeringMode": "all",
+  "followUpMode": "one-at-a-time"
 }
