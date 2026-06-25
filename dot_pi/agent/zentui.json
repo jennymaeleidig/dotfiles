@@ -1,0 +1,27 @@
+{
+  "colorSources": {
+    "starship": "theme"
+  },
+  "features": {
+    "statusLine": true,
+    "copyFriendly": true
+  },
+  "footerSegments": {
+    "cwd": true,
+    "gitBranch": true,
+    "gitStatus": true,
+    "runtime": true,
+    "context": true,
+    "cost": true
+  },
+  "extensionStatuses": {
+    "placements": {
+      "caveman": "off",
+      "search": "off"
+    },
+    "colorModes": {
+      "caveman": "zentui",
+      "search": "zentui"
+    }
+  }
+}

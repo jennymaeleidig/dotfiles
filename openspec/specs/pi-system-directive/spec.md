@@ -1,6 +1,7 @@
 # pi-system-directive Specification
 
 ## Purpose
+
 General template for cross-cutting system directives loaded via pi's auto-append mechanism (APPEND_SYSTEM.md). Defines the structural requirements for directives that provide tool chain priority, enforcement rules, and investigation principles applicable to all pi sessions. Domain-specific system directives extend this spec with additional content requirements.
 
 ## ADDED Requirements
@@ -37,7 +38,7 @@ The directive SHALL contain exactly these sections in order: a top-level heading
 
 ### Requirement: Tool Chain Priority section
 
-The Tool Chain Priority section SHALL define a numbered, ranked list of tool categories that the agent SHALL apply in order. Each entry SHALL include the tool name, its purpose, and usage guidance. The section MAY use sub-bullets for detailed instructions. The chain SHALL cover at minimum: primary documentation lookup, local search, and web search.
+The Tool Chain Priority section SHALL define a numbered, ranked list of tool categories that the agent SHALL apply in order. Each entry SHALL include the tool name, its purpose, and usage guidance. The section MAY use sub-bullets for detailed instructions. The chain SHALL cover at minimum: primary documentation lookup, local search, and web search. The chain MAY include content extraction steps (e.g., video transcription, image analysis) as the first step when applicable.
 
 #### Scenario: Tool chain is ranked and numbered
 
@@ -97,23 +98,51 @@ The system directive SHALL NOT include response format templates, attribution ru
 - **THEN** it SHALL NOT contain query-type adaptation templates (how-to, debug, concept, etc.)
 - **AND** it SHALL NOT contain citation format rules or Sources section templates
 
-### Requirement: New directives require corresponding spec
-
-When a new system directive is created (e.g., `safety-rules.md`, `memory-strategy.md`), a corresponding domain spec SHALL be created in `openspec/specs/<name>/spec.md`. The domain spec SHALL extend `pi-system-directive` with domain-specific requirements while delegating general structural rules to the shared spec. This SHALL apply to new tasks within any OpenSpec change.
-
-#### Scenario: New directive comes with spec
-
-- **WHEN** a change introduces a new system directive file
-- **THEN** a corresponding `openspec/specs/<directive-name>/spec.md` SHALL be created
-- **AND** the spec SHALL reference `pi-system-directive` for general structural requirements
-- **AND** the spec SHALL define only domain-specific requirements (content, constraints, scenarios)
-
 ### Requirement: Terseness
 
-The directive SHALL use concise, directive language. Sections SHALL favor bullet points and fragments over prose paragraphs. The entire directive SHOULD fit within 50 lines.
+The directive SHALL use concise, directive language. Sections SHALL favor bullet points and fragments over prose paragraphs. The entire directive SHOULD fit within ~60 lines.
 
 #### Scenario: Directive is concise
 
 - **WHEN** `APPEND_SYSTEM.md` is measured
 - **THEN** each section (except the tool chain) SHALL be no more than 10 lines
 - **AND** bullet points SHALL be preferred over prose paragraphs
+
+### Requirement: Content extraction in tool chain priority
+
+The Tool Chain Priority section MAY include content extraction as the first step in the numbered list, before documentation lookup. When a content extraction tool is listed, the agent SHALL use it to extract and process content from the user's input (e.g., video transcripts, image analysis) before proceeding to other research steps. The entry SHALL specify when the tool applies and how the agent SHALL use the extracted content.
+
+#### Scenario: Content extraction step present in chain
+
+- **WHEN** the Tool Chain Priority section includes a content extraction step
+- **THEN** the step SHALL be the first numbered entry in the list
+- **AND** the entry SHALL name the tool and describe the content format it handles
+- **AND** the entry SHALL include guidance on what the agent should do with the extracted content
+
+#### Scenario: Content extraction not applicable to prompt
+
+- **WHEN** a user prompt does not contain content matching a listed extraction tool's domain
+- **THEN** the agent SHALL skip the content extraction step
+- **AND** the agent SHALL proceed directly to the next step in the tool chain
+
+#### Scenario: Content extraction fails
+
+- **WHEN** a content extraction tool returns no usable result
+- **THEN** the agent SHALL report the failure to the user
+- **AND** the agent SHALL proceed with the remaining tool chain steps in order
+
+### Requirement: Enforcement rules for content extraction tools
+
+The Enforcement section's **Always** subsection SHALL include a rule for each content extraction tool listed in the Tool Chain Priority, mandating its use when applicable content is present. The **Never** subsection SHALL include a rule prohibiting skipping applicable content without using the listed extraction tool.
+
+#### Scenario: Always rule covers content extraction
+
+- **WHEN** the Enforcement section is read
+- **THEN** the `### Always` subsection SHALL contain a rule referencing each content extraction tool by name
+- **AND** each rule SHALL state when the tool applies (e.g., "when user provides YouTube video links")
+
+#### Scenario: Never rule covers content extraction
+
+- **WHEN** the Enforcement section is read
+- **THEN** the `### Never` subsection SHALL contain a rule prohibiting skipping applicable content extraction
+- **AND** each rule SHALL direct the agent to use the listed tool first before proceeding with other research

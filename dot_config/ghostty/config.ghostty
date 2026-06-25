@@ -1,5 +1,5 @@
 theme = "Monokai Pro"
-font-family = "CommitMono"
+font-family = "CommitMonoNF"
 font-size = 14
 keybind = global:ctrl+grave_accent=toggle_quick_terminal
 quick-terminal-position = center

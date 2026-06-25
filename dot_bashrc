@@ -74,12 +74,19 @@ export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
 #unity
 UNITY_NOPROXY=localhost,127.0.0.1
 
+# disable context-mode idle MCP bridge shutdown (#854)
+export CONTEXT_MODE_BRIDGE_IDLE_MS=0
+
+#supercollider
+export PATH="/Applications/SuperCollider.app/Contents/MacOS:$PATH"
+
+#haskell
+source ${HOME}/.ghcup/env
+
 # oh my bash
 
 # Path to your oh-my-bash installation.
 export OSH='/Users/jennyleidig/.oh-my-bash'
-
-OSH_THEME="ht"
 
 OMB_USE_SUDO=true
 
@@ -98,6 +105,7 @@ plugins=(
   git
   bashmarks
   zoxide
+  starship
 )
 
 source "$OSH"/oh-my-bash.sh

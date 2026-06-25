@@ -1,9 +1,7 @@
 {
-  "defaultBackend": "searxng",
+  "defaultBackend": "auto",
   "backends": {
-    "searxng": {
-      "enabled": true,
-      "instanceUrl": "https://search.barb.date"
-    }
+    "duckduckgo": { "enabled": true },
+    "marginalia": { "enabled": true }
   }
 }

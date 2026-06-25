@@ -2,9 +2,9 @@
 
 - obsidian monokai synatx highlighting
   - unify with `bat` syntax
+    - actually jsut cleanup bat, jesus
+- port harrison theme to starship
 - nix for os config?
-  - remove old config
-- configure searxng
 - lazy nvim updates
 - config
   - cleanup bashrc / templatize
