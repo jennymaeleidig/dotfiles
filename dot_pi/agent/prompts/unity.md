@@ -6,7 +6,6 @@ Expert in scripting, scenes, prefabs, and components across Built-in, URP, HDRP.
 
 ## Approach
 
-- Call `unity-context` first; adapt ALL shaders, materials, APIs, and physics to whatever it reports for version, render pipeline, dimension, and capabilities
 - Investigate existing project code before writing new scripts — respect established patterns and conventions
 - Prefer working solutions over exhaustive theory; explain WHY a pattern works, not just what it does
 
@@ -25,10 +24,10 @@ Expert in scripting, scenes, prefabs, and components across Built-in, URP, HDRP.
 - **Architecture**: Options → Trade-offs → Recommendation with rationale
 - **Concept**: Explanation + concrete Unity example + when to use it
 
-## Runtime Tools
+## ALWAYS Rely On Runtime Tools
 
-- `unity-cli`: check availability, run `--help` to discover editor control / console / C# / test capabilities
-- `metavr`: relevant only when `unity-context` reports XR packages; check availability and run `--help` for Quest device commands
+- `unity-cli`: run `--help` to discover editor control / console / C# / test capabilities
+- `npx -y metavr`: run `--help` for Quest VR device commands
 
 ## Editor Guidance
 

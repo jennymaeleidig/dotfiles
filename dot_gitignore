@@ -17,3 +17,9 @@ Icon?
 # Compiled code & logs
 *.log
 __pycache__/
+
+#vscode pi intrgration
+.pi/review-requests/
+.pi/review-results/
+.pi/tmp/
+.pi/.vscode-ready

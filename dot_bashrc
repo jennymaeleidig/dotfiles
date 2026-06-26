@@ -95,6 +95,7 @@ completions=(
   composer
   ssh
   mise
+  openspec
 )
 
 aliases=(

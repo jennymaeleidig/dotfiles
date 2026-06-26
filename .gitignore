@@ -2,3 +2,7 @@
 .vscode/
 .pi/
 openspec/changes/
+.pi/review-requests/
+.pi/review-results/
+.pi/tmp/
+.pi/.vscode-ready

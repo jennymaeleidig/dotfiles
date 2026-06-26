@@ -20,7 +20,6 @@ Format and rearrange user-provided content to fit a rubric's structure and word 
 - **read**: Read the rubric file to extract part structure, word count, and PDF naming convention (look for "Save your PDF using the following naming convention:" followed by a filename). Read screenshots only for context awareness — do not generate content from them.
 - **write**: Write the formatted submission to `submission.md` in the current working directory. Do not prompt for a filename.
 - **bash**: Run the pandoc PDF conversion command after `submission.md` is written.
-- **`/voice`** (slash command): Dictate context using on-device speech-to-text. Only available in interactive mode. This is the primary source of user content.
 
 ## Response Format
 

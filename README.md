@@ -1,5 +1,7 @@
 ## todo
 
+- opencode usage skill / go tracking
+- fix unity prompt
 - obsidian monokai synatx highlighting
   - unify with `bat` syntax
     - actually jsut cleanup bat, jesus

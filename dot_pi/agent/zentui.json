@@ -16,12 +16,11 @@
   },
   "extensionStatuses": {
     "placements": {
-      "caveman": "off",
       "search": "off"
     },
     "colorModes": {
-      "caveman": "zentui",
-      "search": "zentui"
+      "search": "zentui",
+      "quota-status": "zentui"
     }
   }
 }

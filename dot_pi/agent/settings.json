@@ -1,24 +1,24 @@
 {
   "lastChangelogVersion": "0.80.2",
   "packages": [
-    "npm:@ff-labs/pi-fff",
     "npm:pi-island",
     "npm:context-mode",
     "npm:@dreki-gg/pi-context7",
     "npm:pi-search-hub",
-    "npm:@m4riok/pi-ide-bridge",
-    "git:github.com/jonjonrankin/pi-caveman",
     "npm:@juicesharp/rpiv-voice",
     "npm:pi-vim",
     "npm:oppi-mirror",
     "npm:pi-youtube-transcript",
-    "git:github.com/aliou/pi-neuralwatt",
     "npm:pi-ask-user",
     "npm:pi-zentui",
-    "npm:pi-workspace-history"
+    "npm:pi-workspace-history",
+    "git:github.com/aliou/pi-neuralwatt",
+    "npm:@mjfuertesf/pi-quota-status",
+    "npm:@heyhuynhgiabuu/pi-pretty",
+    "npm:@aliou/pi-guardrails"
   ],
-  "defaultProvider": "neuralwatt",
-  "defaultModel": "glm-5.2-fast",
+  "defaultProvider": "opencode-go",
+  "defaultModel": "kimi-k2.7-code",
   "defaultThinkingLevel": "high",
   "theme": "monokai-pro",
   "enableInstallTelemetry": false,
@@ -33,13 +33,10 @@
   "followUpMode": "one-at-a-time",
   "enabledModels": [
     "mistral/mistral-large-latest",
-    "neuralwatt/glm-5.2",
-    "neuralwatt/glm-5.2-fast",
-    "neuralwatt/glm-5.2-short",
-    "neuralwatt/glm-5.2-short-fast",
-    "neuralwatt/kimi-k2.6",
-    "neuralwatt/kimi-k2.6-fast",
-    "neuralwatt/kimi-k2.7-code"
+    "opencode-go/glm-5.2",
+    "opencode-go/kimi-k2.6",
+    "opencode-go/kimi-k2.7-code",
+    "opencode-go/deepseek-v4-pro"
   ],
   "editorPaddingX": 2
 }
