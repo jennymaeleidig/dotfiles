@@ -1,7 +1,6 @@
 {
   "lastChangelogVersion": "0.80.2",
   "packages": [
-    "npm:pi-island",
     "npm:context-mode",
     "npm:@dreki-gg/pi-context7",
     "npm:pi-search-hub",
@@ -9,16 +8,19 @@
     "npm:pi-vim",
     "npm:oppi-mirror",
     "npm:pi-youtube-transcript",
-    "npm:pi-ask-user",
     "npm:pi-zentui",
     "npm:pi-workspace-history",
     "git:github.com/aliou/pi-neuralwatt",
     "npm:@mjfuertesf/pi-quota-status",
-    "npm:@heyhuynhgiabuu/pi-pretty",
-    "npm:@aliou/pi-guardrails"
+    "npm:@aliou/pi-guardrails",
+    "npm:pi-ide-bridge",
+    "npm:pi-snap-edit",
+    "npm:pi-slopchop",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:@ff-labs/pi-fff"
   ],
   "defaultProvider": "opencode-go",
-  "defaultModel": "kimi-k2.7-code",
+  "defaultModel": "glm-5.2",
   "defaultThinkingLevel": "high",
   "theme": "monokai-pro",
   "enableInstallTelemetry": false,
@@ -36,7 +38,8 @@
     "opencode-go/glm-5.2",
     "opencode-go/kimi-k2.6",
     "opencode-go/kimi-k2.7-code",
-    "opencode-go/deepseek-v4-pro"
+    "opencode-go/deepseek-v4-pro",
+    "opencode-go/minimax-m3"
   ],
   "editorPaddingX": 2
 }

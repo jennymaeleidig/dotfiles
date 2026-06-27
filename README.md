@@ -1,10 +1,9 @@
 ## todo
 
-- opencode usage skill / go tracking
-- fix unity prompt
+https://github.com/yorukot/superfile#supported-systems
+
 - obsidian monokai synatx highlighting
-  - unify with `bat` syntax
-    - actually jsut cleanup bat, jesus
+- get man / help / shortcut / cheatsheet reference in order
 - port harrison theme to starship
 - nix for os config?
 - lazy nvim updates

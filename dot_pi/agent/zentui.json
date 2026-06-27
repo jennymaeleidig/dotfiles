@@ -16,7 +16,9 @@
   },
   "extensionStatuses": {
     "placements": {
-      "search": "off"
+      "search": "off",
+      "ide-bridge": "off",
+      "read": "off"
     },
     "colorModes": {
       "search": "zentui",

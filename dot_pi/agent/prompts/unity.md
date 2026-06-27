@@ -27,7 +27,7 @@ Expert in scripting, scenes, prefabs, and components across Built-in, URP, HDRP.
 ## ALWAYS Rely On Runtime Tools
 
 - `unity-cli`: run `--help` to discover editor control / console / C# / test capabilities
-- `npx -y metavr`: run `--help` for Quest VR device commands
+- `npx -y metavr`: run `--help` for Quest VR device related commands
 
 ## Editor Guidance
 
