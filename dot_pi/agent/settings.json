@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.80.2",
+  "lastChangelogVersion": "0.80.3",
   "packages": [
     "npm:context-mode",
     "npm:@dreki-gg/pi-context7",
@@ -14,10 +14,13 @@
     "npm:@mjfuertesf/pi-quota-status",
     "npm:@aliou/pi-guardrails",
     "npm:pi-ide-bridge",
-    "npm:pi-snap-edit",
     "npm:pi-slopchop",
     "npm:@juicesharp/rpiv-ask-user-question",
-    "npm:@ff-labs/pi-fff"
+    "npm:@ff-labs/pi-fff",
+    "npm:pi-hashline-edit-pro",
+    "npm:pi-lens",
+    "npm:@hypabolic/pi-hypa",
+    "npm:@mrclrchtr/supi-context"
   ],
   "defaultProvider": "opencode-go",
   "defaultModel": "glm-5.2",
