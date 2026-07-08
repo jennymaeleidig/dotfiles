@@ -21,8 +21,7 @@
       "read": "off"
     },
     "colorModes": {
-      "search": "zentui",
-      "quota-status": "zentui"
+      "search": "zentui"
     }
   }
 }
