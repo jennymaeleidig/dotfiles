@@ -83,6 +83,9 @@ export PATH="/Applications/SuperCollider.app/Contents/MacOS:$PATH"
 #haskell
 source ${HOME}/.ghcup/env
 
+#csharp
+export PATH="$HOME/.dotnet/tools:$PATH"
+
 # oh my bash
 
 # Path to your oh-my-bash installation.

@@ -22,12 +22,13 @@
 
 # Interaction rules for openspec skills & grilling sessions
 
-During **any** openspec skill/workflow (`/opsx:propose`, `/opsx:apply`, `explore`, `ff-change`, `continue-change`, `archive`, `sync`, etc.) and **any** grilling session — whether **user-invoked** or **agent-invoked** — every clarifying or decision question goes through the `ask_user_question` tool. This overrides skill text that references another "AskUserQuestion" command or plain-text questions.
+During **any** openspec skill/workflow (`opsx-propose`, `opsx-apply`, `opsx-explore`, `opsx-verify`, `opsx-archive`, `opsx-sync`, etc.) and **any** grilling session — whether **user-invoked** or **agent-invoked** — every clarifying or decision question goes through the `ask_user_question` tool. This overrides skill text that references another "AskUserQuestion" command or plain-text questions.
 
 - **Always use `ask_user_question`** — never ask a clarifying or decision question as plain prose. If an openspec skill prompt or a grilling instruction says "use the AskUserQuestion tool" or "ask the user", route that question through pi's `ask_user_question`.
 - **Open-ended asks** (e.g. openspec's "What change do you want to build?"): map them to `ask_user_question` by proposing 2–4 concrete best-guess options with your recommended option first (label suffixed `(Recommended)`). The auto-appended "Type something." row is the free-form escape — never author your own "Other"/"Type something." option.
 - **Decisions vs facts**: look up facts in the codebase or `openspec` state yourself; put each genuine *decision* to the user via `ask_user_question`.
 - **Grilling sessions**: issue exactly **one** `ask_user_question` item per call (preserve the one-question-at-a-time philosophy), mark your recommended answer first, wait for the response, then ask the next. Never batch dependent decisions.
+- **Explore / `ospx-explore`** — the skill's conversational stance ("open threads, not interrogations", "don't follow a script") governs brainstorming and surfacing options, *not* decisions. It does NOT override this section. Prose is fine for observations, hypotheses, sketches, and offering threads. But the moment a question expects an answer — picking a direction, confirming scope, choosing an option, deciding to capture an artifact, committing to an approach — route it through `ask_user_question`. Don't drop a decision as plain prose and barrel ahead; pause and ask formally. Keep to one decision question at a time, don't stack a wall of items.
 
 # Verification
 

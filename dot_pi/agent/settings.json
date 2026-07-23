@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.80.6",
+  "lastChangelogVersion": "0.81.1",
   "packages": [
     "npm:context-mode",
     "npm:@dreki-gg/pi-context7",
@@ -10,19 +10,18 @@
     "npm:pi-youtube-transcript",
     "npm:pi-zentui",
     "npm:pi-workspace-history",
-    "git:github.com/aliou/pi-neuralwatt",
     "npm:@aliou/pi-guardrails",
-    "npm:pi-ide-bridge",
     "npm:pi-slopchop",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@ff-labs/pi-fff",
     "npm:pi-hashline-edit-pro",
     "npm:pi-lens",
     "npm:@hypabolic/pi-hypa",
-    "npm:@mrclrchtr/supi-context"
+    "npm:@mrclrchtr/supi-context",
+    "npm:pi-openspec-status"
   ],
   "defaultProvider": "opencode-go",
-  "defaultModel": "glm-5.2",
+  "defaultModel": "kimi-k2.7-code",
   "defaultThinkingLevel": "high",
   "theme": "monokai-pro",
   "enableInstallTelemetry": false,
@@ -35,13 +34,5 @@
   },
   "steeringMode": "all",
   "followUpMode": "one-at-a-time",
-  "enabledModels": [
-    "mistral/mistral-large-latest",
-    "opencode-go/glm-5.2",
-    "opencode-go/kimi-k2.6",
-    "opencode-go/kimi-k2.7-code",
-    "opencode-go/deepseek-v4-pro",
-    "opencode-go/minimax-m3"
-  ],
   "editorPaddingX": 2
 }

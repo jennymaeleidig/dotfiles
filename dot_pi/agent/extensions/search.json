@@ -1,7 +1,11 @@
 {
   "defaultBackend": "auto",
   "backends": {
-    "duckduckgo": { "enabled": true },
-    "marginalia": { "enabled": true }
+    "duckduckgo": {
+      "enabled": true
+    },
+    "marginalia": {
+      "enabled": true
+    }
   }
 }

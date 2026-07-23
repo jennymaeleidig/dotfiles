@@ -2,7 +2,7 @@
 
 https://github.com/yorukot/superfile#supported-systems
 
-- opencode go usage command like nerualwatt
+- use pi obsidian in obsidian skills
 - obsidian monokai synatx highlighting
 - get man / help / shortcut / cheatsheet reference in order
 - port harrison theme to starship
