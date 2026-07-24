@@ -1,0 +1,38 @@
+{
+  // Find providers from OpenCode configuration and authentication.
+  // Provider selection: "auto" detects providers; an array tracks only listed providers.
+  "enabledProviders": "auto",
+
+  // Show every quota reset period.
+  // Quota presentation and reset-period choices.
+  "formatStyle": "allWindows",
+  "percentDisplayMode": "remaining",
+
+  // Show slash-command results with normal TUI messages.
+  "tuiCommandDisplay": "inline",
+
+  // Show the detailed Quota panel in the TUI sidebar.
+  // TUI-only surfaces.
+  "tuiSidebarPanel": {
+    "enabled": false
+  },
+
+  // Keep the other automatic TUI displays off.
+  // Automatic quota surfaces. Slash commands remain available when these are disabled.
+  "enableToast": false,
+  "tuiCompactStatus": {
+    "enabled": true,
+    "homeBottom": true,
+    "sessionPrompt": true,
+    "suppressWhenNativeProviderQuota": true
+  },
+
+  // Show bundled maintainer notices on TUI Home.
+  // Optional bundled maintainer Home announcements.
+  "maintainerAnnouncements": {
+    "enabled": false,
+    "home": false
+  },
+  // Include or hide current-session input and output token totals.
+  "showSessionTokens": true
+}

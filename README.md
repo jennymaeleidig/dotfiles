@@ -2,7 +2,7 @@
 
 https://github.com/yorukot/superfile#supported-systems
 
-- use pi obsidian in obsidian skills
+- add script / command / skill to obnoard / init a project with all opencode tools
 - obsidian monokai synatx highlighting
 - get man / help / shortcut / cheatsheet reference in order
 - port harrison theme to starship
