@@ -2,3 +2,5 @@
 dotnet = "latest"
 node = "24"
 pnpm = "10"
+prettier = "latest"
+"npm:typescript-language-server" = "latest"

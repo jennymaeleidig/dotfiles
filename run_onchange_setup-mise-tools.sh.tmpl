@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+{{- $hash := (include "dot_config/mise/config.toml" | sha256sum) }}
+# config-hash: {{ $hash }}
+echo "==> Installing mise tools from config.toml..."
+mise install
+
+echo "==> Done. mise tools are up to date."

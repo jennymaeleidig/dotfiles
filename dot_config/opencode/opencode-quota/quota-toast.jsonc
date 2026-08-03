@@ -14,25 +14,25 @@
   // Show the detailed Quota panel in the TUI sidebar.
   // TUI-only surfaces.
   "tuiSidebarPanel": {
-    "enabled": false
+    "enabled": true,
   },
 
   // Keep the other automatic TUI displays off.
   // Automatic quota surfaces. Slash commands remain available when these are disabled.
   "enableToast": false,
   "tuiCompactStatus": {
-    "enabled": true,
-    "homeBottom": true,
+    "enabled": false,
+    "homeBottom": false,
     "sessionPrompt": true,
-    "suppressWhenNativeProviderQuota": true
+    "suppressWhenNativeProviderQuota": true,
   },
 
   // Show bundled maintainer notices on TUI Home.
   // Optional bundled maintainer Home announcements.
   "maintainerAnnouncements": {
     "enabled": false,
-    "home": false
+    "home": false,
   },
   // Include or hide current-session input and output token totals.
-  "showSessionTokens": true
+  "showSessionTokens": false,
 }

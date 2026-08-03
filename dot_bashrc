@@ -1,3 +1,20 @@
+# mise shims - ensure available for non-interactive shells
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+
+# brew
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH=/usr/local/bin:$PATH
+
+# local binaries
+export PATH="$HOME/.local/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/Users/jennyleidig/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
 # Enable the subsequent settings only in interactive sessions
 case $- in
   *i*) ;;
@@ -13,10 +30,6 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 export EDITOR="code"
 export GIT_EDITOR="code"
 export VISUAL="code"
-
-# brew
-eval "$(/opt/homebrew/bin/brew shellenv)"
-export PATH=/usr/local/bin:$PATH
 
 #fzf
 set rtp+=/opt/homebrew/opt/fzf
@@ -45,11 +58,8 @@ alias cdi="zi"
 alias processing="/Applications/Processing.app/Contents/MacOS/Processing"
 alias processing-cli="/Applications/Processing.app/Contents/MacOS/Processing cli"
 
-#scripts
-export PATH="${HOME}/.local/share/chezmoi/scripts:$PATH"
-
-#python
-export PATH="$HOME/.local/bin:$PATH"
+#npm
+export NODE_PATH=$(npm root -g)
 
 # Load Angular CLI autocompletion.
 source <(ng completion script)
@@ -114,10 +124,3 @@ plugins=(
 
 source "$OSH"/oh-my-bash.sh
 
-# pnpm
-export PNPM_HOME="/Users/jennyleidig/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end

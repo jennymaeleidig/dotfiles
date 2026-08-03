@@ -2,8 +2,11 @@
 
 https://github.com/yorukot/superfile#supported-systems
 
-- add script / command / skill to obnoard / init a project with all opencode tools
+- kagi
+
+- writing cli tools skill
 - obsidian monokai synatx highlighting
+  - https://monokai.pro/contribute
 - get man / help / shortcut / cheatsheet reference in order
 - port harrison theme to starship
 - nix for os config?
@@ -12,18 +15,20 @@ https://github.com/yorukot/superfile#supported-systems
   - cleanup bashrc / templatize
 - style
   - orange / monokai
+    - _bat_
+    - https://monokai.pro/contribute
     - unify these
   - flashing pipe cursor
     - vim mode
-  - commit mono
+  - commit mono nerd font
   - kebab-case / snake_case
   - styling on commit
-  - make code settings idempotent
+    - unified solution?
   - local custom cfg per workspace?
-  - sketchybar
   - aerospace
 - things to backup / automate
   - npm install -g script
   - oh my bash install script
   - homebrew install script
     - non brew mac apps
+  - opencode plugin / skill update / install script

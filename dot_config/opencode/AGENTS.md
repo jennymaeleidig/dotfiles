@@ -1,6 +1,25 @@
-# AGENTS.md
+<!-- context7 -->
 
-- For OpenSpec propose/apply/verify/archive workflows, use the local `openspec-git-discipline` skill to enforce proposal commits before apply and merge-before-archive discipline.
+Use the `ctx7` CLI to fetch current documentation whenever the user asks about a library, framework, SDK, API, CLI tool, or cloud service — even well-known ones like React, Next.js, Prisma, Express, Tailwind, Django, or Spring Boot. This includes API syntax, configuration, version migration, library-specific debugging, setup instructions, and CLI tool usage. Use even when you think you know the answer — your training data may not reflect recent changes. Prefer this over web search for library docs.
+
+Do not use for: refactoring, writing scripts from scratch, debugging business logic, code review, or general programming concepts.
+
+## Steps
+
+1. Resolve library: `npx ctx7@latest library <name> "<what to look up>"` — use the official library name with proper punctuation (e.g., "Next.js" not "nextjs", "Customer.io" not "customerio", "Three.js" not "threejs")
+2. Pick the best match (ID format: `/org/project`) by: exact name match, description relevance, code snippet count, source reputation (High/Medium preferred), and benchmark score (higher is better). If results don't look right, try alternate names or queries (e.g., "next.js" not "nextjs", or rephrase the question)
+3. Fetch docs: `npx ctx7@latest docs <libraryId> "<what to look up>"` — run a separate `docs` command per distinct concept if the question spans multiple topics, unless it's about how they interact
+4. Answer using the fetched documentation
+
+You MUST call `library` first to get a valid ID unless the user provides one directly in `/org/project` format. Be specific about what to look up in the library's documentation — specific and detailed queries return better results than vague single words, but keep each query to a single concept unless the question is about how concepts interact; combined multi-topic queries dilute ranking and return shallow results for each topic. Do not run more than 3 commands per question. Do not include sensitive information (API keys, passwords, credentials) in queries.
+
+For version-specific docs, use `/org/project/version` from the `library` output (e.g., `/vercel/next.js/v14.3.0`).
+
+If a command fails with a quota error, inform the user and suggest `npx ctx7@latest login` or setting `CONTEXT7_API_KEY` env var for higher limits. Do not silently fall back to training data.
+
+<!-- context7 -->
+
+<!-- context-mode -->
 
 # context-mode — MANDATORY routing rules
 
@@ -13,26 +32,32 @@ Analyze/count/filter/compare/search/parse/transform data: **write code** via `co
 ## BLOCKED — do NOT attempt
 
 ### curl / wget — BLOCKED
+
 Shell `curl`/`wget` intercepted and blocked. Do NOT retry.
 Use: `context-mode_ctx_fetch_and_index(url, source)` or `context-mode_ctx_execute(language: "javascript", code: "const r = await fetch(...)")`
 
 ### Inline HTTP — BLOCKED
+
 `fetch('http`, `requests.get(`, `requests.post(`, `http.get(`, `http.request(` — intercepted. Do NOT retry.
 Use: `context-mode_ctx_execute(language, code)` — only stdout enters context
 
 ### Direct web fetching — BLOCKED
+
 Use: `context-mode_ctx_fetch_and_index(url, source)` then `context-mode_ctx_search(queries)`
 
 ## REDIRECTED — use sandbox
 
 ### Shell (>20 lines output)
+
 Shell ONLY for: `git`, `mkdir`, `rm`, `mv`, `cd`, `ls`, `npm install`, `pip install`.
 Otherwise: `context-mode_ctx_batch_execute(commands, queries)` or `context-mode_ctx_execute(language: "javascript", code: "...")`. Use `language: "shell"` only when code matches the host shell.
 
 ### File reading (for analysis)
+
 Reading to **edit** → reading correct. Reading to **analyze/explore/summarize** → `context-mode_ctx_execute_file(path, language, code)`.
 
 ### grep / search (large results)
+
 Use `context-mode_ctx_execute(language: "javascript", code: "...")` in sandbox for portable filtering/counting.
 
 ## Tool selection
@@ -68,21 +93,23 @@ Skills, roles, and decisions persist for the entire session. Do not abandon them
 
 Session history is persistent and searchable. On resume, search BEFORE asking the user:
 
-| Need | Command |
-|------|---------|
-| What did we decide? | `context-mode_ctx_search(queries: ["decision"], source: "decision", sort: "timeline")` |
-| What constraints exist? | `context-mode_ctx_search(queries: ["constraint"], source: "constraint")` |
+| Need                    | Command                                                                                |
+| ----------------------- | -------------------------------------------------------------------------------------- |
+| What did we decide?     | `context-mode_ctx_search(queries: ["decision"], source: "decision", sort: "timeline")` |
+| What constraints exist? | `context-mode_ctx_search(queries: ["constraint"], source: "constraint")`               |
 
 DO NOT ask "what were we working on?" — SEARCH FIRST.
 If search returns 0 results, proceed as a fresh session.
 
 ## ctx commands
 
-| Command | Action |
-|---------|--------|
-| `ctx stats` | Call `stats` MCP tool, display full output verbatim |
-| `ctx doctor` | Call `doctor` MCP tool, run returned shell command, display as checklist |
-| `ctx upgrade` | Call `upgrade` MCP tool, run returned shell command, display as checklist |
-| `ctx purge` | Call `purge` MCP tool with confirm: true. Warns before wiping knowledge base. |
+| Command       | Action                                                                        |
+| ------------- | ----------------------------------------------------------------------------- |
+| `ctx stats`   | Call `stats` MCP tool, display full output verbatim                           |
+| `ctx doctor`  | Call `doctor` MCP tool, run returned shell command, display as checklist      |
+| `ctx upgrade` | Call `upgrade` MCP tool, run returned shell command, display as checklist     |
+| `ctx purge`   | Call `purge` MCP tool with confirm: true. Warns before wiping knowledge base. |
 
 After /clear or /compact: knowledge base and session stats preserved. Use `ctx purge` to start fresh.
+
+<!-- context-mode -->

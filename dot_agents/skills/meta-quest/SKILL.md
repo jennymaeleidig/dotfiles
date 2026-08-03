@@ -1,12 +1,10 @@
 ---
 name: meta-quest
-description: Meta Quest and Horizon OS VR development via metavr CLI — device management, app lifecycle, performance analysis, documentation search, and VR development guidance. Use when working with Meta Quest, Horizon OS, or VR development.
+description: Meta Quest and Horizon OS VR development via metavr CLI. Use when working with Meta Quest, Horizon OS, or VR development.
 license: Apache-2.0
 ---
 
 # Meta Quest Development
-
-You are a Meta Quest and Horizon OS development assistant. Use `npx -y metavr` for device management, app lifecycle, performance analysis, and documentation search.
 
 ## CLI Reference
 
@@ -56,37 +54,13 @@ npx -y metavr docs search "hand tracking setup"
 npx -y metavr docs search "OVRManager configuration" --category UNITY
 ```
 
-## VR Development Knowledge
+## Platform Knowledge
 
-When the user asks about Quest/VR-specific topics:
+- **Unity VR**: OVRManager, OVRCameraRig, hand tracking, passthrough, controllers, Scene API, Meta XR Core SDK
+- **Performance**: Perfetto traces, frame timing, CPU/GPU bottlenecks, thermal issues
+- **Horizon Platform SDK**: Android/Kotlin apps, public platform packages
+- **Mixed Reality**: MR Utility Kit, Scene API, spatial anchors, anchor-based prefab spawning
+- **WebXR**: Immersive Web SDK, Three.js, ECS patterns, spatial UI
+- **App submission**: Build validation, VRC compliance, store upload, ovr-platform-util
 
-1. **Use metavr docs search** for platform documentation:
-   ```bash
-   npx -y metavr docs search "<query>" --category <UNITY|UNREAL|ANDROID|NATIVE|WEB>
-   ```
-
-2. **Reference specialized knowledge areas:**
-   - **Unity VR development**: OVRManager, OVRCameraRig, hand tracking, passthrough, controllers, Scene API, Meta XR Core SDK
-   - **Performance debugging**: Perfetto traces, frame timing, CPU/GPU bottlenecks, thermal issues
-   - **Horizon Platform SDK**: Android/Kotlin apps, public platform packages
-   - **Mixed Reality**: MR Utility Kit, Scene API, spatial anchors, anchor-based prefab spawning
-   - **WebXR**: Immersive Web SDK, Three.js, ECS patterns, spatial UI
-   - **App submission**: Build validation, VRC compliance, store upload, ovr-platform-util
-
-3. **For Unity-specific Quest development**, reference the `unity` skill for general Unity patterns, then augment with Quest-specific guidance from metavr docs.
-
-## Progressive Disclosure
-
-1. Start with this skill for command groups and common workflows
-2. Use `npx -y metavr --help` for command discovery
-3. Use `npx -y metavr <group> --help` for specific subcommand syntax
-4. Use `npx -y metavr docs search` for platform-specific questions
-
-## Error Handling
-
-If a command fails:
-- Check device connection: `npx -y metavr device list`
-- Verify Developer Mode is enabled on Quest
-- Check USB debugging is enabled
-- Try a different USB cable (data-capable, not charge-only)
-- For wireless: `npx -y metavr device connect <ip>`
+For Unity-specific Quest development, reference the `unity` skill.

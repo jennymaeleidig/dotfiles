@@ -1,9 +1,5 @@
-openspec/
 .vscode/
-.agents/
-.opencode/
-.superpowers/
-docs/
 opencode.json
 skills-lock.json
-
+*.md
+docs/
