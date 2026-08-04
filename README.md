@@ -10,9 +10,6 @@ https://github.com/yorukot/superfile#supported-systems
 - get man / help / shortcut / cheatsheet reference in order
 - port harrison theme to starship
 - nix for os config?
-- lazy nvim updates
-- config
-  - cleanup bashrc / templatize
 - style
   - orange / monokai
     - _bat_

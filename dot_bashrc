@@ -9,7 +9,7 @@ export PATH=/usr/local/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
 
 # pnpm
-export PNPM_HOME="/Users/jennyleidig/Library/pnpm"
+export PNPM_HOME="$HOME/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -31,9 +31,6 @@ export EDITOR="code"
 export GIT_EDITOR="code"
 export VISUAL="code"
 
-#fzf
-set rtp+=/opt/homebrew/opt/fzf
-
 #bat
 export BAT_THEME="MonokaiPro"
 
@@ -44,8 +41,8 @@ export BAT_THEME="MonokaiPro"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 
 # playdate
-export PLAYDATE_SDK_PATH="/Users/jennyleidig/Developer/PlaydateSDK"
-export PATH="/Users/jennyleidig/Developer/PlaydateSDK/bin:$PATH"
+export PLAYDATE_SDK_PATH="$HOME/Developer/PlaydateSDK"
+export PATH="$HOME/Developer/PlaydateSDK/bin:$PATH"
 
 # aliases
 alias pico8="/Applications/PICO-8.app/Contents/MacOS/pico8; exit"
@@ -58,21 +55,15 @@ alias cdi="zi"
 alias processing="/Applications/Processing.app/Contents/MacOS/Processing"
 alias processing-cli="/Applications/Processing.app/Contents/MacOS/Processing cli"
 
-#npm
-export NODE_PATH=$(npm root -g)
-
 # Load Angular CLI autocompletion.
 source <(ng completion script)
 
 #flash player
-export FLEX_HOME="/Users/jennyleidig/Documents/Adobe/Flash/apache-flex-4.16.1-air-51.1.3.12/apache-flex-sdk-4.16.1-bin"
+export FLEX_HOME="$HOME/Documents/Adobe/Flash/apache-flex-4.16.1-air-51.1.3.12/apache-flex-sdk-4.16.1-bin"
 
 # Docker
 #expose docker to colima
 export DOCKER_HOST="unix://$HOME/.colima/docker.sock"
-
-# qdrant
-alias qdrant="docker-compose --file=$HOME/.roo/indexing/qdrant/docker-compose.yaml up -d"
 
 #mise
 eval "$(mise activate bash)"
@@ -99,16 +90,26 @@ export PATH="$HOME/.dotnet/tools:$PATH"
 # oh my bash
 
 # Path to your oh-my-bash installation.
-export OSH='/Users/jennyleidig/.oh-my-bash'
+export OSH="$HOME/.oh-my-bash"
 
 OMB_USE_SUDO=true
 
 completions=(
   git
-  composer
   ssh
   mise
-  openspec
+  brew
+  docker
+  gem
+  gh
+  go
+  gradle
+  makefile
+  maven
+  npm
+  pip3
+  uv
+  chezmoi
 )
 
 aliases=(
@@ -120,6 +121,15 @@ plugins=(
   bashmarks
   zoxide
   starship
+  fzf
+  brew
+  cargo
+  chezmoi
+  colored-man-pages
+  dotnet
+  golang
+  npm
+  sudo
 )
 
 source "$OSH"/oh-my-bash.sh

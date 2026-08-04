@@ -1,5 +1,5 @@
 {
-  "$schema": "https://opencode.ai/theme.json",
+  "$schema": "https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/public/theme.json",
   "defs": {
     "background": "#2D2A2E",
     "foreground": "#FCFCFA",
