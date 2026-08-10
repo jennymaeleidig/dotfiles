@@ -11,4 +11,4 @@
 	ff = only
 [core]
 	editor = code -n --wait
-	excludesfile = /Users/jennyleidig/.gitignore
+	excludesfile = ~/.gitignore

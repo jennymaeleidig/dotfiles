@@ -1,3 +1,5 @@
+#organized according to: https://sava.rocks/blog/how-i-organize-my-bashrc-with-imports
+
 # mise shims - ensure available for non-interactive shells
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 
@@ -11,126 +13,17 @@ export PATH="$HOME/.local/bin:$PATH"
 # pnpm
 export PNPM_HOME="$HOME/Library/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+*":$PNPM_HOME:"*) ;;
+*) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 
 # Enable the subsequent settings only in interactive sessions
 case $- in
-  *i*) ;;
-    *) return;;
+*i*) ;;
+*) return ;;
 esac
 
-# User configuration
-
-# remove switch to zsh warning
-export BASH_SILENCE_DEPRECATION_WARNING=1
-
-#vscode as default editor
-export EDITOR="code"
-export GIT_EDITOR="code"
-export VISUAL="code"
-
-#bat
-export BAT_THEME="MonokaiPro"
-
-# bash completion
-[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
-
-# mac ports
-export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-
-# playdate
-export PLAYDATE_SDK_PATH="$HOME/Developer/PlaydateSDK"
-export PATH="$HOME/Developer/PlaydateSDK/bin:$PATH"
-
-# aliases
-alias pico8="/Applications/PICO-8.app/Contents/MacOS/pico8; exit"
-alias hg="history | grep"
-alias cat="bat --paging=never"
-alias grep="rg"
-alias ls="eza"
-alias cd="z"
-alias cdi="zi"
-alias processing="/Applications/Processing.app/Contents/MacOS/Processing"
-alias processing-cli="/Applications/Processing.app/Contents/MacOS/Processing cli"
-
-# Load Angular CLI autocompletion.
-source <(ng completion script)
-
-#flash player
-export FLEX_HOME="$HOME/Documents/Adobe/Flash/apache-flex-4.16.1-air-51.1.3.12/apache-flex-sdk-4.16.1-bin"
-
-# Docker
-#expose docker to colima
-export DOCKER_HOST="unix://$HOME/.colima/docker.sock"
-
-#mise
-eval "$(mise activate bash)"
-
-#clangd
-export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
-
-#unity
-UNITY_NOPROXY=localhost,127.0.0.1
-
-# disable context-mode idle MCP bridge shutdown (#854)
-export CONTEXT_MODE_BRIDGE_IDLE_MS=0
-
-#supercollider
-export PATH="/Applications/SuperCollider.app/Contents/MacOS:$PATH"
-
-#haskell
-source ${HOME}/.ghcup/env
-
-#csharp
-export PATH="$HOME/.dotnet/tools:$PATH"
-
-# oh my bash
-
-# Path to your oh-my-bash installation.
-export OSH="$HOME/.oh-my-bash"
-
-OMB_USE_SUDO=true
-
-completions=(
-  git
-  ssh
-  mise
-  brew
-  docker
-  gem
-  gh
-  go
-  gradle
-  makefile
-  maven
-  npm
-  pip3
-  uv
-  chezmoi
-)
-
-aliases=(
-  general
-)
-
-plugins=(
-  git
-  bashmarks
-  zoxide
-  starship
-  fzf
-  brew
-  cargo
-  chezmoi
-  colored-man-pages
-  dotnet
-  golang
-  npm
-  sudo
-)
-
-source "$OSH"/oh-my-bash.sh
-
+# Source modular config files
+for rc in ~/.bash_exports ~/.bash_init ~/.bash_aliases; do
+	[[ -f "$rc" ]] && source "$rc"
+done

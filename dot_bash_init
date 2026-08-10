@@ -1,0 +1,58 @@
+# bash completion
+[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+
+# Load Angular CLI autocompletion.
+source <(ng completion script)
+
+#mise
+eval "$(mise activate bash)"
+
+#haskell
+source ${HOME}/.ghcup/env
+
+# oh my bash
+
+# Path to your oh-my-bash installation.
+export OSH="$HOME/.oh-my-bash"
+
+OMB_USE_SUDO=true
+
+completions=(
+  git
+  ssh
+  mise
+  brew
+  docker
+  gem
+  gh
+  go
+  gradle
+  makefile
+  maven
+  npm
+  pip3
+  uv
+  chezmoi
+)
+
+aliases=(
+  general
+)
+
+plugins=(
+  git
+  bashmarks
+  zoxide
+  starship
+  fzf
+  brew
+  cargo
+  chezmoi
+  colored-man-pages
+  dotnet
+  golang
+  npm
+  sudo
+)
+
+source "$OSH"/oh-my-bash.sh

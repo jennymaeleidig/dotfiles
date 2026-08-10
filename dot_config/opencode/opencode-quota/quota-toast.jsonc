@@ -1,7 +1,35 @@
 {
   // Find providers from OpenCode configuration and authentication.
   // Provider selection: "auto" detects providers; an array tracks only listed providers.
-  "enabledProviders": "auto",
+  // Explicit list excludes OpenCode Zen ("opencode") whose negative balance the parser can't handle.
+  "enabledProviders": ["opencode-go", "quota-providers"],
+
+  // Custom provider: Neuralwatt credit balance from the account quota API.
+  "quotaProviders": [
+    {
+      "id": "neuralwatt",
+      "label": "Neuralwatt",
+      "mode": "remote-api",
+      "url": "https://api.neuralwatt.com/v1/quota",
+      "format": "json-v1",
+      "adapter": {
+        "mappings": [
+          {
+            "resultType": "balance",
+            "name": "Credit balance",
+            "label": "Balance",
+            "unit": "$",
+            "unitPosition": "prefix",
+            "metric": {
+              "type": "value",
+              "valueType": "balance",
+              "value": { "path": ["balance", "credits_remaining_usd"] },
+            },
+          },
+        ],
+      },
+    },
+  ],
 
   // Show every quota reset period.
   // Quota presentation and reset-period choices.

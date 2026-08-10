@@ -1,5 +1,14 @@
-.vscode/
+# Source-only artifacts never reach a host (see docs/adr/0002-source-only-artifacts.md)
+README.md
+CONTEXT.md
+AGENTS.md
+CODING_STANDARDS.md
+docs/
+tools/
+.scratch/
+# Runtime state written by the opencode-vision plugin — kept on the host, not managed
+dot_config/opencode/vision-model-image.txt
+# Runtime files opencode may drop in the source directory
 opencode.json
 skills-lock.json
-*.md
-docs/
+.vscode/
