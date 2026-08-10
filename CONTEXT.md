@@ -51,7 +51,7 @@ _Avoid_: first-run script
 ### Source-only artifacts
 
 **Provisioning material**:
-Source artifacts that feed scripts but are never applied to a host — extension sources, themes.
+Source artifacts that feed scripts but are never applied to a host — extension sources.
 _Avoid_: assets, bundled content
 
 **Repo docs**:
@@ -73,5 +73,5 @@ The set of dotfiles for one program, such as the nvim, ghostty, bash, or starshi
 _Avoid_: config, dotfile folder
 
 **Theme**:
-Styling choices — colors, fonts, cursor — shared across app configs; currently monokai.
+Styling choices — colors, fonts, cursor — shared across app configs; currently Monokai Pro. Themes are dependencies: each is sourced from its own repo, not maintained inside this repo; the shiki and bat themes are hosted here only until they are published.
 _Avoid_: color scheme, style

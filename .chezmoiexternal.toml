@@ -1,0 +1,14 @@
+# Theme dependencies — see docs/adr/0003-themes-are-dependencies.md
+# Themes are kept as dependencies (chezmoi externals), not vendored copies.
+
+["dot_config/ghostty/themes/Monokai Pro"]
+    type = "file"
+    # https://github.com/Kirlovon/monokai-ghostty
+    url = "https://raw.githubusercontent.com/Kirlovon/monokai-ghostty/main/Monokai%20Pro"
+    refreshPeriod = "168h"
+
+["dot_config/opencode/themes/monokai-pro.json"]
+    type = "file"
+    # https://github.com/monokai-pro/opencode
+    url = "https://raw.githubusercontent.com/monokai-pro/opencode/main/monokai-pro.json"
+    refreshPeriod = "168h"
