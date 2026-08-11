@@ -7,11 +7,20 @@ https://github.com/yorukot/superfile#supported-systems
 - update vs code paths to be generic ($HOME)
 
 - opencode
-  - custom skills
-  - custom agents
+  - agents / agents.md
     - verifiers, both code and reference material
+    - want to include:
+      - promote tool reuse when planning rather than writing new ones
+  - plugins / tools
     - create and enforce citations
-- writing cli tools skill
+  - skills
+    - writing cli tools skill
+    - per PROJECT, some global (project is ~)
+  - commands
+    - per PROJECT
+  - lsps / formatters
+    - per PROJECT, some global (project is ~)
+
 - obsidian monokai synatx highlighting
   - https://monokai.pro/contribute
   - - bat
@@ -37,4 +46,3 @@ https://github.com/yorukot/superfile#supported-systems
   - oh my bash install script
   - homebrew install script
     - non brew mac apps
-  - opencode plugin / skill update / install script

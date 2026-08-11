@@ -15,8 +15,12 @@ What this repo tracks — dotfiles, scripts, provisioning material, and repo doc
 _Avoid_: repo, source
 
 **Target state**:
-What a host actually has after Apply: its home directory as reconciled.
+What a host actually has after Apply: its home directory as reconciled, excluding runtime state.
 _Avoid_: destination, applied files
+
+**Runtime state**:
+Files that running programs write — on a host or in the source directory — as opposed to this repo; deliberately not managed. Target-side runtime state (e.g. the opencode-vision plugin's model-choice file) is left in place by Apply; source-side runtime files (e.g. opencode.json, skills-lock.json, .vscode/) never reach a host. Both sides are enumerated in `.chezmoiignore`.
+_Avoid_: cache, unmanaged files, junk
 
 **Apply**:
 The act of reconciling Source state into Target state: writing dotfiles, removing those no longer in Source state, and running scripts whose inputs changed.
@@ -48,10 +52,20 @@ _Avoid_: watcher
 A script that runs exactly once per host.
 _Avoid_: first-run script
 
+### External sources
+
+**External source**:
+Content pulled from a remote location into Source state, refreshed on a schedule, and applied like any other source content — e.g. the ghostty and opencode theme files fetched by Apply.
+_Avoid_: vendored copy, bundled content
+
 ### Source-only artifacts
 
+**Source-only artifact**:
+Any content in Source state that never reaches a host — repo docs, provisioning material, agent scratch. `.chezmoiignore` enumerates every source-only artifact explicitly; a blanket rule is forbidden because it would swallow applied content such as the opencode app config's markdown commands and skills.
+_Avoid_: assets, bundled content
+
 **Provisioning material**:
-Source artifacts that feed scripts but are never applied to a host — extension sources.
+Source-only artifacts that feed action — tool sources hashed into onchange scripts, theme files consumed by tools outside this repo. Never applied to a host.
 _Avoid_: assets, bundled content
 
 **Repo docs**:
@@ -73,5 +87,5 @@ The set of dotfiles for one program, such as the nvim, ghostty, bash, or starshi
 _Avoid_: config, dotfile folder
 
 **Theme**:
-Styling choices — colors, fonts, cursor — shared across app configs; currently Monokai Pro. Themes are dependencies: each is sourced from its own repo, not maintained inside this repo; the shiki and bat themes are hosted here only until they are published.
+Styling choices — colors, fonts, cursor — shared across app configs; currently Monokai Pro. A published theme is an external source; the shiki and bat themes are hosted in Source state only until they are published — the shiki theme as provisioning material, the bat theme as a plain dotfile.
 _Avoid_: color scheme, style

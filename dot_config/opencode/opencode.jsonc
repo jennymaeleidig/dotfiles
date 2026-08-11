@@ -29,36 +29,4 @@
     // Detected deepseek authentication; opencode-quota added this global provider declaration.
     "deepseek": {},
   },
-  "formatter": {
-    "csharpier": {
-      "command": ["csharpier", "format", "$FILE"],
-      "extensions": [".cs"],
-      "environment": {
-        "DOTNET_ROOT": "$HOME/.local/share/mise/dotnet-root",
-      },
-    },
-    "prettier": {
-      "command": ["prettier", "--write", "$FILE"],
-      "extensions": [
-        ".js",
-        ".jsx",
-        ".ts",
-        ".tsx",
-        ".json",
-        ".md",
-        ".html",
-        ".css",
-        ".yaml",
-        ".yml",
-      ],
-    },
-  },
-  "lsp": {
-    "csharp": {
-      "command": ["csharp-ls"],
-      "env": {
-        "DOTNET_ROOT": "$HOME/.local/share/mise/dotnet-root",
-      },
-    },
-  },
 }
