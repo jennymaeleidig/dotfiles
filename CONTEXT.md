@@ -19,7 +19,7 @@ What a host actually has after Apply: its home directory as reconciled, excludin
 _Avoid_: destination, applied files
 
 **Runtime state**:
-Files that running programs write — on a host or in the source directory — as opposed to this repo; deliberately not managed. Target-side runtime state (e.g. the opencode-vision plugin's model-choice file) is left in place by Apply; source-side runtime files (e.g. opencode.json, skills-lock.json, .vscode/) never reach a host. Both sides are enumerated in `.chezmoiignore`.
+Files that running programs write — on a host or in the source directory — as opposed to this repo; deliberately not managed. Target-side runtime state (e.g. the pi package trees under `~/.pi/agent/npm/` and `~/.pi/agent/git/`) is left in place by Apply; source-side runtime files (e.g. opencode.json, skills-lock.json, .vscode/) never reach a host. Both sides are enumerated in `.chezmoiignore`.
 _Avoid_: cache, unmanaged files, junk
 
 **Apply**:
@@ -52,6 +52,10 @@ _Avoid_: watcher
 A script that runs exactly once per host.
 _Avoid_: first-run script
 
+**Prompt template**:
+A dotfile that expands a slash-invoked prompt in pi — a reusable Markdown snippet typed as `/name`. Replaces opencode's "command" concept.
+_Avoid_: command, slash command, custom command
+
 ### External sources
 
 **External source**:
@@ -83,8 +87,12 @@ A program that installs, upgrades, and tracks the tools of a host, such as mise 
 _Avoid_: package manager, version manager
 
 **App config**:
-The set of dotfiles for one program, such as the nvim, ghostty, bash, or starship app config. An app config may depend on tools.
+The set of dotfiles for one program, such as the nvim, ghostty, bash, starship, or pi app config. An app config may depend on tools.
 _Avoid_: config, dotfile folder
+
+**Package**:
+A pi package — a distributable bundle of extension, skill, prompt template, or theme, declared in the pi app config and materialized by pi into runtime state on startup. Distinct from a Tool (installed by a toolchain manager) and an External source (pulled into Source state by Apply).
+_Avoid_: plugin, add-on
 
 **Theme**:
 Styling choices — colors, fonts, cursor — shared across app configs; currently Monokai Pro. A published theme is an external source; the shiki and bat themes are hosted in Source state only until they are published — the shiki theme as provisioning material, the bat theme as a plain dotfile.

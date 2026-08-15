@@ -12,9 +12,3 @@ type = "file"
 # https://github.com/monokai-pro/opencode
 url = "https://raw.githubusercontent.com/monokai-pro/opencode/main/monokai-pro.json"
 refreshPeriod = "168h"
-
-[".pi/agent/themes/monokai-pro.json"]
-type = "file"
-# https://github.com/krfantasy/pi-monokai-pro
-url = "https://raw.githubusercontent.com/krfantasy/pi-monokai-pro/main/themes/monokai-pro.json"
-refreshPeriod = "168h"

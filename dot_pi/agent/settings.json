@@ -1,0 +1,49 @@
+{
+  "theme": "Monokai Pro (CE)",
+  "packages": [
+    "npm:context-mode",
+    "npm:@hypabolic/pi-hypa",
+    "npm:@latentminds/pi-quotas",
+    "npm:@aliou/pi-neuralwatt",
+    "npm:pi-vim",
+    "npm:pi-vision-handoff",
+    "npm:pi-lens",
+    "npm:pi-hashline-edit-pro",
+    "npm:@ff-labs/pi-fff",
+    "npm:pi-markdown-preview",
+    "npm:@narumitw/pi-btw",
+    "npm:pi-zentui",
+    "git:github.com/jonjonrankin/pi-caveman",
+    "npm:pi-context-view",
+    "npm:oppi-mirror"
+  ],
+  "lastChangelogVersion": "0.84.1",
+  "compaction": {
+    "enabled": false
+  },
+  "terminal": {
+    "showImages": false
+  },
+  "editorPaddingX": 0,
+  "enableInstallTelemetry": false,
+  "quietStartup": true,
+  "collapseChangelog": true,
+  "enabledModels": [
+    "opencode-go/deepseek-v4-flash",
+    "opencode-go/deepseek-v4-pro"
+  ],
+  "oppiMirror": {
+    "autoStart": false,
+    "workspaceCreation": "never"
+  },
+  "hideThinkingBlock": true,
+  "tuiMode": "regular",
+  "showHardwareCursor": true,
+  "piVim": {
+    "modeColors": {
+      "insert": "text",
+      "normal": "accent"
+    }
+  },
+  "outputPad": 0
+}

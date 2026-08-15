@@ -1,7 +1,7 @@
 ---
 name: create-obsidian-reference
 description: Create a structured reference document in journal/ai-reference-docs/ from the current conversation.
-compatibility: opencode
+disable-model-invocation: true
 ---
 
 # Create Obsidian Reference Doc
@@ -22,7 +22,7 @@ Destination: `journal/ai-reference-docs/`. Notes are raw format — no `---` sep
 2. **Ask the user to confirm** the derived filename before writing.
 3. If a note at the same path already exists, **ask** — overwrite, skip, or new name.
 4. Assemble the document from conversation context using the template below.
-5. **No-AI-slop pass.** Load `skill("no-ai-slop")`, then apply its **Edit** job
+5. **No-AI-slop pass.** Load the `no-ai-slop` skill, then apply its **Edit** job
    to the assembled document. Apply the rules: cut banned words, tighten empty
    phrases, unwrap colon reveals and binary contrasts, replace weak verbs,
    rewrite throat-clearing openers. Return the cleaned document. Keep the
@@ -55,9 +55,9 @@ Keep each Focus cell to one line — Content carries the substance.]
 ## Content
 
 [Structured explanation, analysis, comparisons, and findings. When a diagram
-would clarify the content, first use `skill("ascii-art-diagrams")` to load
-it, then follow its PLAN -> DRAW -> VERIFY workflow. Always wrap diagrams in
-code fences so editors do not mangle the alignment.
+would clarify the content, first load the `ascii-art-diagrams` skill, then
+follow its PLAN -> DRAW -> VERIFY workflow. Always wrap diagrams in code
+fences so editors do not mangle the alignment.
 ```
 
 ASCII diagram

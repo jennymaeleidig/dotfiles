@@ -40,3 +40,6 @@ export PATH="/Applications/SuperCollider.app/Contents/MacOS:$PATH"
 
 #csharp
 export PATH="$HOME/.dotnet/tools:$PATH"
+
+#pi
+export FFF_ENABLE_HOME_SCAN=0
