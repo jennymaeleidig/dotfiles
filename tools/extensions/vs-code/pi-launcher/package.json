@@ -2,7 +2,7 @@
   "name": "pi-launcher",
   "displayName": "pi launcher",
   "description": "Launches pi in the integrated terminal with one command.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "local",
   "engines": {
     "vscode": "^1.80.0"
@@ -23,9 +23,11 @@
     ],
     "keybindings": [
       {
-        "key": "cmd+esc",
         "command": "pi.launch",
-        "when": "!terminalFocus"
+        "key": "cmd+escape",
+        "mac": "cmd+escape",
+        "win": "ctrl+escape",
+        "linux": "ctrl+escape"
       }
     ]
   }
