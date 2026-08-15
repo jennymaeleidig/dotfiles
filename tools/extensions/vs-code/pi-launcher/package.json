@@ -1,0 +1,25 @@
+{
+  "name": "pi-launcher",
+  "displayName": "pi launcher",
+  "description": "Launches pi in the integrated terminal with one command.",
+  "version": "0.0.1",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:pi.launch"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "pi.launch",
+        "title": "Launch pi"
+      }
+    ]
+  }
+}

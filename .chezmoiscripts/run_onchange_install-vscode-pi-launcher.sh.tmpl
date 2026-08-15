@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+{{- $pkgHash := (include "tools/extensions/vs-code/pi-launcher/package.json" | sha256sum) }}
+{{- $srcHash := (include "tools/extensions/vs-code/pi-launcher/src/extension.js" | sha256sum) }}
+{{- $instHash := (include "tools/extensions/vs-code/pi-launcher/install.sh" | sha256sum) }}
+# config-hash: {{ $pkgHash }}{{ $srcHash }}{{ $instHash }}
+echo "==> Installing pi-launcher VS Code extension..."
+SRC="{{ .chezmoi.sourceDir }}/tools/extensions/vs-code/pi-launcher"
+bash "$SRC/install.sh"
+echo "==> Done. Reload the VS Code window to activate."
