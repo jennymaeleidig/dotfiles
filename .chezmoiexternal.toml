@@ -5,10 +5,3 @@
 type = "file"
 # https://github.com/Kirlovon/monokai-ghostty
 url = "https://raw.githubusercontent.com/Kirlovon/monokai-ghostty/main/Monokai%20Pro"
-refreshPeriod = "168h"
-
-[".config/opencode/themes/monokai-pro.json"]
-type = "file"
-# https://github.com/monokai-pro/opencode
-url = "https://raw.githubusercontent.com/monokai-pro/opencode/main/monokai-pro.json"
-refreshPeriod = "168h"

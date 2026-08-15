@@ -1,0 +1,14 @@
+{
+  "lens": {
+    "enabled": false
+  },
+  "format": {
+    "enabled": false
+  },
+  "ui": {
+    "compactToolLine": true
+  },
+  "widget": {
+    "visible": false
+  }
+}

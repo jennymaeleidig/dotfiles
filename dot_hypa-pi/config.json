@@ -1,0 +1,6 @@
+{
+  "mode": "replace",
+  "binary": "hypa",
+  "rewriteTimeoutMs": 5000,
+  "askNonInteractive": "deny"
+}

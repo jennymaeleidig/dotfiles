@@ -1,6 +1,6 @@
 ---
 name: validate
-description: Validate produced artifacts and the current state of development against user-named criteria — a Matt Pocock skill (~/.agents/skills), a file, or steps listed inline. Use when asked to validate progress, check work against a process, or answer "did we follow X". More generic than code-review: any artifact compared against any criteria.
+description: 'Validate produced artifacts and the current state of development against user-named criteria — a Matt Pocock skill (~/.agents/skills), a file, or steps listed inline. Use when asked to validate progress, check work against a process, or answer "did we follow X". More generic than code-review: any artifact compared against any criteria.'
 ---
 
 Validate WHAT was produced against criteria the user supplies. Unlike code review — a diff vs standards and a spec — both sides are open: a spec against tickets, a session's output against a skill's steps, a doc against a style guide.

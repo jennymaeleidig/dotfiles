@@ -10,6 +10,5 @@ tools/
 .pi/agent/npm/
 .pi/agent/git/
 # Runtime state (source side) — files opencode may drop in the source directory, never reach a host
-opencode.json
 skills-lock.json
 .vscode/
