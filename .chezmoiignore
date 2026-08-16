@@ -1,4 +1,5 @@
 # Source-only artifacts never reach a host (see docs/adr/0002-source-only-artifacts.md)
+
 README.md
 CONTEXT.md
 AGENTS.md
@@ -6,9 +7,18 @@ CODING_STANDARDS.md
 docs/
 tools/
 .scratch/
-# Runtime state (target side) — pi package trees materialized on startup, left in place by Apply
+
+# Runtime state (target side) — pi package/skill trees materialized imperatively
+# (pi packages on startup, third-party skills by the skills CLI), left in place by
+# Apply. First-match wins: ignore each immediate skills-dir child, then re-include
+# the authored skills by negation. See docs/adr/0009-agent-skills-are-runtime-state.md.
 .pi/agent/npm/
 .pi/agent/git/
-# Runtime state (source side) — files opencode may drop in the source directory, never reach a host
+.pi/agent/skills/*
+!.pi/agent/skills/create-obsidian-reference/**
+!.pi/agent/skills/validate/**
+!.pi/agent/skills/vision/**
+
+# Runtime state (source side) — files the tools may drop in the source directory, never reach a host
 skills-lock.json
 .vscode/

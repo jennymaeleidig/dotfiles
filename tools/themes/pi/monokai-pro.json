@@ -69,9 +69,9 @@
     "syntaxOperator": "pink",
     "syntaxPunctuation": "dim2",
 
-    "thinkingOff": "bgRaised",
+    "thinkingOff": "dim3",
     "thinkingMinimal": "dim4",
-    "thinkingLow": "dim3",
+    "thinkingLow": "dim2",
     "thinkingMedium": "cyan",
     "thinkingHigh": "purple",
     "thinkingXhigh": "yellow",

@@ -6,9 +6,4 @@ alias grep="rg"
 alias ls="eza"
 alias cd="z"
 alias cdi="zi"
-alias processing="/Applications/Processing.app/Contents/MacOS/Processing"
-alias processing-cli="/Applications/Processing.app/Contents/MacOS/Processing cli"
-
-# pi: raw-builtin exclusion now lives in the ~/.local/bin/pi wrapper,
-# materialized by .chezmoiscripts/run_onchange_write-pi-wrapper.sh.tmpl so it
-# applies from any shell.
+alias tsvmd="csvmd --delimiter=$'\t'"

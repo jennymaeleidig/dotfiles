@@ -55,13 +55,13 @@ Keep each Focus cell to one line — Content carries the substance.]
 ## Content
 
 [Structured explanation, analysis, comparisons, and findings. When a diagram
-would clarify the content, first load the `ascii-art-diagrams` skill, then
-follow its PLAN -> DRAW -> VERIFY workflow. Always wrap diagrams in code
-fences so editors do not mangle the alignment.
-```
-
-ASCII diagram
-
+would clarify the content, load the `design-doc-mermaid` skill
+and generate a Mermaid diagram. Obsidian renders ```mermaid
+fences natively, so embed the Mermaid source directly and validate
+it per the skill's workflow before including it.
+```mermaid
+flowchart LR
+    A[Start] --> B[End]
 ```
 
 This section carries the substance. Prefer tables for comparisons. Prefer lists

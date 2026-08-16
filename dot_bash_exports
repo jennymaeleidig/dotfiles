@@ -44,3 +44,4 @@ export PATH="$HOME/.dotnet/tools:$PATH"
 #pi
 export FFF_ENABLE_HOME_SCAN=0
 export PI_FFF_MODE=override
+export PI_MARKDOWN_PREVIEW_REGISTER_EXPORT_TOOL=false

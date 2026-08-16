@@ -97,3 +97,29 @@ _Avoid_: plugin, add-on
 **Theme**:
 Styling choices — colors, fonts, cursor — shared across app configs; currently Monokai Pro. A published theme is an external source; the shiki and bat themes are hosted in Source state only until they are published — the shiki theme as provisioning material, the bat theme as a plain dotfile.
 _Avoid_: color scheme, style
+
+### Agent tooling
+
+**Subagent**:
+A pi session the orchestrator spawns to run a bounded task in isolation — its own tools, model, and system prompt — returning a result. Spawned with pi-subagents' `Agent` tool.
+_Avoid_: sub-agent, worker, background agent, child session
+
+**Agent type**:
+A named subagent definition — an `.md` file under `~/.pi/agent/agents/` (or a project's `.pi/agents/`) whose frontmatter declares the system prompt, model, and tools. Addressed by `subagent_type` and `@name`.
+_Avoid_: agent, subagent config
+
+**Orchestrator**:
+The main pi session that detects when to delegate and spawns subagents, then consumes their results.
+_Avoid_: main agent, parent, host
+
+**Leaf agent**:
+A subagent that must not spawn further subagents (no `allowed_subagents`). The `vision` subagent is a leaf.
+_Avoid_: terminal agent, sink agent
+
+**Delegation**:
+The orchestrator handing a bounded task to a subagent instead of doing it in-context, to keep the main context clean.
+_Avoid_: handoff
+
+**Vision handoff**:
+pi-vision-handoff's mechanism that swaps an image block for its text description before a text-only model sees it. Transport — distinct from vision delegation, where a subagent does the visual reasoning.
+_Avoid_: vision subagent, vision delegation
