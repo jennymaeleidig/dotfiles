@@ -25,7 +25,6 @@
     "npm:pi-vim",
     "npm:pi-vision-handoff",
     "npm:pi-lens",
-    "npm:pi-hashline-edit-pro",
     "npm:@ff-labs/pi-fff",
     "npm:pi-markdown-preview",
     "npm:@narumitw/pi-btw",
@@ -34,7 +33,8 @@
     "npm:pi-context-view",
     "npm:oppi-mirror",
     "npm:@upstash/context7-pi",
-    "/Users/jennyleidig/.vibe-island/pi-extension"
+    "/Users/jennyleidig/.vibe-island/pi-extension",
+    "npm:pi-web-access"
   ],
   "piVim": {
     "modeColors": {

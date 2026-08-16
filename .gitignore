@@ -4,4 +4,4 @@ openspec/changes/
 # chezmoi external targets — materialized by apply, never committed
 dot_config/ghostty/themes/Monokai Pro
 dot_config/opencode/themes/monokai-pro.json
-
+.scratch/
