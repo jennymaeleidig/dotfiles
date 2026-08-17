@@ -14,20 +14,23 @@ cd "$HOME"
 echo "==> Installing third-party pi agent skills..."
 
 npx -y skills@latest add https://github.com/spillwavesolutions/design-doc-mermaid \
-  --skill design-doc-mermaid -g -a pi -y
+	--skill design-doc-mermaid -g -a pi -y
 
 npx -y skills@latest add https://github.com/petergyang/no-ai-slop \
-  --skill no-ai-slop -g -a pi -y
+	--skill no-ai-slop -g -a pi -y
+
+npx skills add https://github.com/intent-driven-dev/intent-driven-template \
+	--skill gherkin-authoring -g -a pi -y
 
 # mattpocock/skills: install only the curated "base" set (the 25 skills
 # listed in the repo's .claude-plugin/plugin.json). Without -s the CLI
 # defaults to --skill '*' and installs all 35, including in-progress/misc.
 npx -y skills@latest add mattpocock/skills -g -a pi -y \
-  -s ask-matt code-review codebase-design diagnosing-bugs domain-modeling \
-     grill-with-docs implement improve-codebase-architecture prototype \
-     research resolving-merge-conflicts setup-matt-pocock-skills tdd to-spec \
-     to-tickets triage wayfinder wizard \
-     grill-me grilling handoff teach to-questionnaire wait-what writing-for-agents
+	-s ask-matt code-review codebase-design diagnosing-bugs domain-modeling \
+	grill-with-docs implement improve-codebase-architecture prototype \
+	research resolving-merge-conflicts setup-matt-pocock-skills tdd to-spec \
+	to-tickets triage wayfinder wizard \
+	grill-me grilling handoff teach to-questionnaire wait-what writing-for-agents
 
 echo "==> Installed global skills:"
 npx -y skills ls -g --json | grep '"name"'
