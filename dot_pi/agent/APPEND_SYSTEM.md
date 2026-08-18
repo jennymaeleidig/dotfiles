@@ -11,7 +11,8 @@ Agent types (defined in `~/.pi/agent/agents/*.md`):
 
 - `researcher` — background; investigates against primary sources, writes a findings file. (wayfinder research tickets)
 - `validate` — foreground, inherits context; compares artifacts vs criteria, returns a verdict table.
-- `code-review-standards` / `code-review-spec` — background, parallel; the two code-review axes.
+- `explore` — foreground; fast read-only code search — find files by pattern, grep symbols, answer "where is X defined".
+- `general` — foreground; the fallback subtype. Multi-step tasks and searches where the first few tries may miss.
 - `vision` — foreground leaf; reads images, returns one JSON object.
 
 Skill wording → call:

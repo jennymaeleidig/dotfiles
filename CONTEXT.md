@@ -26,10 +26,6 @@ _Avoid_: cache, unmanaged files, junk
 The act of reconciling Source state into Target state: writing dotfiles, removing those no longer in Source state, and running scripts whose inputs changed.
 _Avoid_: sync, deploy
 
-**Provision**:
-The one-time act of standing up a new host — installing the toolchain manager and chezmoi themselves, before the first Apply.
-_Avoid_: bootstrap, fresh install
-
 ### Files and scripts
 
 **Dotfile**:
@@ -48,10 +44,6 @@ _Avoid_: installer, setup script
 A script that runs when its inputs change; the inputs are hashed into the script's rendered content so the change is detected.
 _Avoid_: watcher
 
-**Once script**:
-A script that runs exactly once per host.
-_Avoid_: first-run script
-
 **Prompt template**:
 A dotfile that expands a slash-invoked prompt in pi — a reusable Markdown snippet typed as `/name`. Replaces opencode's "command" concept.
 _Avoid_: command, slash command, custom command
@@ -66,10 +58,6 @@ _Avoid_: vendored copy, bundled content
 
 **Source-only artifact**:
 Any content in Source state that never reaches a host — repo docs, provisioning material, agent scratch. `.chezmoiignore` enumerates every source-only artifact explicitly; a blanket rule is forbidden because it would swallow applied content such as the opencode app config's markdown commands and skills.
-_Avoid_: assets, bundled content
-
-**Provisioning material**:
-Source-only artifacts that feed action — tool sources hashed into onchange scripts, theme files consumed by tools outside this repo. Never applied to a host.
 _Avoid_: assets, bundled content
 
 **Repo docs**:
@@ -90,7 +78,7 @@ _Avoid_: package manager, version manager
 The set of dotfiles for one program, such as the nvim, ghostty, bash, starship, or pi app config. An app config may depend on tools.
 _Avoid_: config, dotfile folder
 
-**Package**:
+**Pi Package**:
 A pi package — a distributable bundle of extension, skill, prompt template, or theme, declared in the pi app config and materialized by pi into runtime state on startup. Distinct from a Tool (installed by a toolchain manager) and an External source (pulled into Source state by Apply).
 _Avoid_: plugin, add-on
 
@@ -104,10 +92,6 @@ _Avoid_: color scheme, style
 A pi session the orchestrator spawns to run a bounded task in isolation — its own tools, model, and system prompt — returning a result. Spawned with pi-subagents' `Agent` tool.
 _Avoid_: sub-agent, worker, background agent, child session
 
-**Agent type**:
-A named subagent definition — an `.md` file under `~/.pi/agent/agents/` (or a project's `.pi/agents/`) whose frontmatter declares the system prompt, model, and tools. Addressed by `subagent_type` and `@name`.
-_Avoid_: agent, subagent config
-
 **Orchestrator**:
 The main pi session that detects when to delegate and spawns subagents, then consumes their results.
 _Avoid_: main agent, parent, host
@@ -119,7 +103,3 @@ _Avoid_: terminal agent, sink agent
 **Delegation**:
 The orchestrator handing a bounded task to a subagent instead of doing it in-context, to keep the main context clean.
 _Avoid_: handoff
-
-**Vision handoff**:
-pi-vision-handoff's mechanism that swaps an image block for its text description before a text-only model sees it. Transport — distinct from vision delegation, where a subagent does the visual reasoning.
-_Avoid_: vision subagent, vision delegation

@@ -18,6 +18,8 @@ tools/
 !.pi/agent/skills/create-obsidian-reference/**
 !.pi/agent/skills/validate/**
 !.pi/agent/skills/vision/**
+!.pi/agent/skills/setup-pi-workspace/**
+!.pi/agent/skills/collapse-journey/**
 
 # Runtime state (source side) — files the tools may drop in the source directory, never reach a host
 skills-lock.json
