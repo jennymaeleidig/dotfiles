@@ -1,0 +1,9 @@
+{
+  "$schema": "https://unpkg.com/@aliou/pi-neuralwatt@0.14.2/schema.json",
+  "subBarIntegration": {
+    "enabled": false
+  },
+  "provider": {
+    "includeEarlyAccessModels": true
+  }
+}

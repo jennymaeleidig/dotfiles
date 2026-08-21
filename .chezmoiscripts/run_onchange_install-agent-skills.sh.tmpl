@@ -9,28 +9,41 @@ set -euo pipefail
 # would not rerun to restore them.
 # See docs/adr/0009-agent-skills-are-runtime-state.md.
 #
+# Parity: the `add` commands below are the single source of truth for
+# third-party pi skills. Every run first removes ALL previously installed
+# CLI-installed (github-sourced) pi skills, then reinstalls exactly the set
+# named below — so deleting a line uninstalls that skill instead of orphaning
+# it. Authored skills (sourceType != github; chezmoi-managed under
+# dot_pi/agent/skills, re-included in .chezmoiignore) are preserved
+# automatically and never touched.
+#
 cd "$HOME"
 
-echo "==> Installing third-party pi agent skills..."
+echo "==> Removing previously installed third-party pi skills..."
+INSTALLED="$(npx -y skills ls -g --json 2>/dev/null \
+	| python3 -c "import json,sys; print('\n'.join(s['name'] for s in json.load(sys.stdin) if s.get('sourceType')=='github'))")"
+if [ -n "$INSTALLED" ]; then
+	# shellcheck disable=SC2086
+	npx -y skills remove -g -a pi -y $INSTALLED
+fi
 
-npx -y skills@latest add https://github.com/spillwavesolutions/design-doc-mermaid \
-	--skill design-doc-mermaid -g -a pi -y
+echo "==> Installing third-party pi agent skills..."
 
 npx -y skills@latest add https://github.com/petergyang/no-ai-slop \
 	--skill no-ai-slop -g -a pi -y
 
-npx skills add https://github.com/intent-driven-dev/intent-driven-template \
-	--skill gherkin-authoring -g -a pi -y
+npx -y skills@latest add https://github.com/jasnell/opencode-skill-ascii-art-diagrams \
+	--skill ascii-art-diagrams -g -a pi -y
 
-# mattpocock/skills: install only the curated "base" set (the 25 skills
+# mattpocock/skills: install only the curated "base" set (the 21 skills
 # listed in the repo's .claude-plugin/plugin.json). Without -s the CLI
 # defaults to --skill '*' and installs all 35, including in-progress/misc.
 npx -y skills@latest add mattpocock/skills -g -a pi -y \
-	-s ask-matt code-review codebase-design diagnosing-bugs domain-modeling \
+	-s code-review codebase-design diagnosing-bugs domain-modeling \
 	grill-with-docs implement improve-codebase-architecture prototype \
 	research resolving-merge-conflicts setup-matt-pocock-skills tdd to-spec \
 	to-tickets wayfinder wizard \
-	grill-me grilling handoff teach to-questionnaire wait-what writing-for-agents
+	grill-me grilling handoff teach writing-for-agents
 
 echo "==> Installed global skills:"
 npx -y skills ls -g --json | grep '"name"'
