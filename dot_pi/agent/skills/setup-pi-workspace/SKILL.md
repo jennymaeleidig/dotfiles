@@ -1,6 +1,7 @@
 ---
 name: setup-pi-workspace
 description: Set up a repo's workspace — run setup-matt-pocock-skills, then overlay this skill's authoritative local-markdown issue-tracker doc. Use when onboarding a repo, or the user says "setup pi workspace".
+disable-model-invocation: true
 ---
 
 # setup pi workspace
@@ -27,7 +28,7 @@ Write the tracker doc from the seed template in this skill folder:
 
 Copy it to `<repo>/docs/agents/issue-tracker.md` — overwrite; the seed wins. Then, in the repo's `## Agent skills` block (`CLAUDE.md`/`AGENTS.md`), update only the `### Issue tracker` sub-block to read:
 
-> Issues and specs live as markdown files under `.scratch/<feature>/` in this repo. See `docs/agents/issue-tracker.md`.
+> Issues and specs live as markdown files under `.scratch/<effort>/` in this repo. See `docs/agents/issue-tracker.md`.
 
 The rest of the block stays as setup wrote it.
 

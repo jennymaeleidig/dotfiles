@@ -36,16 +36,16 @@ Done when the response passes the Checklist in §8.
 
 ### 4.1 Tier Definitions
 Rank sources at selection time:
-- **Tier A** — Primary, independent of interested parties: filings, raw data,
+- **Tier 1** — Primary, independent of interested parties: filings, raw data,
   peer-reviewed studies, audit reports, original transcripts.
-- **Tier B** — Disinterested institutional reporting relaying Tier A material.
-- **Tier C** — Interested-party primary: corporate reports, press releases,
+- **Tier 2** — Disinterested institutional reporting relaying Tier 1 material.
+- **Tier 3** — Interested-party primary: corporate reports, press releases,
   think-tank white papers, someone's own account. Never the terminal source for
   a consequential claim.
-- **Tier D** — Commentary, aggregation, AI summaries: find and frame, never
+- **Tier 4** — Commentary, aggregation, AI summaries: find and frame, never
   settle.
 
-A consequential claim settles only at Tier A, corroborated independently of the
+A consequential claim settles only at Tier 1, corroborated independently of the
 interested party; otherwise tag it `[REPORTED]` or `[DISPUTED]` (tags defined in
 §6) and say corroboration is absent. Name conflicts of interest on all sides.
 
@@ -54,16 +54,16 @@ interested party; otherwise tag it `[REPORTED]` or `[DISPUTED]` (tags defined in
 
 | Outlet / Domain | Default Tier | Notes |
 |---|---|---|
-| SEC EDGAR / court filings | Tier A | primary |
-| arXiv, peer-reviewed journals | Tier A | primary; arXiv is pre-peer-review |
-| Reuters / AP wire | Tier B | disinterested |
-| Company press rooms | Tier C | interested-party primary |
-| Wikipedia | Tier D | find-and-frame only, never settle |
+| SEC EDGAR / court filings | Tier 1 | primary |
+| arXiv, peer-reviewed journals | Tier 1 | primary; arXiv is pre-peer-review |
+| Reuters / AP wire | Tier 2 | disinterested |
+| Company press rooms | Tier 3 | interested-party primary |
+| Wikipedia | Tier 4 | find-and-frame only, never settle |
 
 ## 5. Research Budget
 ~3 rounds; tool calls are metered. Spend rounds on depth, not breadth:
 - **R1 Locate** — who claims what; map the landscape; find primary material.
-- **R2 Verify** — Tier A sources on the 2–3 load-bearing claims; one document
+- **R2 Verify** — Tier 1 sources on the 2–3 load-bearing claims; one document
   per claim, not a scan.
 - **R3 Corroborate + break** — the disinterested upgrade, then attack your own
   best case.

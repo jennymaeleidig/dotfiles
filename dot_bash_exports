@@ -45,3 +45,6 @@ export PATH="$HOME/.dotnet/tools:$PATH"
 export FFF_ENABLE_HOME_SCAN=0
 export PI_FFF_MODE=override
 export PI_MARKDOWN_PREVIEW_REGISTER_EXPORT_TOOL=false
+
+# pi security (cc-safety-net)
+export CC_SAFETY_NET_LEVEL=strict

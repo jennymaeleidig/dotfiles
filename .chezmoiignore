@@ -9,18 +9,28 @@ tools/
 .scratch/
 
 # Runtime state (target side) — pi package/skill trees materialized imperatively
+
 # (pi packages on startup, third-party skills by the skills CLI), left in place by
+
 # Apply. First-match wins: ignore each immediate skills-dir child, then re-include
+
 # the authored skills by negation. See docs/adr/0009-agent-skills-are-runtime-state.md.
+
 .pi/agent/npm/
 .pi/agent/git/
-.pi/agent/skills/*
+.pi/agent/skills/\*
 !.pi/agent/skills/create-obsidian-reference/**
-!.pi/agent/skills/validate/**
-!.pi/agent/skills/vision/**
 !.pi/agent/skills/setup-pi-workspace/**
-!.pi/agent/skills/collapse-journey/**
+!.pi/agent/skills/cc-safety-net/**
+!.pi/agent/skills/subagents/**
+
+# Extension runtime deps (target side) — node_modules materialized by
+# run_onchange_after_install-mermaid-lint-deps.sh.tmpl, same source/runtime split as
+# the pi package trees (docs/adr/0004-pi-packages-declared-in-settings.md).
+.pi/agent/extensions/mermaid-lint/node_modules/
+.pi/agent/extensions/mermaid-lint/package-lock.json
 
 # Runtime state (source side) — files the tools may drop in the source directory, never reach a host
+
 skills-lock.json
 .vscode/

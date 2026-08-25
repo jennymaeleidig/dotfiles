@@ -55,14 +55,7 @@ Keep each Focus cell to one line — Content carries the substance.]
 ## Content
 
 [Structured explanation, analysis, comparisons, and findings. When a diagram
-would clarify the content, load the `design-doc-mermaid` skill
-and generate a Mermaid diagram. Obsidian renders ```mermaid
-fences natively, so embed the Mermaid source directly and validate
-it per the skill's workflow before including it.
-```mermaid
-flowchart LR
-    A[Start] --> B[End]
-```
+would clarify the content, load the `mermaid-diagrammer` agent and follow its workflow. Wrap the resulting diagram in a fenced ```` ```mermaid ```` block.
 
 This section carries the substance. Prefer tables for comparisons. Prefer lists
 for sequences. Prefer concrete examples over abstract descriptions.

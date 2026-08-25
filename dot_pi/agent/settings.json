@@ -4,23 +4,76 @@
     "enabled": false
   },
   "defaultModel": "deepseek-v4-flash",
-  "defaultProvider": "opencode-go",
+  "defaultProvider": "neuralwatt",
   "defaultThinkingLevel": "high",
   "editorPaddingX": 0,
   "enabledModels": [
-    "opencode-go/deepseek-v4-flash",
-    "opencode-go/deepseek-v4-pro",
-    "opencode/mimo-v2.5-free",
-    "opencode-go/mimo-v2.5"
+    "neuralwatt/deepseek-v4-flash",
+    "neuralwatt/deepseek-v4-flash-flex",
+    "neuralwatt/qwen-3.8-27b",
+    "neuralwatt/deepseek-v4-pro"
   ],
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.84.1",
+  "lastChangelogVersion": "0.84.2",
   "oppiMirror": {
     "autoStart": false,
     "workspaceCreation": "never"
   },
   "outputPad": 0,
+  "packageDocs": [
+    {
+      "npm:pi-vim": "https://github.com/lajarre/pi-vim"
+    },
+    {
+      "npm:@tintinweb/pi-subagents": "https://github.com/tintinweb/pi-subagents"
+    },
+    {
+      "npm:@ff-labs/pi-fff": "https://github.com/dmtrKovalenko/fff/tree/main/packages/pi-fff"
+    },
+    {
+      "npm:pi-markdown-preview": "https://github.com/omaclaren/pi-markdown-preview"
+    },
+    {
+      "npm:@narumitw/pi-btw": "https://github.com/narumiruna/pi-extensions/tree/main/packages/pi-btw"
+    },
+    {
+      "npm:pi-zentui": "https://github.com/lmilojevicc/pi-zentui"
+    },
+    {
+      "npm:oppi-mirror": "https://github.com/duh17/oppi/tree/main/pi-extensions/oppi-mirror"
+    },
+    {
+      "npm:@upstash/context7-pi": "https://github.com/upstash/context7"
+    },
+    {
+      "npm:pi-web-access": "https://github.com/nicobailon/pi-web-access"
+    },
+    {
+      "npm:@bigboss2063/pi-clip": "https://github.com/bigboss2063/pi-clip"
+    },
+    {
+      "npm:cc-safety-net": "https://github.com/kenryu42/cc-safety-net"
+    },
+    {
+      "npm:pi-sandbox": "https://github.com/carderne/pi-sandbox"
+    },
+    {
+      "npm:@tmustier/pi-ralph-wiggum": "https://github.com/tmustier/pi-extensions/tree/main/pi-ralph-wiggum"
+    },
+    {
+      "npm:pi-compact-ex": "https://github.com/evan-choi/pi-compact-ex"
+    },
+    {
+      "npm:pi-skill-gate": "https://github.com/cullendotdev/pi-skill-gate"
+    },
+    {
+      "npm:pi-extmgr": "https://github.com/ayagmar/pi-extmgr"
+    },
+    {
+      "npm:pi-mermaid": "https://github.com/Gurpartap/pi-mermaid"
+    }
+  ],
   "packages": [
     "npm:pi-vim",
     "npm:@tintinweb/pi-subagents",
@@ -30,8 +83,17 @@
     "npm:pi-zentui",
     "npm:oppi-mirror",
     "npm:@upstash/context7-pi",
-    "/Users/jennyleidig/.vibe-island/pi-extension",
-    "npm:pi-web-access"
+    "npm:pi-web-access",
+    "npm:@bigboss2063/pi-clip",
+    "npm:cc-safety-net",
+    "npm:pi-sandbox",
+    "npm:@aliou/pi-neuralwatt",
+    "npm:@tmustier/pi-ralph-wiggum",
+    "npm:pi-compact-ex",
+    "npm:pi-skill-gate",
+    "npm:pi-extmgr",
+    "npm:pi-mermaid",
+    "/Users/jennyleidig/.vibe-island/pi-extension"
   ],
   "piVim": {
     "modeColors": {

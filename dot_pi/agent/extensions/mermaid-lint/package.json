@@ -1,0 +1,14 @@
+{
+  "name": "pi-mermaid-lint-extension",
+  "private": true,
+  "type": "module",
+  "description": "pi extension that lints Mermaid diagrams in Markdown / .mmd files via @mermaid-lint/core",
+  "pi": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "dependencies": {
+    "@mermaid-lint/core": "^0.53.1"
+  }
+}

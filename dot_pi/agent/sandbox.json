@@ -1,0 +1,23 @@
+{
+  "enabled": true,
+  "permissionPromptTimeoutSeconds": 0.001,
+  "filesystem": {
+    "allowRead": [
+      "~/.pi/agent/skills",
+      "~/.pi/agent/agents",
+      "~/.pi/agent/prompts",
+      "~/.gitconfig",
+      "~/.cc-safety-net",
+      "/opt/homebrew/Cellar"
+    ],
+    "allowWrite": [
+      ".",
+      "$TMPDIR",
+      "/tmp"
+    ],
+    "denyWrite": [
+      "~/.local/share/chezmoi/dot_pi/agent/sandbox.json",
+      "~/.cc-safety-net"
+    ]
+  }
+}

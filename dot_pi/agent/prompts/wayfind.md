@@ -1,0 +1,4 @@
+---
+description:
+argument-hint: "<effort>"
+---

@@ -103,3 +103,19 @@ _Avoid_: terminal agent, sink agent
 **Delegation**:
 The orchestrator handing a bounded task to a subagent instead of doing it in-context, to keep the main context clean.
 _Avoid_: handoff
+
+**Ralph loop**:
+A long-running, verifiable task driven by the pi-ralph-wiggum extension: the `ralph-runner` wrapper turns a task into a task file, runs the loop until the completion gate is met, and returns a `<promise>COMPLETE</promise>`. Conceptually a spawned unix process — one input, run until exit.
+_Avoid_: loop agent, task runner
+
+**Ralph runner**:
+The subagent that runs one ralph loop on a supplied task to completion and returns. Dispatched via the `Agent` tool; never run inline.
+_Avoid_: ralph agent, ralph-loop agent
+
+**Prompt state machine**:
+A slash prompt (`/name` in `dot_pi/agent/prompts/`) written as a machine: its body is one fenced Mermaid `flowchart TD` state diagram with explicit transitions and one terminal "report back" state. Node shapes carry meaning: `[ ]` inline orchestration, `[[ ]]` dispatch a `ralph-runner` subagent, `{ }` decision, `([ ])` report-back. Frontmatter (`description`, `argument-hint`) sits outside the diagram.
+_Avoid_: slash command, prompt, command
+
+**Prompt lifecycle**:
+The larger state machine a prompt lives inside — the ordering of prompts a human walks (wayfind → to-effort-spec → to-impl-tickets → implement → close). A prompt is one state of it, and may compose child prompts the same way.
+_Avoid_: flow, pipeline, workflow

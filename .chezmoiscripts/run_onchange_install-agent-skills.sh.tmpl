@@ -20,8 +20,8 @@ set -euo pipefail
 cd "$HOME"
 
 echo "==> Removing previously installed third-party pi skills..."
-INSTALLED="$(npx -y skills ls -g --json 2>/dev/null \
-	| python3 -c "import json,sys; print('\n'.join(s['name'] for s in json.load(sys.stdin) if s.get('sourceType')=='github'))")"
+INSTALLED="$(npx -y skills ls -g --json 2>/dev/null |
+	python3 -c "import json,sys; print('\n'.join(s['name'] for s in json.load(sys.stdin) if s.get('sourceType')=='github'))")"
 if [ -n "$INSTALLED" ]; then
 	# shellcheck disable=SC2086
 	npx -y skills remove -g -a pi -y $INSTALLED
@@ -31,9 +31,6 @@ echo "==> Installing third-party pi agent skills..."
 
 npx -y skills@latest add https://github.com/petergyang/no-ai-slop \
 	--skill no-ai-slop -g -a pi -y
-
-npx -y skills@latest add https://github.com/jasnell/opencode-skill-ascii-art-diagrams \
-	--skill ascii-art-diagrams -g -a pi -y
 
 # mattpocock/skills: install only the curated "base" set (the 21 skills
 # listed in the repo's .claude-plugin/plugin.json). Without -s the CLI
