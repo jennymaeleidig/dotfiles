@@ -44,10 +44,6 @@ _Avoid_: installer, setup script
 A script that runs when its inputs change; the inputs are hashed into the script's rendered content so the change is detected.
 _Avoid_: watcher
 
-**Prompt template**:
-A dotfile that expands a slash-invoked prompt in pi — a reusable Markdown snippet typed as `/name`. Replaces opencode's "command" concept.
-_Avoid_: command, slash command, custom command
-
 ### External sources
 
 **External source**:
@@ -61,8 +57,8 @@ Any content in Source state that never reaches a host — repo docs, provisionin
 _Avoid_: assets, bundled content
 
 **Repo docs**:
-Repository documents that guide the setup but never reach a host — docs/, README, CODING_STANDARDS.
-_Avoid_: documentation
+Repository documents that guide the setup but never reach a host — docs/, README, CODING*STANDARDS.
+\_Avoid*: documentation
 
 ### Tools and apps
 
@@ -78,44 +74,6 @@ _Avoid_: package manager, version manager
 The set of dotfiles for one program, such as the nvim, ghostty, bash, starship, or pi app config. An app config may depend on tools.
 _Avoid_: config, dotfile folder
 
-**Pi Package**:
-A pi package — a distributable bundle of extension, skill, prompt template, or theme, declared in the pi app config and materialized by pi into runtime state on startup. Distinct from a Tool (installed by a toolchain manager) and an External source (pulled into Source state by Apply).
-_Avoid_: plugin, add-on
-
 **Theme**:
 Styling choices — colors, fonts, cursor — shared across app configs; currently Monokai Pro. A published theme is an external source; the shiki and bat themes are hosted in Source state only until they are published — the shiki theme as provisioning material, the bat theme as a plain dotfile.
 _Avoid_: color scheme, style
-
-### Agent tooling
-
-**Subagent**:
-A pi session the orchestrator spawns to run a bounded task in isolation — its own tools, model, and system prompt — returning a result. Spawned with pi-subagents' `Agent` tool.
-_Avoid_: sub-agent, worker, background agent, child session
-
-**Orchestrator**:
-The main pi session that detects when to delegate and spawns subagents, then consumes their results.
-_Avoid_: main agent, parent, host
-
-**Leaf agent**:
-A subagent that must not spawn further subagents (no `allowed_subagents`). The `vision` subagent is a leaf.
-_Avoid_: terminal agent, sink agent
-
-**Delegation**:
-The orchestrator handing a bounded task to a subagent instead of doing it in-context, to keep the main context clean.
-_Avoid_: handoff
-
-**Ralph loop**:
-A long-running, verifiable task driven by the pi-ralph-wiggum extension: the `ralph-runner` wrapper turns a task into a task file, runs the loop until the completion gate is met, and returns a `<promise>COMPLETE</promise>`. Conceptually a spawned unix process — one input, run until exit.
-_Avoid_: loop agent, task runner
-
-**Ralph runner**:
-The subagent that runs one ralph loop on a supplied task to completion and returns. Dispatched via the `Agent` tool; never run inline.
-_Avoid_: ralph agent, ralph-loop agent
-
-**Prompt state machine**:
-A slash prompt (`/name` in `dot_pi/agent/prompts/`) written as a machine: its body is one fenced Mermaid `flowchart TD` state diagram with explicit transitions and one terminal "report back" state. Node shapes carry meaning: `[ ]` inline orchestration, `[[ ]]` dispatch a `ralph-runner` subagent, `{ }` decision, `([ ])` report-back. Frontmatter (`description`, `argument-hint`) sits outside the diagram.
-_Avoid_: slash command, prompt, command
-
-**Prompt lifecycle**:
-The larger state machine a prompt lives inside — the ordering of prompts a human walks (wayfind → to-effort-spec → to-impl-tickets → implement → close). A prompt is one state of it, and may compose child prompts the same way.
-_Avoid_: flow, pipeline, workflow

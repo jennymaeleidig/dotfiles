@@ -3,13 +3,7 @@ name: seer
 description: >-
   Plain-language descriptions of images — screenshots and image paths the user references, images inside tool results, or whatever the user asks to verify visually.
 tools: read
-extensions:
-  [
-    "cc-safety-net",
-    "pi-sandbox",
-    "pi-compact-ex",
-    "~/.vibe-island/pi-extension",
-  ]
+extensions: true
 skills: false
 model: qwen-3.8-27b
 thinking: off

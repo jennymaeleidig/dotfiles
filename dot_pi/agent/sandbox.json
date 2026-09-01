@@ -1,17 +1,33 @@
 {
   "enabled": true,
-  "permissionPromptTimeoutSeconds": 0.001,
+  "permissionPromptTimeoutSeconds": 0,
+  "network": {
+    "allowLocalBinding": true,
+    "allowAllUnixSockets": true,
+    "allowUnauthenticatedSocksProxy": true,
+    "allowedDomains": [
+      "*"
+    ],
+    "deniedDomains": []
+  },
   "filesystem": {
     "allowRead": [
-      "~/.pi/agent/skills",
-      "~/.pi/agent/agents",
-      "~/.pi/agent/prompts",
+      ".",
+      "~/.pi",
       "~/.gitconfig",
       "~/.cc-safety-net",
-      "/opt/homebrew/Cellar"
+      "~/.docker",
+      "~/.colima",
+      "~./agent/sandbox.json",
+      "/opt/homebrew/Cellar",
+      "/private/var/folders/*/pi-clipboard-*.png",
+      "/var/folders/*/*/T/**",
+      "/private/var/folders/*/*/T/**"
     ],
     "allowWrite": [
       ".",
+      "~/.pi/agent/sessions",
+      "~/.pi/agent/agent-memory",
       "$TMPDIR",
       "/tmp"
     ],

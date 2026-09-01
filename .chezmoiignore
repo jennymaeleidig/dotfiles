@@ -2,8 +2,14 @@
 
 README.md
 CONTEXT.md
+CONTEXT-MAP.md
 AGENTS.md
 CODING_STANDARDS.md
+**/README.md
+**/CONTEXT.md
+**/CONTEXT-MAP.md
+**/AGENTS.md
+**/CODING_STANDARDS.md
 docs/
 tools/
 .scratch/
@@ -23,10 +29,14 @@ tools/
 !.pi/agent/skills/setup-pi-workspace/**
 !.pi/agent/skills/cc-safety-net/**
 !.pi/agent/skills/subagents/**
+!.pi/agent/skills/pi-sandbox/**
 
 # Extension runtime deps (target side) — node_modules materialized by
+
 # run_onchange_after_install-mermaid-lint-deps.sh.tmpl, same source/runtime split as
+
 # the pi package trees (docs/adr/0004-pi-packages-declared-in-settings.md).
+
 .pi/agent/extensions/mermaid-lint/node_modules/
 .pi/agent/extensions/mermaid-lint/package-lock.json
 

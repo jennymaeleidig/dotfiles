@@ -1,17 +1,17 @@
 ---
 name: cc-safety-net
-description: Boundary and CLI guidance for the global CC Safety Net pre-tool guard and the strict pi-sandbox. Use when a tool is blocked or denied, when running `npx -y cc-safety-net`, or to know which reads and writes are allowed.
+description: Boundary and CLI guidance for the global CC Safety Net pre-tool guard — secrets access, destructive commands, git-history mutation, and its rule allow-lists. Use when a tool is blocked with a safety-net reason, when running `npx -y cc-safety-net`, or when its rules are discussed. For filesystem/network denials and permission prompts, use the pi-sandbox skill.
 ---
 
-# CC Safety Net & Sandbox guidance
+# CC Safety Net guidance
 
-A strict sandbox (pi-sandbox) and a CC Safety Net pre-tool guard are active for **every** agent, including subagents and background agents. This skill states the boundary and how to use the CLI. Do not treat it as advice to bypass anything — the restrictions are enforced at the OS and tool level.
+A CC Safety Net pre-tool guard is active for **every** agent, including subagents and background agents. This skill states what it guards and how to use the CLI. Do not treat it as advice to bypass anything — the restrictions are enforced at the OS and tool level.
 
 ## Boundary
 
-- **Reads** are limited to the current project and `~/.pi/agent/skills`. Reads of anything else are denied (non-interactive runs auto-deny after ~1 ms).
-- **Writes** are limited to the project, `/tmp`, `~/.npm`, and `~/.cc-safety-net`.
-- CC Safety Net hard-blocks destructive commands, git-history mutation, and secrets (SSH keys, `.env`, `~/.aws`, and similar). These cannot be overridden, even by an allow rule.
+CC Safety Net hard-blocks secrets access (SSH keys, `.env`, `~/.aws`, and similar), destructive commands, and git-history mutation. These cannot be overridden, even by an allow rule.
+
+The filesystem and network fence is a different guard — the pi-sandbox extension. See the `pi-sandbox` skill for that boundary, its config, and how its denials and permission prompts work.
 
 ## When a tool is blocked
 
@@ -21,5 +21,3 @@ A strict sandbox (pi-sandbox) and a CC Safety Net pre-tool guard are active for 
 ## CLI
 
 - Read-only / audit: `npx -y cc-safety-net status`, `logs`, `rule list`, `rule verify`, `rule doc`.
-- Write (`rule sync`, `rule add`) only after the user asks.
-- Never edit `~/.cc-safety-net/policy.json` directly; CC Safety Net blocks it anyway.

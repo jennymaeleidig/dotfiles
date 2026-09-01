@@ -4,7 +4,19 @@
     "subagents": "enabled",
     "context7-docs": "enabled",
     "writing-for-agents": "enabled",
-    "pi-ralph-wiggum": "enabled"
+    "pi-ralph-wiggum": "enabled",
+    "no-ai-slop": "enabled",
+    "grilling": "enabled",
+    "code-review": "enabled",
+    "codebase-design": "enabled",
+    "diagnosing-bugs": "enabled",
+    "domain-modeling": "enabled",
+    "prototype": "enabled",
+    "research": "enabled",
+    "resolving-merge-conflicts": "enabled",
+    "tdd": "enabled",
+    "wizard": "enabled",
+    "pi-sandbox": "enabled"
   },
   "projects": {}
 }

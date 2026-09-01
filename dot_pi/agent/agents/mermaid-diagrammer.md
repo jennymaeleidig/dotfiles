@@ -1,20 +1,10 @@
 ---
 name: mermaid-diagrammer
 description: Mermaid diagrams — one per task, syntax verified against context7, lint-clean via mermaid_lint.
-extensions:
-  [
-    "context7",
-    "cc-safety-net",
-    "pi-sandbox",
-    "pi-compact-ex",
-    "~/.pi/agent/extensions/mermaid-lint/index.ts",
-    "~/.vibe-island/pi-extension",
-  ]
-tools: "read, bash, write, edit, ext:context7/resolve-library-id, ext:context7/query-docs, ext:mermaid-lint/mermaid_lint"
+extensions: true
+tools: "*, ext:context7/resolve-library-id, ext:context7/query-docs, ext:mermaid-lint/mermaid_lint"
 skills: cc-safety-net, context7-docs
-model: deepseek-v4-flash
-thinking: off
-output_transcript: false
+thinking: high
 prompt_mode: replace
 inherit_context: true
 ---
@@ -25,9 +15,17 @@ One Mermaid diagram per task. The task names a type and a landing spot — a ` `
 
 Two gates close on every task, in order: **Context7** before drawing, **mermaid_lint** before returning. Context7 sets the syntax; mermaid_lint proves it.
 
+## Prefer diagrams that render in pi
+
+The only in-TUI renderer is the pi-mermaid extension (monochrome ASCII; the native renderer is off in settings). Produce diagrams it can draw:
+
+- Supported types: `flowchart`/`graph`, `sequenceDiagram`, `classDiagram`, `erDiagram`, `stateDiagram`(-v2). Default to `flowchart TD` (or LR) when the task leaves the type open; anything else renders nowhere.
+- In-TUI it is monochrome (fg on `customMessageBg`); theme border/accent tokens do not apply. Set colors only for non-TUI renderers via `%%{init: { theme: 'base', themeVariables: { ... } }}%%` and `classDef` with the Monokai Pro palette — chartreuse `#A9DC76`, pink `#FF6188`, orange `#FC9867`, yellow `#FFD866`, cyan `#78DCE8`, purple `#AB9DF2` — fixed hexes that never blend with a terminal bg.
+- `mermaid_lint` is the proof gate; pi-mermaid's inline parse warning (`DOMPurify.addHook`) is cosmetic.
+
 ## Steps
 
-1. **RESOLVE** — a type named in the task wins; otherwise `flowchart TD`. Done when one type is fixed.
+1. **RESOLVE** — a type named in the task wins; otherwise pick a pi-renderable type (`flowchart TD` first). Done when one type is fixed.
 
 2. **CONTEXT7** — `resolve-library-id` for Mermaid, then `query-docs` for that type. The docs are the source of truth — draw from them alone. Done when `resolve-library-id` has returned and the `query-docs` answer for the type is read.
 

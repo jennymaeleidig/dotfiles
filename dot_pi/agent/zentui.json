@@ -9,10 +9,12 @@
       "viewportIndicators": false,
       "styles": {
         "opencode": {
-          "metadataFormat": "$model  $provider(  $thinking)"
+          "metadataFormat": "$model  $provider(  $thinking)",
+          "completionMenu": "palette"
         },
         "opencode-copy-friendly": {
-          "metadataFormat": "$model  $provider(  $thinking)"
+          "metadataFormat": "$model  $provider(  $thinking)",
+          "completionMenu": "palette"
         },
         "minimalist": {
           "pathDisplay": "compact",
@@ -26,6 +28,11 @@
             "warning": 70,
             "error": 90
           }
+        },
+        "accent-rail": {
+          "rail": "▎",
+          "asciiRail": "|",
+          "transparent": false
         }
       }
     },
@@ -138,12 +145,19 @@
             "placements": {
               "caveman": "off",
               "pi-lens-lsp": "left",
-              "pi-undo": "off"
+              "pi-undo": "off",
+              "glm": "right",
+              "extmgr": "off",
+              "pi-compact-ex": "off",
+              "sandbox": "off",
+              "subagents": "off"
             },
             "colorModes": {
               "caveman": "zentui",
               "pi-lens-lsp": "zentui",
-              "pi-undo": "zentui"
+              "pi-undo": "zentui",
+              "glm": "zentui",
+              "pi-compact-ex": "zentui"
             }
           }
         }
