@@ -11,10 +11,10 @@ uncommitted edits.
 
 ## License
 
-- New code is [CC0-1.0](https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt) (SPDX `CC0-1.0`): CC0 §2 waives all rights "for any purpose whatsoever" with no attribution condition, so no per-file notices — an optional `// SPDX-License-Identifier: CC0-1.0` line as machine-readable convenience.
-- Borrowing or adapting external code: citation block above the code and a root `CITATION.cff`, per [CITATION.md](~/.pi/agent/seed/prompts/CITATION.md) — the source’s license survives the borrow (CC0 §2 waives only the Affirmer's own rights), so it must be attributed.
+- When writing new code, license it [CC0-1.0](https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt) (SPDX `CC0-1.0`): CC0 §2 waives all rights "for any purpose whatsoever" with no attribution condition, so no per-file notices — mark it with the optional `// SPDX-License-Identifier: CC0-1.0` line as machine-readable convenience.
+- When borrowing or adapting external code — verbatim or paraphrased, in code or in a doc snippet: add a citation block above the code and update the root `CITATION.cff`, per [CITATION.md](~/.pi/agent/seed/prompts/CITATION.md) — the source’s license survives the borrow (CC0 §2 waives only the Affirmer's own rights), so it must be attributed.
 
 ## Accessibility
 
-- Follow the [WAI standards & guidelines](https://www.w3.org/WAI/standards-guidelines/)
-  - WCAG for content, the [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/patterns/) patterns (semantics and keyboard contract) for interactive components.
+- When writing content or UI: follow the [WAI standards & guidelines](https://www.w3.org/WAI/standards-guidelines/) —
+  [WCAG](https://www.w3.org/WAI/standards-guidelines/wcag/) for content, the [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/patterns/) patterns (semantics and keyboard contract) for interactive components.

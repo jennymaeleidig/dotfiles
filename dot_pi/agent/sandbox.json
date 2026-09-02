@@ -13,11 +13,15 @@
   "filesystem": {
     "allowRead": [
       ".",
+      "~/.local",
+      "~/.config",
+      "Library",
       "~/.pi",
       "~/.gitconfig",
       "~/.cc-safety-net",
       "~/.docker",
       "~/.colima",
+      "~/.npm",
       "~./agent/sandbox.json",
       "/opt/homebrew/Cellar",
       "/private/var/folders/*/pi-clipboard-*.png",
@@ -29,7 +33,8 @@
       "~/.pi/agent/sessions",
       "~/.pi/agent/agent-memory",
       "$TMPDIR",
-      "/tmp"
+      "/tmp",
+      "~/.npm/_logs"
     ],
     "denyWrite": [
       "~/.local/share/chezmoi/dot_pi/agent/sandbox.json",

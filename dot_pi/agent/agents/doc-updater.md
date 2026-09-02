@@ -39,6 +39,12 @@ If a coding standard changed, edit the matching `CODING_STANDARDS.md` (root for 
 
 Done when standards and agent docs reflect the work, with no duplicated meaning and no slop.
 
+## Cite borrowed code
+
+Any doc you write that incorporates borrowed or adapted external code — a snippet in an ADR, standard, or skill — gets a citation block above the code per `~/.pi/agent/seed/prompts/CITATION.md`; external code with citation metadata also updates the root `CITATION.cff`.
+
+Done when every borrowed or adapted snippet cites its source, and the root `CITATION.cff` reflects any newly incorporated external code.
+
 ## Gate and verify
 
 Grep the repo for dangling references to deleted tracker artifacts (`spec.md`, `issues/<NN>`, `map.md`, `research/`, `prototype/`) in any doc. Tidy every modified `.md` with `format_md_tables`. Re-read each edited doc once as if you'd never seen the work: it must make its point without the artifact it was updated from.

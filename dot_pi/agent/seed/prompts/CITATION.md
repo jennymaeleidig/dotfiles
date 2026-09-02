@@ -3,7 +3,14 @@
 Policies for external code incorporated into a project. New, original
 code is CC0-1.0 (SPDX `CC0-1.0`) and needs no citation.
 
-## Code Citation Policy
+Two layers, per the [FORCE11 Software Citation
+Principles](https://force11.org/info/software-citation-principles-published-2016/):
+a citation block above the code that humans read, and a `CITATION.cff`
+in the project root that tools parse. The block cites the borrowed code
+in place; the `CITATION.cff` records every external source the project
+incorporates. Both layers apply to the same borrow.
+
+## Code Citation Policy (human-readable block)
 
 Borrowing or adapting external code adds a citation block immediately
 above it — verbatim or adapted, any external source.
@@ -24,9 +31,7 @@ Adapt the comment syntax to the target language. Python example:
 - Modifying borrowed code appends
   `# Modified by {name} on {date} — {changes}`; earlier citations stay.
 
-Reference: [FORCE11 Software Citation Principles](https://force11.org/info/software-citation-principles-published-2016/)
-
-## Machine-Readable Citation Policy
+## Machine-Readable Citation Policy (`CITATION.cff`)
 
 Keep a `CITATION.cff` (CFF 1.2.0 spec) in the project root for all
 external code incorporated.
