@@ -4,12 +4,6 @@ The domain of configuring pi, the coding agent: the dotfiles under `dot_pi/` tha
 
 ## Language
 
-### Prompts
-
-**Prompt template**:
-A dotfile that expands a slash-invoked prompt in pi — a reusable Markdown snippet typed as `/name`.
-_Avoid_: command, slash command, custom command
-
 ### Seeds
 
 **Seed**:
