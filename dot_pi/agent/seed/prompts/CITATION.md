@@ -3,29 +3,27 @@
 Policies for external code incorporated into a project. New, original
 code is CC0-1.0 (SPDX `CC0-1.0`) and needs no citation.
 
-Two layers, per the [FORCE11 Software Citation
-Principles](https://force11.org/info/software-citation-principles-published-2016/):
-a citation block above the code that humans read, and a `CITATION.cff`
-in the project root that tools parse. The block cites the borrowed code
-in place; the `CITATION.cff` records every external source the project
-incorporates. Both layers apply to the same borrow.
+Two layers apply to every borrow: a citation block above the code
+(humans read) and a `CITATION.cff` in the project root (tools parse).
 
 ## Code Citation Policy (human-readable block)
 
-Borrowing or adapting external code adds a citation block immediately
-above it — verbatim or adapted, any external source.
+Borrowing or adapting external code — verbatim or adapted, any external
+source — adds a citation block immediately above it, per the
+[FORCE11 Software Citation Primer](https://raw.githubusercontent.com/force11/force11-sciwg/master/guidance/software_citation_primer.md):
+cite the software itself — Creator, Title, resolvable Identifier (DOI
+preferred) — plus Version, Date, and license as available.
 
 Adapt the comment syntax to the target language. Python example:
 
 ```python
-# Citation: {Authors} — {Title} (v{version}) [{License}]
-# Source: {URL or DOI}
+# Citation: {Creator} — {Title} (v{version}) [{License}]
+# Source: {resolvable permalink or DOI}
 # Accessed: {date}
 ```
 
-- Cite every borrowed or adapted block, with a unique identifier
-  (permalink URL or DOI) and a specific version — tag, commit hash, or
-  access date.
+- Cite every borrowed or adapted block, with a specific version — tag,
+  commit hash, or access date.
 - Name the original license; when unknown, write `Unknown` and flag for
   verification.
 - Modifying borrowed code appends

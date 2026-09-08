@@ -7,10 +7,13 @@
   "defaultProvider": "neuralwatt",
   "defaultThinkingLevel": "high",
   "editorPaddingX": 0,
-  "enabledModels": ["zai/glm-5.3-flash"],
+  "enabledModels": [
+    "zai/glm-5.3-flash",
+    "openrouter/z-ai/glm-5.3-flash"
+  ],
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.84.4",
+  "lastChangelogVersion": "0.85.1",
   "markdown": {
     "mermaid": "off"
   },
@@ -42,9 +45,6 @@
       "npm:@upstash/context7-pi": "https://github.com/upstash/context7"
     },
     {
-      "npm:pi-web-access": "https://github.com/nicobailon/pi-web-access"
-    },
-    {
       "npm:@bigboss2063/pi-clip": "https://github.com/bigboss2063/pi-clip"
     },
     {
@@ -54,12 +54,6 @@
       "npm:pi-sandbox": "https://github.com/carderne/pi-sandbox"
     },
     {
-      "npm:pi-compact-ex": "https://github.com/evan-choi/pi-compact-ex"
-    },
-    {
-      "npm:pi-skill-gate": "https://github.com/cullendotdev/pi-skill-gate"
-    },
-    {
       "npm:pi-extmgr": "https://github.com/ayagmar/pi-extmgr"
     },
     {
@@ -67,26 +61,30 @@
     },
     {
       "npm:@estebanforge/pi-glm-tweaks": "https://github.com/EstebanForge/pi-glm-tweaks"
+    },
+    {
+      "npm:donsetch": "https://github.com/dondai44423/donsetch"
+    },
+    {
+      "npm:pi-blackhole": "https://github.com/k0valik/pi-blackhole"
     }
   ],
   "packages": [
     "npm:pi-vim",
-    "npm:@tintinweb/pi-subagents",
     "npm:@ff-labs/pi-fff",
     "npm:pi-markdown-preview",
     "npm:@narumitw/pi-btw",
     "npm:pi-zentui",
     "npm:oppi-mirror",
     "npm:@upstash/context7-pi",
-    "npm:pi-web-access",
     "npm:@bigboss2063/pi-clip",
     "npm:cc-safety-net",
     "npm:pi-sandbox",
-    "npm:pi-compact-ex",
-    "npm:pi-skill-gate",
     "npm:pi-extmgr",
     "npm:pi-mermaid",
-    "npm:@estebanforge/pi-glm-tweaks"
+    "npm:@estebanforge/pi-glm-tweaks",
+    "npm:donsetch",
+    "npm:pi-blackhole"
   ],
   "piVim": {
     "modeColors": {

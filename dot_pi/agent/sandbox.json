@@ -15,7 +15,7 @@
       ".",
       "~/.local",
       "~/.config",
-      "Library",
+      "~/Library",
       "~/.pi",
       "~/.gitconfig",
       "~/.cc-safety-net",
@@ -34,7 +34,7 @@
       "~/.pi/agent/agent-memory",
       "$TMPDIR",
       "/tmp",
-      "~/.npm/_logs"
+      "~/.npm"
     ],
     "denyWrite": [
       "~/.local/share/chezmoi/dot_pi/agent/sandbox.json",
