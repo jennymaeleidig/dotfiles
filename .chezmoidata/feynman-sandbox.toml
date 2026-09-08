@@ -1,0 +1,17 @@
+# Port map for the feynman sandbox (see docs/adr/0004). Single source for both
+# the msb `ports:` list and the guest relay's fwd() pairs, rendered into
+# dot_config/feynman/sandbox.yaml.tmpl and dot_config/feynman/relay.js.tmpl.
+# msb publishes host ports by dialing the guest's eth0 IP, but feynman binds
+# its servers to 127.0.0.1 inside the guest, so each service is exposed by the
+# relay (0.0.0.0:relay -> 127.0.0.1:service) and msb maps host -> relay.
+[[feynmanSandbox.ports]]
+name = "workbench"
+host = 6174
+relay = 16174
+service = 6174
+
+[[feynmanSandbox.ports]]
+name = "oauth-callback"
+host = 9876
+relay = 19876
+service = 9876

@@ -9,6 +9,10 @@
 # the release's SHA256SUMS, and extracts it into the volume with a one-off
 # builder sandbox. Re-running with a newer VERSION rebuilds the volume.
 #
+# Guest bundle provisioning only: the guest pi config (extensions, shared
+# prefs, keybindings) is the feynman-pi-sync Script's concern, invoked at the
+# end and also on every launch by the feynman() shell function.
+#
 # Usage: feynman-vm-setup [VERSION]   (default: latest release)
 set -eu
 
@@ -18,12 +22,6 @@ VOLUME="feynman"
 VOLUME_SIZE="8G"
 OS_ARCH="linux-arm64"
 RELEASE_BASE="https://github.com/companion-inc/feynman/releases/download"
-
-# Pi extensions bundled into the feynman sandbox. Declared here (source state);
-# merged into ~/.feynman/agent/settings.json `packages` (feynman's pi home,
-# mounted into the VM) and materialized by feynman's pi at startup.
-# Peer-range rule from docs/adr/0004 applies: check against the bundled pi.
-EXTENSIONS="npm:pi-compact-transcript npm:pi-vim"
 
 resolve_latest() {
 	curl -fsSL https://github.com/companion-inc/feynman/releases/latest |
@@ -36,55 +34,13 @@ if [ -z "$VERSION" ]; then
 	exit 1
 fi
 
-# Pi settings applied declaratively alongside the extensions: merged into
-# ~/.feynman/agent/settings.json on every run. Mirrors the host pi prefs that
-# are not tied to host-only extensions; nested values are complete objects
-# (shallow merge). Note: feynman forces theme = "feynman" every launch
-# (src/pi/settings.ts normalizeFeynmanSettings), so the theme is not ours to
-# set — it is left to feynman.
-SETTINGS_BLOB='{"collapseChangelog":true,"compaction":{"enabled":true},"defaultProjectTrust":"always","doubleEscapeAction":"tree","editorPaddingX":0,"enableInstallTelemetry":false,"markdown":{"mermaid":"final"},"piVim":{"modeColors":{"insert":"text","normal":"accent"}},"quietStartup":true,"showHardwareCursor":true,"terminal":{"showImages":true},"tuiMode":"fullscreen"}'
-# Keybindings overlaid onto ~/.feynman/agent/keybindings.json (declared keys
-# win; feynman's own defaults are preserved).
-KEYBINDINGS_BLOB='{"app.interrupt":"alt+c"}'
-
 BUNDLE="feynman-${VERSION}-${OS_ARCH}"
 TARBALL="$SRC_DIR/$BUNDLE.tar.gz"
 MARKER="$VM_DIR/installed-version"
-SETTINGS="$HOME/.feynman/agent/settings.json"
-
-# Sync the declared extensions and settings into feynman's pi state:
-# append missing packages, overlay the declared keys, touch nothing else.
-# Keybindings are overlaid the same way onto keybindings.json.
-sync_settings() {
-	[ -f "$SETTINGS" ] || return 0
-	FEYNMAN_SETTINGS_BLOB="$SETTINGS_BLOB" FEYNMAN_KEYBINDINGS_BLOB="$KEYBINDINGS_BLOB" node -e '
-const fs = require("node:fs");
-const path = require("node:path");
-const file = process.argv[1];
-const settings = JSON.parse(fs.readFileSync(file, "utf8"));
-const pkgs = settings.packages ?? [];
-for (const ext of process.argv.slice(2)) {
-	if (!pkgs.includes(ext)) pkgs.push(ext);
-}
-settings.packages = pkgs;
-Object.assign(settings, JSON.parse(process.env.FEYNMAN_SETTINGS_BLOB ?? "{}"));
-fs.writeFileSync(file, JSON.stringify(settings, null, 2) + "\n");
-const kbBlob = process.env.FEYNMAN_KEYBINDINGS_BLOB;
-if (kbBlob) {
-	const kbFile = file.replace(/settings\.json$/, "keybindings.json");
-	if (fs.existsSync(kbFile)) {
-		const kb = JSON.parse(fs.readFileSync(kbFile, "utf8"));
-		Object.assign(kb, JSON.parse(kbBlob));
-		fs.writeFileSync(kbFile, JSON.stringify(kb, null, 2) + "\n");
-	}
-}
-' "$SETTINGS" $EXTENSIONS
-	echo "feynman-vm-setup: extensions and settings synced into $SETTINGS"
-}
 
 if [ -f "$MARKER" ] && [ "$(cat "$MARKER")" = "$VERSION" ]; then
 	echo "feynman-vm-setup: version $VERSION already installed in the feynman volume"
-	sync_settings
+	"$HOME/.local/bin/feynman-pi-sync"
 	exit 0
 fi
 
@@ -135,6 +91,6 @@ done
 
 # State dirs the sandbox config bind-mounts; msb needs them to exist.
 mkdir -p "$HOME/.feynman" "$HOME/.ahub"
-sync_settings
+"$HOME/.local/bin/feynman-pi-sync"
 
 echo "feynman-vm-setup: installed $BUNDLE into the '$VOLUME' disk volume"

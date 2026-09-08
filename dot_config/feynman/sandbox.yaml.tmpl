@@ -1,8 +1,10 @@
 # Feynman runs inside this microsandbox microVM (msb). Loaded by the `feynman`
-# shell function in bash_aliases; see docs/adr/0012-feynman-runs-in-a-microsandbox.md.
+# shell function in bash_aliases; see docs/adr/0004-feynman-runs-in-a-microsandbox.md.
 #
 # msb schema: https://github.com/superradcompany/microsandbox/blob/main/docs/cli/configuration.mdx
 # Strict YAML: no anchors, no unknown fields, quote typed strings.
+# The guest patches are real source files (relay.js.tmpl, guest-feynman.sh)
+# rendered in below; port pairs come from .chezmoidata/feynman-sandbox.toml.
 image: "debian:trixie"
 cpus: 4
 memory: "4G"
@@ -25,27 +27,28 @@ mounts:
     target: "/opt/feynman"
 
 patches:
-  # Guest loopback relay. msb publishes ports by dialing the guest's eth0 IP
-  # (smoltcp), but feynman binds its servers to 127.0.0.1 inside the guest, so
-  # direct host->guest forwards can't reach them. This relay exposes the
-  # loopback services on 0.0.0.0: workbench 16174 -> 6174, OAuth callback
-  # 19876 -> 9876; the ports block maps host ports to the relay.
+  # Guest loopback relay: exposes the guest's loopback-only services on
+  # 0.0.0.0 (see relay.js for the pair map).
   - text:
       path: "/opt/relay.js"
-      content: "const net = require('node:net');\nconst fwd = (listen, target) => {\n\tnet.createServer((c) => {\n\t\tconst u = net.connect(target);\n\t\tc.pipe(u);\n\t\tu.pipe(c);\n\t\tconst kill = () => { c.destroy(); u.destroy(); };\n\t\tc.on('error', kill);\n\t\tu.on('error', kill);\n\t}).listen(listen, '0.0.0.0');\n};\nfwd(19876, { host: '127.0.0.1', port: 9876 });\nfwd(16174, { host: '127.0.0.1', port: 6174 });\n"
+      content: {{ includeTemplate "dot_config/feynman/relay.js.tmpl" . | toJson }}
       mode: "0644"
   # Guest entry point: start the relay, then exec the launcher inside the
   # bundle (a symlink would break the launcher's own ROOT resolution).
   - text:
       path: "/usr/local/bin/feynman"
-      content: "#!/bin/sh\nif [ ! -x /opt/feynman/current/feynman ]; then\n\techo \"feynman: VM bundle missing at /opt/feynman — run feynman-vm-setup on the host\" >&2\n\texit 127\nfi\n/opt/feynman/current/node/bin/node /opt/relay.js >/dev/null 2>&1 &\nexec /opt/feynman/current/feynman \"$@\"\n"
+      content: {{ include "dot_config/feynman/guest-feynman.sh" | toJson }}
       mode: "0755"
 
 # Public internet egress (model providers, paper APIs); private/metadata blocked.
 network: public
 
-# Host -> relay mapping (see the relay patch): workbench and OAuth callback.
-ports: ["6174:16174", "9876:19876"]
+# Host -> relay mapping (see relay.js and .chezmoidata/feynman-sandbox.toml):
+# workbench and OAuth callback.
+ports:
+{{- range .feynmanSandbox.ports }}
+  - "{{ .host }}:{{ .relay }}"
+{{- end }}
 
 # Provider API keys stay host-side and are injected per-domain; uncomment and
 # add keys as needed (values come from the host environment):

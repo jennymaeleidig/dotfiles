@@ -1,0 +1,6 @@
+{{- /*
+Host pi settings: shared prefs (both adapters) merged with host-only keys.
+One declaration, two adapters — see docs/adr/0004 and .chezmoidata/pi-prefs.toml.
+*/ -}}
+{{- $prefs := merge (dict) .piPrefs.hostOnly .piPrefs.shared -}}
+{{ $prefs | toPrettyJson }}

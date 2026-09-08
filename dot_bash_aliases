@@ -22,9 +22,9 @@ feynman() {
 		command feynman "$@"
 		return
 	fi
-	# Re-assert declared pi extensions/settings/keybindings before launch —
-	# a fast no-op when the volume already matches the declared version.
-	"$HOME/.local/bin/feynman-vm-setup" >/dev/null 2>&1 || true
+	# Re-assert the declared guest pi config (extensions/settings/keybindings)
+	# before launch — a fast no-op when the target already matches.
+	"$HOME/.local/bin/feynman-pi-sync" >/dev/null 2>&1 || true
 	local dir="$(pwd -P)"
 	if [ "$dir" != "$HOME" ] && [ -d "$dir" ]; then
 		msb run --conf "$HOME/.config/feynman/sandbox.yaml" -v "$dir:/workspace" -w /workspace -- feynman "$@"

@@ -1,0 +1,47 @@
+#!/bin/sh
+# feynman-pi-sync - sync the declared guest pi config into feynman's pi home
+# (~/.feynman/agent). The App config concern split out of feynman-vm-setup
+# (see docs/adr/0004): the declaration is rendered to
+# ~/.config/feynman/pi-guest-prefs.json from .chezmoidata/pi-prefs.toml, and
+# this script merges it into ~/.feynman/agent/settings.json - appending
+# missing packages, overlaying declared keys, touching nothing else - and
+# overlays the declared keybindings onto keybindings.json.
+#
+# Called by the feynman() shell function on every launch (a fast no-op when
+# the target already matches) and by feynman-vm-setup after installing the
+# bundle volume.
+set -eu
+
+SETTINGS="$HOME/.feynman/agent/settings.json"
+DECLARED="$HOME/.config/feynman/pi-guest-prefs.json"
+KEYBINDINGS_OVERLAY='{"app.interrupt":"alt+c"}'
+
+[ -f "$SETTINGS" ] || exit 0
+if [ ! -f "$DECLARED" ]; then
+	echo "feynman-pi-sync: $DECLARED missing; run chezmoi apply" >&2
+	exit 0
+fi
+
+DECLARED="$DECLARED" KEYBINDINGS_OVERLAY="$KEYBINDINGS_OVERLAY" node -e '
+const fs = require("node:fs");
+const file = process.argv[1];
+const overlay = JSON.parse(fs.readFileSync(process.env.DECLARED, "utf8"));
+const settings = JSON.parse(fs.readFileSync(file, "utf8"));
+const pkgs = settings.packages ?? [];
+for (const pkg of overlay.packages ?? []) {
+	if (!pkgs.includes(pkg)) pkgs.push(pkg);
+}
+if (overlay.packages) settings.packages = pkgs;
+delete overlay.packages;
+Object.assign(settings, overlay);
+fs.writeFileSync(file, JSON.stringify(settings, null, 2) + "\n");
+const kbOverlay = process.env.KEYBINDINGS_OVERLAY;
+if (kbOverlay) {
+	const kbFile = file.replace(/settings\.json$/, "keybindings.json");
+	if (fs.existsSync(kbFile)) {
+		const kb = JSON.parse(fs.readFileSync(kbFile, "utf8"));
+		Object.assign(kb, JSON.parse(kbOverlay));
+		fs.writeFileSync(kbFile, JSON.stringify(kb, null, 2) + "\n");
+	}
+}
+' "$SETTINGS"

@@ -1,0 +1,8 @@
+{{- /*
+Guest pi declaration for the feynman sandbox: shared prefs plus the guest
+extension list (as `packages`). Read by feynman-pi-sync and merged into
+~/.feynman/agent/settings.json — see docs/adr/0004 and
+.chezmoidata/pi-prefs.toml.
+*/ -}}
+{{- $guest := merge (dict) .piPrefs.shared (dict "packages" .piPrefs.guest.extensions) -}}
+{{ $guest | toJson }}
