@@ -5,6 +5,16 @@
 # Panes themselves are colored by the host terminal (ghostty theme
 # "Monokai Pro", see docs/adr/0003-themes-are-dependencies.md); the plugin
 # additionally syncs the 16 ANSI cell colors to ghostty live via OSC.
+#
+# KNOWN BUG (upstream, qintmb/herdr-theme-picker): every pick rewrites
+# [theme.custom] with BARE hex ("2d2a2e"), but herdr's parse_color only
+# accepts "#rrggbb"/"#rgb"/rgb()/names — anything else logs
+# "unknown color, defaulting to cyan" and renders cyan (tab bar, active
+# rows, labels). If the UI turns cyan after a pick: re-prefix every value
+# below with "#", then `herdr server reload-config`. The picker's preview
+# looks right because it renders swatches directly, bypassing the parser.
+# Also note the OSC sync keeps recoloring ghostty after herdr closes;
+# restart ghostty (or OSC 104/110/111) to reset to its configured theme.
 
 onboarding = false
 
