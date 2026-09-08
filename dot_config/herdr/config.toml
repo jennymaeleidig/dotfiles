@@ -63,3 +63,13 @@ green = "#a9dc76"
 # class → blue and teal (Monokai Pro has no teal; blue doubles for it)
 blue = "#78dce8"
 teal = "#78dce8"
+
+# The agent-name token in the expanded sidebar renders with overlay0 + DIM
+# by default (src/client/shell/agent_sidebar.rs, render_agent_row), which is
+# near-invisible on the Monokai active_row_bg (#5b595c on #403e41, ~1.6:1).
+# Give it subtext0 instead, undimmed and bold, so focused agent rows read.
+[ui.sidebar.agents]
+rows = [
+  ["state_icon", "machine", "workspace", "tab"],
+  [{ token = "agent", fg = "#939293", bold = true, dim = false }],
+]
