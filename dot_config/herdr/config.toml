@@ -17,6 +17,10 @@
 
 onboarding = false
 
+# alt+1..9 jump straight to tabs 1-9 without the prefix.
+[keys.indexed]
+tabs = "alt"
+
 [ui.sound]
 enabled = false
 
