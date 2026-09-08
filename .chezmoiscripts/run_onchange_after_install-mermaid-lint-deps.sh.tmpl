@@ -4,7 +4,8 @@ set -euo pipefail
 # Materializes the mermaid-lint extension's runtime dependencies. Its source
 # (index.ts, package.json) is Source state under dot_pi/agent/extensions/
 # mermaid-lint/; its node_modules/ is runtime state excluded from target state
-# in .chezmoiignore, exactly like the pi package trees (docs/adr/0004).
+# in .chezmoiignore, exactly like the pi package trees
+# (dot_pi/docs/adr/0001-pi-packages-declared-in-settings.md).
 #
 # `after_` attribute, not `onchange` interleaved alphabetically with file
 # updates: default (unordered) scripts run while dotfiles are being applied,
