@@ -50,10 +50,14 @@ surface1 = "#403e41"
 active_row_bg = "#403e41"
 selection_bg = "#403e41"
 
-# dimmed 4 → overlay0 (soft borders)
-overlay0 = "#5b595c"
-# dimmed 3 → overlay1 (strong borders)
-overlay1 = "#727072"
+# dimmed 3 → overlay0 (soft borders, sidebar token separators). Herdr
+# renders separators and headers with overlay0 + DIM, so this tier needs
+# to stay readable on the active_row_bg (#403e41); dimmed 4 (#5b595c)
+# proved near-invisible there.
+overlay0 = "#727072"
+# dimmed 2 → overlay1 (strong borders; also selected workspace number
+# and scrollbar thumb)
+overlay1 = "#939293"
 # dimmed 2 → subtext0
 subtext0 = "#939293"
 # (dimmed 1 #c1c0c0 is unused; Herdr has no token between text and subtext0.)
@@ -73,12 +77,17 @@ green = "#a9dc76"
 blue = "#78dce8"
 teal = "#78dce8"
 
-# The agent-name token in the expanded sidebar renders with overlay0 + DIM
-# by default (src/client/shell/agent_sidebar.rs, render_agent_row), which is
-# near-invisible on the Monokai active_row_bg (#5b595c on #403e41, ~1.6:1).
-# Give it subtext0 instead, undimmed and bold, so focused agent rows read.
+# Machine/tab/pane tokens share the agent-name fallback style
+# (overlay0 + DIM, see render_agent_row), which is unreadable on the
+# Monokai active_row_bg. Give them the same treatment as the agent
+# token: subtext0, bold, undimmed.
 [ui.sidebar.agents]
 rows = [
-  ["state_icon", "machine", "workspace", "tab"],
+  [
+    "state_icon",
+    { token = "machine", fg = "#939293", bold = true, dim = false },
+    "workspace",
+    { token = "tab", fg = "#939293", bold = true, dim = false },
+  ],
   [{ token = "agent", fg = "#939293", bold = true, dim = false }],
 ]
