@@ -7,7 +7,7 @@ set -euo pipefail
 # ~/.pi/agent is chezmoi-managed, so without the .chezmoiignore exclusion an
 # Apply would delete them — they were wiped by the last apply — and the script
 # would not rerun to restore them.
-# See docs/adr/0009-agent-skills-are-runtime-state.md.
+# See dot_pi/docs/adr/0003-agent-skills-are-runtime-state.md.
 #
 # Parity: the `add` commands below are the single source of truth for
 # third-party pi skills. Every run first removes ALL previously installed

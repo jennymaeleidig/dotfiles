@@ -19,7 +19,7 @@ What a host actually has after Apply: its home directory as reconciled, excludin
 _Avoid_: destination, applied files
 
 **Runtime state**:
-Files that running programs write — on a host or in the source directory — as opposed to this repo; deliberately not managed. Target-side runtime state (e.g. the pi package trees under `~/.pi/agent/npm/` and `~/.pi/agent/git/`) is left in place by Apply; source-side runtime files (e.g. opencode.json, skills-lock.json, .vscode/) never reach a host. Both sides are enumerated in `.chezmoiignore`.
+Files that running programs write — on a host or in the source directory — as opposed to this repo; deliberately not managed. Target-side runtime state is left in place by Apply; source-side runtime files never reach a host.
 _Avoid_: cache, unmanaged files, junk
 
 **Apply**:
@@ -47,18 +47,16 @@ _Avoid_: watcher
 ### External sources
 
 **External source**:
-Content pulled from a remote location into Source state, refreshed on a schedule, and applied like any other source content — e.g. the ghostty and opencode theme files fetched by Apply.
+Content pulled from a remote location into Source state, refreshed on a schedule, and applied like any other source content.
 _Avoid_: vendored copy, bundled content
 
-### Source-only artifacts
-
 **Source-only artifact**:
-Any content in Source state that never reaches a host — repo docs, provisioning material, agent scratch. `.chezmoiignore` enumerates every source-only artifact explicitly; a blanket rule is forbidden because it would swallow applied content such as the opencode app config's markdown commands and skills.
+Content in Source state that never reaches a host — repo docs, provisioning material, agent scratch.
 _Avoid_: assets, bundled content
 
 **Repo docs**:
-Repository documents that guide the setup but never reach a host — docs/, README, CODING*STANDARDS.
-\_Avoid*: documentation
+Repository documents that guide the setup but never reach a host.
+_Avoid_: documentation
 
 ### Tools and apps
 
@@ -71,23 +69,23 @@ A program that installs, upgrades, and tracks the tools of a host, such as mise 
 _Avoid_: package manager, version manager
 
 **App config**:
-The set of dotfiles for one program, such as the nvim, ghostty, bash, starship, or pi app config. An app config may depend on tools.
+The set of dotfiles for one program, such as the nvim, ghostty, bash, or pi app config. An app config may depend on tools.
 _Avoid_: config, dotfile folder
 
 **Theme**:
-Styling choices — colors, fonts, cursor — shared across app configs; currently Monokai Pro. A published theme is an external source; the shiki and bat themes are hosted in Source state only until they are published — the shiki theme as provisioning material, the bat theme as a plain dotfile.
+Styling choices — colors, fonts, cursor — shared across app configs; currently Monokai Pro. A published theme is an External source; an unpublished one lives in Source state.
 _Avoid_: color scheme, style
 
 ### Sandboxing
 
 **Microsandbox**:
-The msb microVM runtime that fences untrusted workloads (agents, commands) in boot-and-dispose Linux guests. Presence is a Tool concern; guest behavior is a per-app-config concern expressed in an msb sandbox config.
+The msb microVM runtime that fences untrusted workloads (agents, commands) in boot-and-dispose Linux guests. Presence is a Tool concern; guest behavior is a per-app-config concern expressed in a Sandbox config.
 _Avoid_: VM runtime, msb
 
 **Sandbox config**:
-The msb YAML file for one sandboxed program — image, resources, mounts, network policy, ports — loaded with `--conf`. Currently `dot_config/feynman/sandbox.yaml` for the feynman app config (see docs/adr/0012-feynman-runs-in-a-microsandbox.md).
+The msb YAML file for one sandboxed program — image, resources, mounts, network policy, ports — loaded with `--conf`.
 _Avoid_: sandbox yaml, VM config
 
 **Guest bundle**:
-A platform-specific program bundle installed host-side and mounted into a guest, because the host binary cannot execute inside the Linux microVM. Currently the linux-arm64 feynman bundle under `~/.local/share/feynman-vm`, installed by `feynman-vm-setup`.
+A platform-specific program bundle installed host-side and mounted into a guest, because the host binary cannot execute inside the Linux microVM.
 _Avoid_: guest binary, VM install

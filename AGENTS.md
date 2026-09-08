@@ -6,7 +6,7 @@ Issues and specs live as markdown files under `.scratch/<feature>/` in this repo
 
 ### Domain docs
 
-Two contexts, one per split domain: `CONTEXT.md` at the repo root (config — Machine Configuration) and `dot_pi/CONTEXT.md` (pi config — Agent tooling). `CONTEXT-MAP.md` at the root points at each of them. Read the one relevant to the topic; read both for cross-cutting work. `docs/adr/` holds decisions across both. See `docs/agents/domain.md`.
+Two contexts, one per split domain: `CONTEXT.md` at the repo root (config — Machine Configuration) and `dot_pi/CONTEXT.md` (pi config — Agent tooling). `CONTEXT-MAP.md` at the root points at each of them. Read the one relevant to the topic; read both for cross-cutting work. Decisions live beside their context: `docs/adr/` (config) and `dot_pi/docs/adr/` (pi config). See `docs/agents/domain.md`.
 
 ### Coding standards
 

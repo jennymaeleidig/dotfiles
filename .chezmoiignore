@@ -20,22 +20,20 @@ tools/
 
 # Apply. First-match wins: ignore each immediate skills-dir child, then re-include
 
-# the authored skills by negation. See docs/adr/0009-agent-skills-are-runtime-state.md.
+# the authored skills by negation. See dot_pi/docs/adr/0003-agent-skills-are-runtime-state.md.
 
 .pi/agent/npm/
 .pi/agent/git/
 .pi/agent/skills/\*
 !.pi/agent/skills/create-obsidian-reference/**
-!.pi/agent/skills/setup-pi-workspace/**
 !.pi/agent/skills/cc-safety-net/**
-!.pi/agent/skills/subagents/**
 !.pi/agent/skills/pi-sandbox/**
 
 # Extension runtime deps (target side) — node_modules materialized by
 
 # run_onchange_after_install-mermaid-lint-deps.sh.tmpl, same source/runtime split as
 
-# the pi package trees (docs/adr/0004-pi-packages-declared-in-settings.md).
+# the pi package trees (dot_pi/docs/adr/0001-pi-packages-declared-in-settings.md).
 
 .pi/agent/extensions/mermaid-lint/node_modules/
 .pi/agent/extensions/mermaid-lint/package-lock.json
