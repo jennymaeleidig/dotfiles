@@ -1,19 +1,10 @@
-# Herdr app config — Monokai Pro (CE)
+# Herdr app config
 #
-# Citation: Monokai — Monokai Pro (CE) for OpenCode, default filter palette [MIT]
-# Source: https://github.com/monokai-pro/opencode (monokai-pro.json)
-# Accessed: 2026-09-08
-# Modified by jennymaeleidig on 2026-09-08 — mapped the Monokai Pro (CE)
-# default-filter palette onto Herdr's theme.custom tokens.
-#
-# No official Monokai Pro theme exists for Herdr, so this qualifies as a
-# Community Edition (CE) per https://monokai.pro/contribute: named
-# "Monokai Pro (CE)", default filter only, free and open source.
-#
-# Herdr reads no external theme files; the theme lives here as a full set of
-# theme.custom overrides on top of a built-in dark base. Panes themselves are
-# colored by the host terminal (ghostty theme "Monokai Pro", see
-# docs/adr/0003-themes-are-dependencies.md), so the window stays coherent.
+# Theme is managed by the herdr-theme-picker plugin (prefix+t): picking a
+# theme rewrites [theme.custom] in this file and reloads automatically.
+# Panes themselves are colored by the host terminal (ghostty theme
+# "Monokai Pro", see docs/adr/0003-themes-are-dependencies.md); the plugin
+# additionally syncs the 16 ANSI cell colors to ghostty live via OSC.
 
 onboarding = false
 
@@ -26,61 +17,21 @@ switch_tab = "prefix+1..9"
 [keys.indexed]
 tabs = "alt"
 
+# Theme picker popup (plugin action id confirmed via `herdr plugin action list`).
+[[keys.command]]
+key = "prefix+t"
+type = "plugin_action"
+command = "herdr-theme-picker.open"
+description = "pick UI theme"
+
 [ui.sound]
 enabled = false
 
-# Every theme.custom token below is overridden, so the base theme only acts as
-# a fallback for tokens Herdr may add later. Keep it a dark built-in.
-[theme]
-name = "catppuccin"
-
-[theme.custom]
-# foreground → text
-text = "#fcfcfa"
-
-# background → surface0
-surface0 = "#2d2a2e"
-# bg dimmed 2 → surface_dim
-surface_dim = "#19181a"
-# bg dimmed 1 → panel_bg and desktop sidebar
-panel_bg = "#221f22"
-sidebar_bg = "#221f22"
-# dimmed 5 → surface1, active row, navigate selection
-surface1 = "#403e41"
-active_row_bg = "#403e41"
-selection_bg = "#403e41"
-
-# dimmed 3 → overlay0 (soft borders, sidebar token separators). Herdr
-# renders separators and headers with overlay0 + DIM, so this tier needs
-# to stay readable on the active_row_bg (#403e41); dimmed 4 (#5b595c)
-# proved near-invisible there.
-overlay0 = "#727072"
-# dimmed 2 → overlay1 (strong borders; also selected workspace number
-# and scrollbar thumb)
-overlay1 = "#939293"
-# dimmed 2 → subtext0
-subtext0 = "#939293"
-# (dimmed 1 #c1c0c0 is unused; Herdr has no token between text and subtext0.)
-
-# constant → accent and mauve
-accent = "#ab9df2"
-mauve = "#ab9df2"
-# keyword → red
-red = "#ff6188"
-# argument → peach
-peach = "#fc9867"
-# string → yellow
-yellow = "#ffd866"
-# function → green
-green = "#a9dc76"
-# class → blue and teal (Monokai Pro has no teal; blue doubles for it)
-blue = "#78dce8"
-teal = "#78dce8"
-
-# Machine/tab/pane tokens share the agent-name fallback style
-# (overlay0 + DIM, see render_agent_row), which is unreadable on the
-# Monokai active_row_bg. Give them the same treatment as the agent
-# token: subtext0, bold, undimmed.
+# Sidebar token overrides: machine/tab/pane/agent all share Herdr's
+# overlay0 + DIM fallback style (render_agent_row / resolved_token_spans),
+# which is unreadable on light-on-dark active rows. The hex is the Monokai
+# Pro subtext gray this config used before the theme picker took over
+# theme.custom; revisit if a picked theme's palette clashes with it.
 [ui.sidebar.agents]
 rows = [
   [
