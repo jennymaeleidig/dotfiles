@@ -10,8 +10,8 @@ alias tsvmd="csvmd --delimiter=$'\t'"
 
 # feynman always runs inside a microsandbox microVM configured by
 # ~/.config/feynman/sandbox.yaml. FEYNMAN_NATIVE=1 escapes to the host binary
-# for host-side maintenance (updates, installers). Runs outside $HOME mount
-# the working directory at /workspace inside the VM.
+# for host-side maintenance (if the native install is still present). Runs
+# outside $HOME mount the working directory at /workspace inside the VM.
 feynman() {
 	if [ "${FEYNMAN_NATIVE:-0}" != "1" ] && ! command -v msb >/dev/null 2>&1; then
 		echo "feynman: msb not found; falling back to native feynman (install microsandbox to sandbox it)" >&2
@@ -22,8 +22,12 @@ feynman() {
 		command feynman "$@"
 		return
 	fi
-	if [ "$PWD" != "$HOME" ] && [ -d "$PWD" ]; then
-		msb run --conf "$HOME/.config/feynman/sandbox.yaml" -v "$PWD:/workspace" -w /workspace -- feynman "$@"
+	# Re-assert declared pi extensions/settings/keybindings before launch —
+	# a fast no-op when the volume already matches the declared version.
+	"$HOME/.local/bin/feynman-vm-setup" >/dev/null 2>&1 || true
+	local dir="$(pwd -P)"
+	if [ "$dir" != "$HOME" ] && [ -d "$dir" ]; then
+		msb run --conf "$HOME/.config/feynman/sandbox.yaml" -v "$dir:/workspace" -w /workspace -- feynman "$@"
 	else
 		msb run --conf "$HOME/.config/feynman/sandbox.yaml" -- feynman "$@"
 	fi

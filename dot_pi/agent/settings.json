@@ -5,10 +5,7 @@
   },
   "defaultThinkingLevel": "high",
   "editorPaddingX": 0,
-  "enabledModels": [
-    "zai/glm-5.3-flash",
-    "openrouter/z-ai/glm-5.3-flash"
-  ],
+  "enabledModels": [],
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
   "lastChangelogVersion": "0.85.1",
@@ -68,9 +65,6 @@
       "npm:pi-extmgr": "https://github.com/ayagmar/pi-extmgr"
     },
     {
-      "npm:pi-mermaid": "https://github.com/Gurpartap/pi-mermaid"
-    },
-    {
       "npm:@estebanforge/pi-glm-tweaks": "https://github.com/EstebanForge/pi-glm-tweaks"
     },
     {
@@ -104,7 +98,6 @@
     "npm:cc-safety-net",
     "npm:pi-sandbox",
     "npm:pi-extmgr",
-    "npm:pi-mermaid",
     "npm:@estebanforge/pi-glm-tweaks",
     "npm:donsetch",
     "npm:pi-blackhole",

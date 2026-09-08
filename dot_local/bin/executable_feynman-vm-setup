@@ -2,16 +2,28 @@
 # feynman-vm-setup - install or refresh the Linux feynman bundle that the
 # feynman microsandbox mounts at /opt/feynman (see ~/.config/feynman/sandbox.yaml).
 #
+# The bundle lives in an msb DISK VOLUME named `feynman` (raw ext4 via
+# virtio-blk, guest-native speed, persists across ephemeral sandbox runs).
 # The host feynman binary is darwin-arm64 and cannot run inside the Linux
-# microVM, so the guest gets its own linux-arm64 bundle. `current` is the
-# stable symlink the guest wrapper execs, so version bumps need no msb change.
+# guest, so this script downloads the linux-arm64 release, verifies it against
+# the release's SHA256SUMS, and extracts it into the volume with a one-off
+# builder sandbox. Re-running with a newer VERSION rebuilds the volume.
 #
 # Usage: feynman-vm-setup [VERSION]   (default: latest release)
 set -eu
 
 VM_DIR="$HOME/.local/share/feynman-vm"
+SRC_DIR="$VM_DIR/src"
+VOLUME="feynman"
+VOLUME_SIZE="8G"
 OS_ARCH="linux-arm64"
-BASE_REPO="https://github.com/companion-inc/feynman/releases/download"
+RELEASE_BASE="https://github.com/companion-inc/feynman/releases/download"
+
+# Pi extensions bundled into the feynman sandbox. Declared here (source state);
+# merged into ~/.feynman/agent/settings.json `packages` (feynman's pi home,
+# mounted into the VM) and materialized by feynman's pi at startup.
+# Peer-range rule from docs/adr/0004 applies: check against the bundled pi.
+EXTENSIONS="npm:pi-compact-transcript npm:pi-vim"
 
 resolve_latest() {
 	curl -fsSL https://github.com/companion-inc/feynman/releases/latest |
@@ -24,37 +36,105 @@ if [ -z "$VERSION" ]; then
 	exit 1
 fi
 
+# Pi settings applied declaratively alongside the extensions: merged into
+# ~/.feynman/agent/settings.json on every run. Mirrors the host pi prefs that
+# are not tied to host-only extensions; nested values are complete objects
+# (shallow merge). Note: feynman forces theme = "feynman" every launch
+# (src/pi/settings.ts normalizeFeynmanSettings), so the theme is not ours to
+# set — it is left to feynman.
+SETTINGS_BLOB='{"collapseChangelog":true,"compaction":{"enabled":true},"defaultProjectTrust":"always","doubleEscapeAction":"tree","editorPaddingX":0,"enableInstallTelemetry":false,"markdown":{"mermaid":"final"},"piVim":{"modeColors":{"insert":"text","normal":"accent"}},"quietStartup":true,"showHardwareCursor":true,"terminal":{"showImages":true},"tuiMode":"fullscreen"}'
+# Keybindings overlaid onto ~/.feynman/agent/keybindings.json (declared keys
+# win; feynman's own defaults are preserved).
+KEYBINDINGS_BLOB='{"app.interrupt":"alt+c"}'
+
 BUNDLE="feynman-${VERSION}-${OS_ARCH}"
+TARBALL="$SRC_DIR/$BUNDLE.tar.gz"
+MARKER="$VM_DIR/installed-version"
+SETTINGS="$HOME/.feynman/agent/settings.json"
 
-if [ -x "$VM_DIR/$BUNDLE/feynman" ]; then
-	echo "feynman-vm-setup: $BUNDLE already installed"
-else
-	TMP="$(mktemp -d)"
-	trap 'rm -rf "$TMP"' EXIT
+# Sync the declared extensions and settings into feynman's pi state:
+# append missing packages, overlay the declared keys, touch nothing else.
+# Keybindings are overlaid the same way onto keybindings.json.
+sync_settings() {
+	[ -f "$SETTINGS" ] || return 0
+	FEYNMAN_SETTINGS_BLOB="$SETTINGS_BLOB" FEYNMAN_KEYBINDINGS_BLOB="$KEYBINDINGS_BLOB" node -e '
+const fs = require("node:fs");
+const path = require("node:path");
+const file = process.argv[1];
+const settings = JSON.parse(fs.readFileSync(file, "utf8"));
+const pkgs = settings.packages ?? [];
+for (const ext of process.argv.slice(2)) {
+	if (!pkgs.includes(ext)) pkgs.push(ext);
+}
+settings.packages = pkgs;
+Object.assign(settings, JSON.parse(process.env.FEYNMAN_SETTINGS_BLOB ?? "{}"));
+fs.writeFileSync(file, JSON.stringify(settings, null, 2) + "\n");
+const kbBlob = process.env.FEYNMAN_KEYBINDINGS_BLOB;
+if (kbBlob) {
+	const kbFile = file.replace(/settings\.json$/, "keybindings.json");
+	if (fs.existsSync(kbFile)) {
+		const kb = JSON.parse(fs.readFileSync(kbFile, "utf8"));
+		Object.assign(kb, JSON.parse(kbBlob));
+		fs.writeFileSync(kbFile, JSON.stringify(kb, null, 2) + "\n");
+	}
+}
+' "$SETTINGS" $EXTENSIONS
+	echo "feynman-vm-setup: extensions and settings synced into $SETTINGS"
+}
 
+if [ -f "$MARKER" ] && [ "$(cat "$MARKER")" = "$VERSION" ]; then
+	echo "feynman-vm-setup: version $VERSION already installed in the feynman volume"
+	sync_settings
+	exit 0
+fi
+
+if ! command -v msb >/dev/null 2>&1; then
+	echo "feynman-vm-setup: msb not found; install microsandbox first" >&2
+	exit 1
+fi
+
+# Download and verify host-side; the guest only ever sees the checked tarball.
+mkdir -p "$SRC_DIR"
+if [ ! -f "$TARBALL" ]; then
 	echo "feynman-vm-setup: downloading $BUNDLE"
-	curl -fsSL "$BASE_REPO/v$VERSION/$BUNDLE.tar.gz" -o "$TMP/$BUNDLE.tar.gz"
-	curl -fsSL "$BASE_REPO/v$VERSION/SHA256SUMS" -o "$TMP/SHA256SUMS"
-
+	TMP="$(mktemp -d /tmp/feynman-vm-setup.XXXXXX)"
+	trap 'rm -rf "$TMP"' EXIT
+	curl -fsSL "$RELEASE_BASE/v$VERSION/$BUNDLE.tar.gz" -o "$TMP/$BUNDLE.tar.gz"
+	curl -fsSL "$RELEASE_BASE/v$VERSION/SHA256SUMS" -o "$TMP/SHA256SUMS"
 	EXPECTED="$(awk -v b="$BUNDLE.tar.gz" '$2 == b { print $1 }' "$TMP/SHA256SUMS")"
 	ACTUAL="$(shasum -a 256 "$TMP/$BUNDLE.tar.gz" | awk '{print $1}')"
 	if [ -z "$EXPECTED" ] || [ "$ACTUAL" != "$EXPECTED" ]; then
 		echo "feynman-vm-setup: checksum mismatch for $BUNDLE.tar.gz" >&2
 		exit 1
 	fi
-
-	tar -xzf "$TMP/$BUNDLE.tar.gz" -C "$TMP"
-	mkdir -p "$VM_DIR"
-	rm -rf "$VM_DIR/$BUNDLE"
-	mv "$TMP/$BUNDLE" "$VM_DIR/$BUNDLE"
+	mv "$TMP/$BUNDLE.tar.gz" "$TARBALL"
 fi
+
+# (Re)create the disk volume. Recreating wipes it - intentional on version
+# bumps, since the bundle and its workspace are replaced wholesale.
+if msb volume inspect "$VOLUME" >/dev/null 2>&1; then
+	msb volume remove "$VOLUME" -q
+fi
+msb volume create "$VOLUME" --kind disk --size "$VOLUME_SIZE" -q
+
+# Extract into the volume via a one-off ephemeral builder sandbox. The CLI
+# named-mount defaults to kind=dir, so pin kind=disk to match the volume.
+msb run debian:trixie \
+	--mount-named "$VOLUME:/mnt/feynman:kind=disk,size=$VOLUME_SIZE" \
+	--copy "$TARBALL:/root/feynman-bundle.tar.gz" \
+	--script-path "install:$VM_DIR/install-guest.sh" \
+	-- install
+
+printf '%s\n' "$VERSION" > "$MARKER"
+
+# Remove v1 layout leftovers (extracted bundle dir + host-side symlink).
+for OLD in "$VM_DIR"/feynman-*-"$OS_ARCH" "$VM_DIR/current"; do
+	[ -e "$OLD" ] || [ -L "$OLD" ] || continue
+	rm -rf "$OLD"
+done
 
 # State dirs the sandbox config bind-mounts; msb needs them to exist.
 mkdir -p "$HOME/.feynman" "$HOME/.ahub"
+sync_settings
 
-ln -sfn "$VM_DIR/$BUNDLE" "$VM_DIR/current"
-
-echo "feynman-vm-setup: installed $BUNDLE (current -> $VM_DIR/$BUNDLE)"
-if ! command -v msb >/dev/null 2>&1; then
-	echo "feynman-vm-setup: msb not found; install microsandbox to run the sandbox" >&2
-fi
+echo "feynman-vm-setup: installed $BUNDLE into the '$VOLUME' disk volume"
