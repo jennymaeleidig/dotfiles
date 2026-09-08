@@ -17,6 +17,9 @@
 
 onboarding = false
 
+[ui.sound]
+enabled = false
+
 # Every theme.custom token below is overridden, so the base theme only acts as
 # a fallback for tokens Herdr may add later. Keep it a dark built-in.
 [theme]
