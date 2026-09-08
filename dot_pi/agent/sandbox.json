@@ -22,7 +22,6 @@
       "~/.docker",
       "~/.colima",
       "~/.npm",
-      "~./agent/sandbox.json",
       "/opt/homebrew/Cellar",
       "/private/var/folders/*/pi-clipboard-*.png",
       "/var/folders/*/*/T/**",
@@ -32,7 +31,6 @@
       ".",
       "~/.pi/agent/sessions",
       "~/.pi/agent/agent-memory",
-      "$TMPDIR",
       "/tmp",
       "~/.npm"
     ],

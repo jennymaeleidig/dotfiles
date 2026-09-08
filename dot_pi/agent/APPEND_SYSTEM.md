@@ -1,3 +1,7 @@
+## Scripts
+
+- Run multi-step scripts by writing them to a temp file (e.g. `$TMPDIR/script.py`) and executing it — not as heredocs or multi-line `-c`/`-e` blobs. One-liners may stay inline.
+
 ## Git on a shared worktree
 
 Concurrent agents share this checkout; the hazard is the **sweep**:  
