@@ -17,7 +17,12 @@
 
 onboarding = false
 
-# alt+1..9 jump straight to tabs 1-9 without the prefix.
+# alt+1..9 jump straight to tabs 1-9 without the prefix. switch_tab is
+# pinned explicitly: a legacy [keys.indexed] entry displaces the default
+# prefix+1..9 binding unless keys.switch_tab is also set (then both apply).
+[keys]
+switch_tab = "prefix+1..9"
+
 [keys.indexed]
 tabs = "alt"
 
