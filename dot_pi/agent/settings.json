@@ -1,11 +1,14 @@
 {
   "collapseChangelog": true,
   "compaction": {
-    "enabled": false
+    "enabled": true
   },
   "defaultThinkingLevel": "high",
   "editorPaddingX": 0,
-  "enabledModels": ["zai/glm-5.3-flash", "openrouter/z-ai/glm-5.3-flash"],
+  "enabledModels": [
+    "zai/glm-5.3-flash",
+    "openrouter/z-ai/glm-5.3-flash"
+  ],
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
   "lastChangelogVersion": "0.85.1",
@@ -23,7 +26,7 @@
     "deferToolLoading": true
   },
   "markdown": {
-    "mermaid": "off"
+    "mermaid": "final"
   },
   "oppiMirror": {
     "autoStart": false,
@@ -81,6 +84,12 @@
     },
     {
       "git:github.com/studyzy/pi-lazy-tools": "https://github.com/studyzy/pi-lazy-tools"
+    },
+    {
+      "npm:@krfantasy/pi-monokai-pro":"https://github.com/krfantasy/pi-monokai-pro"
+    },
+    {
+      "npm:pi-compact-transcript":"https://github.com/avhagedorn/pi-compact-transcript"
     }
   ],
   "packages": [
@@ -100,7 +109,9 @@
     "npm:donsetch",
     "npm:pi-blackhole",
     "npm:pi-context-view",
-    "git:github.com/studyzy/pi-lazy-tools"
+    "git:github.com/studyzy/pi-lazy-tools",
+    "npm:@krfantasy/pi-monokai-pro",
+    "npm:pi-compact-transcript"
   ],
   "piVim": {
     "modeColors": {
@@ -111,8 +122,10 @@
   "quietStartup": true,
   "showHardwareCursor": true,
   "terminal": {
-    "showImages": false
+    "showImages": true
   },
+  "tuiMode": "fullscreen",
   "theme": "Monokai Pro (CE)",
-  "tuiMode": "regular"
+  "defaultProjectTrust": "always",
+  "doubleEscapeAction": "tree"
 }
