@@ -1,0 +1,37 @@
+# Feynman runs inside this microsandbox microVM (msb). Loaded by the `feynman`
+# shell function in bash_aliases; see docs/adr/0012-feynman-runs-in-a-microsandbox.md.
+#
+# msb schema: https://github.com/superradcompany/microsandbox/blob/main/docs/cli/configuration.mdx
+# Strict YAML: no anchors, no unknown fields, quote typed strings.
+image: "debian:trixie"
+cpus: 4
+memory: "4G"
+workdir: "/root"
+
+mounts:
+  # Feynman state (auth, sessions, packages, workbench) shared host <-> guest,
+  # so `feynman model login` on the host works inside the VM and vice versa.
+  - "{{ .chezmoi.homeDir }}/.feynman:/root/.feynman"
+  - "{{ .chezmoi.homeDir }}/.ahub:/root/.ahub"
+  # Linux feynman bundle maintained by `feynman-vm-setup`; mounted read-only.
+  - "{{ .chezmoi.homeDir }}/.local/share/feynman-vm:/opt/feynman:ro"
+
+patches:
+  # Guest entry point: exec the launcher inside the bundle (a symlink would
+  # break the launcher's own ROOT resolution).
+  - text:
+      path: "/usr/local/bin/feynman"
+      content: "#!/bin/sh\nexec /opt/feynman/current/feynman \"$@\"\n"
+      mode: "0755"
+
+# Public internet egress (model providers, paper APIs); private/metadata blocked.
+network: public
+
+# `feynman serve` workbench; open http://localhost:6174 on the host.
+ports: ["6174:6174"]
+
+# Provider API keys stay host-side and are injected per-domain; uncomment and
+# add keys as needed (values come from the host environment):
+# secrets:
+#   OPENROUTER_API_KEY:
+#     allow: ["openrouter.ai"]

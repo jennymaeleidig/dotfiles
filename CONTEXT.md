@@ -77,3 +77,17 @@ _Avoid_: config, dotfile folder
 **Theme**:
 Styling choices — colors, fonts, cursor — shared across app configs; currently Monokai Pro. A published theme is an external source; the shiki and bat themes are hosted in Source state only until they are published — the shiki theme as provisioning material, the bat theme as a plain dotfile.
 _Avoid_: color scheme, style
+
+### Sandboxing
+
+**Microsandbox**:
+The msb microVM runtime that fences untrusted workloads (agents, commands) in boot-and-dispose Linux guests. Presence is a Tool concern; guest behavior is a per-app-config concern expressed in an msb sandbox config.
+_Avoid_: VM runtime, msb
+
+**Sandbox config**:
+The msb YAML file for one sandboxed program — image, resources, mounts, network policy, ports — loaded with `--conf`. Currently `dot_config/feynman/sandbox.yaml` for the feynman app config (see docs/adr/0012-feynman-runs-in-a-microsandbox.md).
+_Avoid_: sandbox yaml, VM config
+
+**Guest bundle**:
+A platform-specific program bundle installed host-side and mounted into a guest, because the host binary cannot execute inside the Linux microVM. Currently the linux-arm64 feynman bundle under `~/.local/share/feynman-vm`, installed by `feynman-vm-setup`.
+_Avoid_: guest binary, VM install

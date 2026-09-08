@@ -1,0 +1,60 @@
+#!/bin/sh
+# feynman-vm-setup - install or refresh the Linux feynman bundle that the
+# feynman microsandbox mounts at /opt/feynman (see ~/.config/feynman/sandbox.yaml).
+#
+# The host feynman binary is darwin-arm64 and cannot run inside the Linux
+# microVM, so the guest gets its own linux-arm64 bundle. `current` is the
+# stable symlink the guest wrapper execs, so version bumps need no msb change.
+#
+# Usage: feynman-vm-setup [VERSION]   (default: latest release)
+set -eu
+
+VM_DIR="$HOME/.local/share/feynman-vm"
+OS_ARCH="linux-arm64"
+BASE_REPO="https://github.com/companion-inc/feynman/releases/download"
+
+resolve_latest() {
+	curl -fsSL https://github.com/companion-inc/feynman/releases/latest |
+		sed -n 's@.*releases/tag/v\([0-9][^"<>[:space:]]*\).*@\1@p' | head -n 1
+}
+
+VERSION="${1:-$(resolve_latest)}"
+if [ -z "$VERSION" ]; then
+	echo "feynman-vm-setup: failed to resolve a version; pass one explicitly" >&2
+	exit 1
+fi
+
+BUNDLE="feynman-${VERSION}-${OS_ARCH}"
+
+if [ -x "$VM_DIR/$BUNDLE/feynman" ]; then
+	echo "feynman-vm-setup: $BUNDLE already installed"
+else
+	TMP="$(mktemp -d)"
+	trap 'rm -rf "$TMP"' EXIT
+
+	echo "feynman-vm-setup: downloading $BUNDLE"
+	curl -fsSL "$BASE_REPO/v$VERSION/$BUNDLE.tar.gz" -o "$TMP/$BUNDLE.tar.gz"
+	curl -fsSL "$BASE_REPO/v$VERSION/SHA256SUMS" -o "$TMP/SHA256SUMS"
+
+	EXPECTED="$(awk -v b="$BUNDLE.tar.gz" '$2 == b { print $1 }' "$TMP/SHA256SUMS")"
+	ACTUAL="$(shasum -a 256 "$TMP/$BUNDLE.tar.gz" | awk '{print $1}')"
+	if [ -z "$EXPECTED" ] || [ "$ACTUAL" != "$EXPECTED" ]; then
+		echo "feynman-vm-setup: checksum mismatch for $BUNDLE.tar.gz" >&2
+		exit 1
+	fi
+
+	tar -xzf "$TMP/$BUNDLE.tar.gz" -C "$TMP"
+	mkdir -p "$VM_DIR"
+	rm -rf "$VM_DIR/$BUNDLE"
+	mv "$TMP/$BUNDLE" "$VM_DIR/$BUNDLE"
+fi
+
+# State dirs the sandbox config bind-mounts; msb needs them to exist.
+mkdir -p "$HOME/.feynman" "$HOME/.ahub"
+
+ln -sfn "$VM_DIR/$BUNDLE" "$VM_DIR/current"
+
+echo "feynman-vm-setup: installed $BUNDLE (current -> $VM_DIR/$BUNDLE)"
+if ! command -v msb >/dev/null 2>&1; then
+	echo "feynman-vm-setup: msb not found; install microsandbox to run the sandbox" >&2
+fi

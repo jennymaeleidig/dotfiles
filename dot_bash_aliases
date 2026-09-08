@@ -7,3 +7,24 @@ alias ls="eza"
 alias cd="z"
 alias cdi="zi"
 alias tsvmd="csvmd --delimiter=$'\t'"
+
+# feynman always runs inside a microsandbox microVM configured by
+# ~/.config/feynman/sandbox.yaml. FEYNMAN_NATIVE=1 escapes to the host binary
+# for host-side maintenance (updates, installers). Runs outside $HOME mount
+# the working directory at /workspace inside the VM.
+feynman() {
+	if [ "${FEYNMAN_NATIVE:-0}" != "1" ] && ! command -v msb >/dev/null 2>&1; then
+		echo "feynman: msb not found; falling back to native feynman (install microsandbox to sandbox it)" >&2
+		command feynman "$@"
+		return
+	fi
+	if [ "${FEYNMAN_NATIVE:-0}" = "1" ]; then
+		command feynman "$@"
+		return
+	fi
+	if [ "$PWD" != "$HOME" ] && [ -d "$PWD" ]; then
+		msb run --conf "$HOME/.config/feynman/sandbox.yaml" -v "$PWD:/workspace" -w /workspace -- feynman "$@"
+	else
+		msb run --conf "$HOME/.config/feynman/sandbox.yaml" -- feynman "$@"
+	fi
+}
