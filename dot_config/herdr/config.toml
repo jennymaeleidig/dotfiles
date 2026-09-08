@@ -27,18 +27,46 @@ description = "pick UI theme"
 [ui.sound]
 enabled = false
 
-# Sidebar token overrides: machine/tab/pane/agent all share Herdr's
-# overlay0 + DIM fallback style (render_agent_row / resolved_token_spans),
-# which is unreadable on light-on-dark active rows. The hex is the Monokai
-# Pro subtext gray this config used before the theme picker took over
-# theme.custom; revisit if a picked theme's palette clashes with it.
-[ui.sidebar.agents]
-rows = [
-  [
-    "state_icon",
-    { token = "machine", fg = "#939293", bold = true, dim = false },
-    "workspace",
-    { token = "tab", fg = "#939293", bold = true, dim = false },
-  ],
-  [{ token = "agent", fg = "#939293", bold = true, dim = false }],
-]
+# # Sidebar token overrides: machine/tab/pane/agent all share Herdr's
+# # overlay0 + DIM fallback style (render_agent_row / resolved_token_spans),
+# # which is unreadable on light-on-dark active rows. The hex is the Monokai
+# # Pro subtext gray this config used before the theme picker took over
+# # theme.custom; revisit if a picked theme's palette clashes with it.
+# [ui.sidebar.agents]
+# rows = [
+#   [
+#     "state_icon",
+#     { token = "machine", fg = "#939293", bold = true, dim = false },
+#     "workspace",
+#     { token = "tab", fg = "#939293", bold = true, dim = false },
+#   ],
+#   [{ token = "agent", fg = "#939293", bold = true, dim = false }],
+# ]
+
+
+
+
+
+
+
+
+[theme.custom]
+panel_bg = "2d2a2e"
+sidebar_bg = "#262327"
+active_row_bg = "2d2a2e"
+selection_bg = "5b595c"
+surface0 = "2d2a2e"
+surface1 = "727072"
+surface_dim = "#29262a"
+overlay0 = "727072"
+overlay1 = "fcfcfa"
+text = "fcfcfa"
+subtext0 = "fcfcfa"
+accent = "fc9867"
+mauve = "ab9df2"
+green = "a9dc76"
+yellow = "ffd866"
+red = "ff6188"
+blue = "fc9867"
+teal = "78dce8"
+peach = "ff6188"
