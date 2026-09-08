@@ -3,17 +3,25 @@
   "compaction": {
     "enabled": false
   },
-  "defaultModel": "deepseek-v4-flash",
-  "defaultProvider": "neuralwatt",
   "defaultThinkingLevel": "high",
   "editorPaddingX": 0,
-  "enabledModels": [
-    "zai/glm-5.3-flash",
-    "openrouter/z-ai/glm-5.3-flash"
-  ],
+  "enabledModels": ["zai/glm-5.3-flash", "openrouter/z-ai/glm-5.3-flash"],
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
   "lastChangelogVersion": "0.85.1",
+  "lazyTools": {
+    "defer": [
+      "Defer(web_*)",
+      "zai_web_search",
+      "resolve-library-id",
+      "query-docs",
+      "recall",
+      "format_md_tables",
+      "mermaid_lint"
+    ],
+    "noDefer": [],
+    "deferToolLoading": true
+  },
   "markdown": {
     "mermaid": "off"
   },
@@ -67,6 +75,12 @@
     },
     {
       "npm:pi-blackhole": "https://github.com/k0valik/pi-blackhole"
+    },
+    {
+      "npm:pi-context-view": "https://github.com/dimk90/pi-context-view"
+    },
+    {
+      "git:github.com/studyzy/pi-lazy-tools": "https://github.com/studyzy/pi-lazy-tools"
     }
   ],
   "packages": [
@@ -84,7 +98,9 @@
     "npm:pi-mermaid",
     "npm:@estebanforge/pi-glm-tweaks",
     "npm:donsetch",
-    "npm:pi-blackhole"
+    "npm:pi-blackhole",
+    "npm:pi-context-view",
+    "git:github.com/studyzy/pi-lazy-tools"
   ],
   "piVim": {
     "modeColors": {
