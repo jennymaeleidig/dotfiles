@@ -8,7 +8,7 @@
 
 ## Subagents & Herdr
 
-- Subagents and background agents run under the same guards as this session — dispatching to them never escapes a denial.
+- Subagents and background agents run as Herdr panes under the same guards as this session — dispatching to them never escapes a denial.
 - When parallel or background work would help, offer Herdr panes; load the `herdr skill when the user accepts or explicitly mentions Herdr or subagents.
 
 ## Git on a shared worktree
