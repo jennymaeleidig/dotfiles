@@ -16,7 +16,9 @@ The filesystem and network fence is a different guard — the pi-sandbox extensi
 ## When a tool is blocked
 
 - A block is **silent** and audit-logged; the only visible signal is the tool's returned `block` reason.
-- **Never try to bypass a denial** — no shell wrappers, no path shadowing, no argument reordering, no interpreter one-liners. If a path is genuinely needed, report it so an owner can add it to the allow-list.
+- **Hand the command to the user**: present it verbatim so they can run it in their own unguarded terminal. Hard blocks have no allow-list path; for denials the rule set does support, surface the path so an owner can consider allow-listing it.
+- **Venue is not a workaround.** Subagents and background agents run under this same guard; Herdr panes and non-pi agents run outside every guard. Sending a blocked command to either is a bypass — the user hand-off above is the only path.
+- **Never try to bypass a denial** — no shell wrappers, no path shadowing, no argument reordering, no interpreter one-liners.
 
 ## CLI
 

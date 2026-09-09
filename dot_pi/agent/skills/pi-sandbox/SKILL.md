@@ -19,5 +19,6 @@ The sandbox config files themselves sit in `denyWrite`: only the user can change
 
 ## How denials surface
 
-- **Subprocesses** hitting the fence fail instantly with `EPERM` / `operation not permitted` — no prompt, and switching interpreter or wrapper changes nothing.
+- **Subprocesses** hitting the fence fail instantly with `EPERM` / `operation not permitted` — no prompt, and switching interpreter or wrapper changes nothing. **Hand the exact command to the user** to run in their own terminal, outside the fence; if the need recurs, surface the path or domain so the user can adjust `sandbox.json`.
+- **Agent venues are not escape hatches.** Subagents and background agents run under this same fence — dispatching to them changes nothing. A Herdr pane (`herdr pane run`, `herdr agent start`) or any non-pi agent runs outside it: those processes are started by the Herdr server, not the wrapped shell. Routing a blocked command into another pane or agent is a bypass; the user hand-off above is the only path.
 - **Tool calls** (read/write/edit) trigger a permission prompt to the user, with four options: Abort, this session, this project, all projects. With `permissionPromptTimeoutSeconds: 0` the prompt waits indefinitely — a hung call may simply be an unanswered prompt. Session allowances are in-memory only: the agent cannot read or modify them; `/sandbox` shows them to the user.

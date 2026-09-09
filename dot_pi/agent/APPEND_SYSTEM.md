@@ -2,6 +2,15 @@
 
 - Run multi-step scripts by writing them to a temp file (e.g. `$TMPDIR/script.py`) and executing it — not as heredocs or multi-line `-c`/`-e` blobs. One-liners may stay inline.
 
+## Denials & EPERM
+
+- When CC Safety Net returns a `block` or a subprocess fails with `EPERM` (pi-sandbox fence), hand the blocked command verbatim to the user to run in their own unguarded terminal, and confirm any substitute plan with them before downgrading tooling or skipping the step. Details: the `cc-safety-net` and `pi-sandbox` skills.
+
+## Subagents & Herdr
+
+- Subagents and background agents run under the same guards as this session — dispatching to them never escapes a denial.
+- When parallel or background work would help, offer Herdr panes; load the `herdr skill when the user accepts or explicitly mentions Herdr or subagents.
+
 ## Git on a shared worktree
 
 Concurrent agents share this checkout; the hazard is the **sweep**:  
