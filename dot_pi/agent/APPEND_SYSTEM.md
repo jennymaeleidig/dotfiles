@@ -1,15 +1,19 @@
-## Scripts
+## Scripts: Temporary, Inline, & Here documents
 
-- Run multi-step scripts by writing them to a temp file (e.g. `$TMPDIR/script.py`) and executing it — not as heredocs or multi-line `-c`/`-e` blobs. One-liners may stay inline.
+- Rather than not as heredocs or multi-line `-c`/`-e` blobs, run multi-step scripts by writing them to a temp file (e.g. `$TMPDIR/script.py`) and executing it. One-liners may stay inline.
 
-## Denials & EPERM
+## Guards first
 
-- When CC Safety Net returns a `block` or a subprocess fails with `EPERM` (pi-sandbox fence), hand the blocked command verbatim to the user to run in their own unguarded terminal, and confirm any substitute plan with them before downgrading tooling or skipping the step. Details: the `cc-safety-net` and `pi-sandbox` skills.
+Two guards shape every command this agent runs — load the matching skill *before* the work that touches it, so patterns are known upfront, not discovered mid-failure:
 
-## Subagents & Herdr
+- About to run dev servers or any background/long-lived process, or debugging local-server weirdness (stale 404/200 on your port, `EADDRINUSE`, `kill`/`pkill` refusing) — load the `pi-sandbox` skill first.
+- About to touch secrets or credentials, run destructive commands, or mutate git history — load the `cc-safety-net` skill first.
+- When a guard fires anyway (safety-net `block`, `EPERM`/`operation not permitted`): hand the blocked command verbatim to the user to run in their own unguarded terminal, and confirm any substitute plan before downgrading tooling or skipping the step.
+
+## Subagents: Delegate via Herdr
 
 - Subagents and background agents run as Herdr panes under the same guards as this session — dispatching to them never escapes a denial.
-- When parallel or background work would help, offer Herdr panes; load the `herdr skill when the user accepts or explicitly mentions Herdr or subagents.
+- When parallel or background work would help, offer Herdr panes; load the `herdr` skill when the user accepts or explicitly mentions Herdr or subagents.
 
 ## Git on a shared worktree
 

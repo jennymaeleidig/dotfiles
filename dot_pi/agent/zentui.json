@@ -120,7 +120,7 @@
             "runtime": false,
             "modelInfo": true,
             "context": true,
-            "tokens": true,
+            "tokens": false,
             "cost": true,
             "sessionDuration": false,
             "username": false,
@@ -150,7 +150,9 @@
               "extmgr": "off",
               "pi-compact-ex": "off",
               "sandbox": "off",
-              "subagents": "off"
+              "subagents": "off",
+              "pi-usage": "right",
+              "usage": "right"
             },
             "colorModes": {
               "caveman": "zentui",
@@ -162,6 +164,10 @@
           }
         }
       }
+    },
+    "thinkingSteps": {
+      "enabled": false,
+      "mode": "tree"
     }
   }
 }
