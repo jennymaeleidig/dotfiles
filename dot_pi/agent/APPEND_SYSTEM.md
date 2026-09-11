@@ -10,10 +10,12 @@ Two guards shape every command this agent runs — load the matching skill *befo
 - About to touch secrets or credentials, run destructive commands, or mutate git history — load the `cc-safety-net` skill first.
 - When a guard fires anyway (safety-net `block`, `EPERM`/`operation not permitted`): hand the blocked command verbatim to the user to run in their own unguarded terminal, and confirm any substitute plan before downgrading tooling or skipping the step.
 
-## Subagents: Delegate via Herdr
+## Subagents: Always delegate via Herdr
 
 - Subagents and background agents run as Herdr panes under the same guards as this session — dispatching to them never escapes a denial.
-- When parallel or background work would help, offer Herdr panes; load the `herdr` skill when the user accepts or explicitly mentions Herdr or subagents.
+- **Dispatch by default.** When work parallelizes or backgrounds well — a skill mandate (code-review's two axes, design-it-twice, wayfinder's research fan-out, grilling's fact-finding) or a win you spot yourself — load the `herdr` skill and split a sibling pane at once. Dispatch first, mention it after: no user request for Herdr is needed, and a mandate is never downgraded to inline or sequential.
+- **Reports come back as files, not scrollback.** Put it in every report-back dispatch prompt (review axes, research, design-it-twice): write the full report to your own temp file and reply with only the path — then read the file. Do not fish reports out of the pane with `agent read` and growing `--lines`: alternate-screen TUIs (pi included) keep long output out of Herdr's scrollback, so no line count recovers it. This overrides the herdr skill's fallback-only file rule for report dispatches; short interactive replies still read fine from the pane.
+- The only skip is work too small to benefit from a pane — do that inline. If Herdr is genuinely unavailable, say so and ask how to proceed; never quietly fall back.
 
 ## Git on a shared worktree
 
