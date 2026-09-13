@@ -11,6 +11,7 @@ CODING_STANDARDS.md
 **/AGENTS.md
 **/CODING_STANDARDS.md
 docs/
+.pi/docs/
 tools/
 .scratch/
 
