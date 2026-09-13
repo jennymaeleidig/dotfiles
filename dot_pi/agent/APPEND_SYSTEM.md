@@ -1,6 +1,6 @@
 ## Scripts: Temporary, Inline, & Here documents
 
-- Rather than not as heredocs or multi-line `-c`/`-e` blobs, run multi-step scripts by writing them to a temp file (e.g. `$TMPDIR/script.py`) and executing it. One-liners may stay inline.
+- Multi-step scripts: write a temp file with the write tool (e.g. `$TMPDIR/script.py`) and execute it; one-liners stay inline. This is the substitute for two hard blocks (CC Safety Net): heredocs into anything but `cat`, `tee`, `git apply`, `git commit`, `gh pr create`, `gh issue create`, and multi-line inline `-c`/`-e` blobs — where a backtick in script text breaks CC Safety Net's quote tracking and a later `<<` false-blocks as a heredoc.
 
 ## Guards first
 
