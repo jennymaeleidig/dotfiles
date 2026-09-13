@@ -7,7 +7,58 @@
   "skipForProviders": [],
   "tailBehavior": "minimal",
   "retainedToolOutputMaxTokens": 20000,
-  "midRunCompaction": "off",
+  "midRunCompaction": "resume",
+
+  "_comment_models": "All background model work is delegated to zai/glm-5.3-flash (cheap, 1M ctx); deepseek/deepseek-flash is the single fallback tier, then the session model via sessionFallback. Worker roles only support low|high|max thinking on glm-5.3-flash, so none use \"off\".",
+  "model": {
+    "provider": "zai",
+    "id": "glm-5.3-flash",
+    "thinking": "low",
+    "cooldownHours": 6
+  },
+  "observerModel": {
+    "provider": "zai",
+    "id": "glm-5.3-flash",
+    "thinking": "low",
+    "cooldownHours": 6
+  },
+  "observerFallbackModels": [
+    {
+      "provider": "deepseek",
+      "id": "deepseek-flash",
+      "thinking": "low",
+      "cooldownHours": 6
+    }
+  ],
+  "reflectorModel": {
+    "provider": "zai",
+    "id": "glm-5.3-flash",
+    "thinking": "low",
+    "cooldownHours": 6
+  },
+  "reflectorFallbackModels": [
+    {
+      "provider": "deepseek",
+      "id": "deepseek-flash",
+      "thinking": "low",
+      "cooldownHours": 6
+    }
+  ],
+  "dropperModel": {
+    "provider": "zai",
+    "id": "glm-5.3-flash",
+    "thinking": "low",
+    "cooldownHours": 6
+  },
+  "dropperFallbackModels": [
+    {
+      "provider": "deepseek",
+      "id": "deepseek-flash",
+      "thinking": "low",
+      "cooldownHours": 6
+    }
+  ],
+
   "observeAfterTokens": 15000,
   "reflectAfterTokens": 25000,
   "compactAfterRatio": 0.2,
@@ -23,5 +74,7 @@
   "observerPreambleMaxTokens": 0,
   "agentMaxTurns": 16,
   "memory": true,
-  "debugLog": false
+  "debugLog": false,
+  "recallResponseMaxChars": 48000,
+  "reflectionsPoolMaxTokens": 8000
 }
