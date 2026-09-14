@@ -1,0 +1,62 @@
+# piw (pi-workflows terminal viewer) config.
+#
+# Theme: Monokai Pro. piw ships no Monokai palette and has no theme-file
+# registry, so the only customization point is [theme.custom] overrides — see
+# docs/TUI_VIEWER.md#themes upstream. Every value below is the Monokai Pro
+# palette the repo already depends on, not a new copy of it: the same hexes come
+# from the Ghostty external (.config/ghostty/themes/Monokai Pro, Kirlovon/
+# monokai-ghostty) and from the @krfantasy/pi-monokai-pro pi package, per
+# docs/adr/0003-themes-are-dependencies.md.
+#
+# The upstream `terminal` theme is not an alternative: it maps piw's surfaces to
+# ANSI DarkGray/Gray, and this Ghostty palette defines palette 7 as #fcfcfa and
+# palette 8 as #727072, so node surfaces would render white-on-mid-gray.
+#
+# piw rewrites this file at runtime — the theme picker (`t`) saves [theme].name
+# and dragging the pane borders saves [ui]. Both survive toml_edit, but Source
+# state is the seed, not a lock: diff before `chezmoi apply`.
+#
+# Role map (piw field -> Monokai Pro value):
+#   app_bg/panel_bg/canvas_bg  bg2/bg1/bg            #19181A / #221F22 / #2D2A2E
+#   node_bg/selection_bg       bgRaised             #403E41
+#   node_focus_bg              bgRaised+dim4 mid     #4D4B4E
+#   border / muted / subtext   dim4 / dim2 / dim1    #5B595C / #939293 / #C1C0C0
+#   accent, running, timeline_fill, user             cyan #78DCE8
+#   success, assistant                               green #A9DC76
+#   warning, tool                                    yellow #FFD866
+#   error                                            pink #FF6188
+#   timed_out, branch                                orange #FC9867
+#   cancelled, replay_focus                          purple #AB9DF2
+
+[theme]
+name = "catppuccin"
+auto_switch = false
+
+[theme.custom]
+app_bg = "#19181A"
+panel_bg = "#221F22"
+canvas_bg = "#2D2A2E"
+node_bg = "#403E41"
+node_focus_bg = "#4D4B4E"
+selection_bg = "#403E41"
+surface_dim = "#2D2A2E"
+border = "#5B595C"
+border_focused = "#78DCE8"
+text = "#FCFCFA"
+subtext = "#C1C0C0"
+muted = "#939293"
+accent = "#78DCE8"
+replay_focus = "#AB9DF2"
+running = "#78DCE8"
+success = "#A9DC76"
+warning = "#FFD866"
+error = "#FF6188"
+timed_out = "#FC9867"
+cancelled = "#AB9DF2"
+branch = "#FC9867"
+user = "#78DCE8"
+assistant = "#A9DC76"
+tool = "#FFD866"
+timeline_track = "#403E41"
+timeline_fill = "#78DCE8"
+timeline_thumb = "#FCFCFA"

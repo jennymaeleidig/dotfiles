@@ -1,0 +1,39 @@
+#!/bin/bash
+set -euo pipefail
+#
+# Links the pi-workflows Herdr plugin with herdr's own registrar:
+# `pi-workflows herdr setup` records the package root in runtime state
+# (~/.config/herdr/plugins.json), which Apply leaves alone — the same split as
+# herdr-theme-sync in link-herdr-plugins.sh.tmpl. setup and sync are aliases of
+# one idempotent reconcile (linked | relinked | enabled | unchanged |
+# unavailable), so rerunning is free.
+#
+# Why this is a script and not a declaration: the plugin source is package-owned
+# — herdr-plugin.toml plus plugins/herdr/viewer.mjs ship inside the pi-managed
+# package tree (~/.pi/agent/npm/node_modules/@osolmaz/pi-workflows), so the path
+# is a materialized pi path, not Source state. Source state owns the package
+# declaration (.chezmoidata/pi-prefs.toml) and the ~/.local/bin/pi-workflows
+# symlink piw needs; this script reconciles the Herdr link to them. Nothing is
+# vendored into dot_local/share/herdr, so `pi update` moves the plugin too.
+#
+# Requires herdr >= 0.7.0 (herdr-plugin.toml min_herdr_version) and piw on PATH
+# (herdr-plugin.toml's pane command spawns bare `piw`). A missing herdr is not
+# an error: `pi-workflows herdr setup` reports "unavailable" and changes nothing.
+#
+# Editing this script changes its content hash and reruns it (onchange).
+#
+cd "$HOME"
+
+if ! command -v pi-workflows >/dev/null 2>&1; then
+	# pi installs its declared packages on startup, so on a fresh host the
+	# package may not be materialized when Apply runs.
+	echo "==> pi-workflows not on PATH yet; skipping herdr plugin link"
+	exit 0
+fi
+
+if ! command -v herdr >/dev/null 2>&1; then
+	echo "==> herdr not installed; skipping plugin link"
+	exit 0
+fi
+
+pi-workflows herdr setup
