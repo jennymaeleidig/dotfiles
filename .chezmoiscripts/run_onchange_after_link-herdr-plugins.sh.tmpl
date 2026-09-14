@@ -1,0 +1,35 @@
+#!/bin/bash
+set -euo pipefail
+#
+# Registers locally-vendored herdr plugins with herdr. Plugin source lives in
+# dot_local/share/herdr/<id> (Source state); `herdr plugin link` records the
+# path in runtime state (~/.config/herdr/plugins.json), which Apply leaves
+# alone. Editing this script changes its content hash and reruns it (onchange
+# mechanism).
+#
+# Install is deferred to the user: this script runs only on `chezmoi apply`,
+# links source already present on the host, and is a no-op without herdr.
+#
+cd "$HOME"
+
+if ! command -v herdr >/dev/null 2>&1; then
+	echo "==> herdr not installed; skipping plugin link"
+	exit 0
+fi
+
+PLUGIN_ID="herdr-theme-sync"
+PLUGIN_SRC="$HOME/.local/share/herdr/ghostty-theme-sync"
+
+if [ ! -f "$PLUGIN_SRC/herdr-plugin.toml" ]; then
+	echo "==> missing plugin source: $PLUGIN_SRC" >&2
+	exit 1
+fi
+
+# Unlink then link, so a stale registration (changed id or moved path) is
+# reconciled instead of silently kept.
+if herdr plugin list 2>/dev/null | grep -q "^- $PLUGIN_ID "; then
+	herdr plugin unlink "$PLUGIN_ID"
+fi
+
+herdr plugin link "$PLUGIN_SRC"
+echo "==> linked herdr plugin: $PLUGIN_ID -> $PLUGIN_SRC"
