@@ -8,7 +8,6 @@
   "tailBehavior": "minimal",
   "retainedToolOutputMaxTokens": 20000,
   "midRunCompaction": "resume",
-
   "_comment_models": "All background model work is delegated to zai/glm-5.3-flash (cheap, 1M ctx); deepseek/deepseek-flash is the single fallback tier, then the session model via sessionFallback. Worker roles only support low|high|max thinking on glm-5.3-flash, so none use \"off\".",
   "model": {
     "provider": "zai",
@@ -58,10 +57,8 @@
       "cooldownHours": 6
     }
   ],
-
   "observeAfterTokens": 15000,
   "reflectAfterTokens": 25000,
-  "compactAfterRatio": 0.2,
   "compactAfterPreset": "default",
   "observationsPoolMaxTokens": 20000,
   "fullFoldAlways": true,
