@@ -39,6 +39,14 @@ tools/
 .pi/agent/extensions/mermaid-lint/node_modules/
 .pi/agent/extensions/mermaid-lint/package-lock.json
 
+# Workflow runtime state (target side) — the pi-workflows server owns state.sqlite*
+# and the host/ socket dir beside the authored workflows. Source state owns only
+# the *.workflow.{ts,js,mts,mjs} files the loader discovers there; the .gitkeep
+# declares the directory so a host has it before any workflow is authored.
+
+.pi/agent/workflows/state.sqlite*
+.pi/agent/workflows/host/
+
 # Runtime state (source side) — files the tools may drop in the source directory, never reach a host
 
 skills-lock.json

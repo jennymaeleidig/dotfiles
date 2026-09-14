@@ -1,0 +1,5 @@
+# Declares ~/.pi/agent/workflows in Source state for chezmoi and git.
+# The pi-workflows loader discovers only *.workflow.{ts,js,mts,mjs} here; the
+# package server owns state.sqlite* and host/ beside them (see .chezmoiignore).
+# Keep this file non-empty: chezmoi skips source files whose content is empty or
+# whitespace-only, so an empty .gitkeep never reaches the host.
