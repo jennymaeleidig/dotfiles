@@ -47,6 +47,11 @@ tools/
 .pi/agent/workflows/state.sqlite*
 .pi/agent/workflows/host/
 
+# Python bytecode (target side) — created when a vendored plugin script is run
+# or compiled on the host; never Source state.
+
+**/__pycache__/
+
 # Runtime state (source side) — files the tools may drop in the source directory, never reach a host
 
 skills-lock.json

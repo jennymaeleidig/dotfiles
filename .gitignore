@@ -11,3 +11,6 @@ dot_config/opencode/themes/monokai-pro.json
 # macOS junk
 .DS_Store
 .scratch/
+# Python bytecode — created by any local py_compile/pytest run, never source
+__pycache__/
+*.pyc
