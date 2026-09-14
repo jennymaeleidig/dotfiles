@@ -47,7 +47,8 @@ packages = [
 	"npm:@krfantasy/pi-monokai-pro",
 	"npm:pi-compact-transcript",
 	"npm:@narumitw/pi-usage",
-	"git:github.com/NVlabs/SoL-Pi"
+	"git:github.com/NVlabs/SoL-Pi",
+	"npm:@osolmaz/pi-workflows"
 ]
 packageDocs = [
 	{ "npm:pi-vim" = "https://github.com/lajarre/pi-vim" },
@@ -68,7 +69,8 @@ packageDocs = [
 	{ "npm:@krfantasy/pi-monokai-pro" = "https://github.com/krfantasy/pi-monokai-pro" },
 	{ "npm:pi-compact-transcript" = "https://github.com/avhagedorn/pi-compact-transcript" },
 	{ "npm:@narumitw/pi-usage" = "https://github.com/narumiruna/pi-extensions/tree/main/packages/pi-usage"},
-	{ "git:github.com/NVlabs/SoL-Pi" = "https://github.com/NVlabs/SoL-Pi" }
+	{ "git:github.com/NVlabs/SoL-Pi" = "https://github.com/NVlabs/SoL-Pi" },
+	{ "npm:@osolmaz/pi-workflows" = "https://github.com/osolmaz/pi-workflows" }
 ]
 
 # Extensions bundled into the feynman sandbox: merged into
