@@ -12,7 +12,7 @@ set -euo pipefail
 # — herdr-plugin.toml plus plugins/herdr/viewer.mjs ship inside the pi-managed
 # package tree (~/.pi/agent/npm/node_modules/@osolmaz/pi-workflows), so the path
 # is a materialized pi path, not Source state. Source state owns the package
-# declaration (.chezmoidata/pi-prefs.toml) and the ~/.local/bin/pi-workflows
+# declaration (dot_pi/agent/settings.json) and the ~/.local/bin/pi-workflows
 # symlink piw needs; this script reconciles the Herdr link to them. Nothing is
 # vendored into dot_local/share/herdr, so `pi update` moves the plugin too.
 #
