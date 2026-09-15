@@ -120,7 +120,7 @@
             "runtime": false,
             "modelInfo": true,
             "context": true,
-            "tokens": false,
+            "tokens": true,
             "cost": true,
             "sessionDuration": false,
             "username": false,

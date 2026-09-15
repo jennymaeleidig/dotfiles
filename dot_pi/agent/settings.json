@@ -10,10 +10,7 @@
   "doubleEscapeAction": "tree",
   "editorPaddingX": 0,
   "enableInstallTelemetry": false,
-  "enabledModels": [
-    "zai/glm-5.3-flash",
-    "deepseek/deepseek-flash"
-  ],
+  "enabledModels": ["zai/glm-5.3-flash", "deepseek/deepseek-flash"],
   "hideThinkingBlock": true,
   "lastChangelogVersion": "0.85.1",
   "lazyTools": {
