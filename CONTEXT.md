@@ -75,17 +75,3 @@ _Avoid_: config, dotfile folder
 **Theme**:
 Styling choices — colors, fonts, cursor — shared across app configs; currently Monokai Pro. A published theme is an External source; an unpublished one lives in Source state.
 _Avoid_: color scheme, style
-
-### Sandboxing
-
-**Microsandbox**:
-The msb microVM runtime that fences untrusted workloads (agents, commands) in boot-and-dispose Linux guests. Presence is a Tool concern; guest behavior is a per-app-config concern expressed in a Sandbox config.
-_Avoid_: VM runtime, msb
-
-**Sandbox config**:
-The msb YAML file for one sandboxed program — image, resources, mounts, network policy, ports — loaded with `--conf`.
-_Avoid_: sandbox yaml, VM config
-
-**Guest bundle**:
-A platform-specific program bundle installed host-side and mounted into a guest, because the host binary cannot execute inside the Linux microVM.
-_Avoid_: guest binary, VM install

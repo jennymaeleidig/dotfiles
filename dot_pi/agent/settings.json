@@ -1,0 +1,129 @@
+{
+  "collapseChangelog": true,
+  "compaction": {
+    "enabled": true
+  },
+  "defaultModel": "deepseek-flash",
+  "defaultProjectTrust": "always",
+  "defaultProvider": "deepseek",
+  "defaultThinkingLevel": "high",
+  "doubleEscapeAction": "tree",
+  "editorPaddingX": 0,
+  "enableInstallTelemetry": false,
+  "enabledModels": [
+    "zai/glm-5.3-flash",
+    "deepseek/deepseek-flash"
+  ],
+  "hideThinkingBlock": true,
+  "lastChangelogVersion": "0.85.1",
+  "lazyTools": {
+    "defer": [
+      "Defer(web_*)",
+      "resolve-library-id",
+      "query-docs",
+      "recall",
+      "obs_recall",
+      "format_md_tables",
+      "mermaid_lint"
+    ],
+    "deferToolLoading": true,
+    "noDefer": []
+  },
+  "markdown": {
+    "mermaid": "final"
+  },
+  "oppiMirror": {
+    "autoStart": false,
+    "workspaceCreation": "never"
+  },
+  "outputPad": 0,
+  "packageDocs": [
+    {
+      "npm:pi-vim": "https://github.com/lajarre/pi-vim"
+    },
+    {
+      "npm:@ff-labs/pi-fff": "https://github.com/dmtrKovalenko/fff/tree/main/packages/pi-fff"
+    },
+    {
+      "npm:pi-markdown-preview": "https://github.com/omaclaren/pi-markdown-preview"
+    },
+    {
+      "npm:@narumitw/pi-btw": "https://github.com/narumiruna/pi-extensions/tree/main/packages/pi-btw"
+    },
+    {
+      "npm:pi-zentui": "https://github.com/lmilojevicc/pi-zentui"
+    },
+    {
+      "npm:@upstash/context7-pi": "https://github.com/upstash/context7"
+    },
+    {
+      "npm:@bigboss2063/pi-clip": "https://github.com/bigboss2063/pi-clip"
+    },
+    {
+      "npm:cc-safety-net": "https://github.com/kenryu42/cc-safety-net"
+    },
+    {
+      "npm:pi-sandbox": "https://github.com/carderne/pi-sandbox"
+    },
+    {
+      "npm:pi-extmgr": "https://github.com/ayagmar/pi-extmgr"
+    },
+    {
+      "npm:@estebanforge/pi-glm-tweaks": "https://github.com/EstebanForge/pi-glm-tweaks"
+    },
+    {
+      "npm:pi-context-view": "https://github.com/dimk90/pi-context-view"
+    },
+    {
+      "npm:@krfantasy/pi-monokai-pro": "https://github.com/krfantasy/pi-monokai-pro"
+    },
+    {
+      "npm:pi-compact-transcript": "https://github.com/avhagedorn/pi-compact-transcript"
+    },
+    {
+      "npm:@narumitw/pi-usage": "https://github.com/narumiruna/pi-extensions/tree/main/packages/pi-usage"
+    },
+    {
+      "npm:pi-web-access": "https://github.com/nicobailon/pi-web-access"
+    },
+    {
+      "git:github.com/NVlabs/SoL-Pi": "https://github.com/NVlabs/SoL-Pi"
+    },
+    {
+      "npm:@osolmaz/pi-workflows": "https://github.com/osolmaz/pi-workflows"
+    }
+  ],
+  "packages": [
+    "npm:pi-vim",
+    "npm:@ff-labs/pi-fff",
+    "npm:pi-markdown-preview",
+    "npm:@narumitw/pi-btw",
+    "npm:pi-zentui",
+    "npm:@upstash/context7-pi",
+    "npm:@bigboss2063/pi-clip",
+    "npm:cc-safety-net",
+    "npm:pi-sandbox",
+    "npm:pi-extmgr",
+    "npm:@estebanforge/pi-glm-tweaks",
+    "npm:pi-context-view",
+    "npm:@krfantasy/pi-monokai-pro",
+    "npm:pi-compact-transcript",
+    "npm:@narumitw/pi-usage",
+    "npm:pi-web-access",
+    "git:github.com/NVlabs/SoL-Pi",
+    "npm:@osolmaz/pi-workflows"
+  ],
+  "piVim": {
+    "modeColors": {
+      "insert": "text",
+      "normal": "accent"
+    }
+  },
+  "quietStartup": true,
+  "showHardwareCursor": true,
+  "terminal": {
+    "showImages": true
+  },
+  "theme": "Monokai Pro (CE)",
+  "tuiMode": "fullscreen"
+}

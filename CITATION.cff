@@ -20,3 +20,10 @@ references:
     url: https://github.com/themuuln/herdr-ghostty-theme-sync
     license: MIT
     notes: "theme-sync.py and refresh.sh vendored and adapted as dot_local/share/herdr/ghostty-theme-sync (plugin id herdr-theme-sync): reads Ghostty's config.ghostty path, normalizes bare hex to #rrggbb, calls the sibling refresh.sh (accessed 2026-09-13)."
+  - type: software
+    title: "herdr-theme-picker"
+    authors:
+      - name: qintmb
+    url: https://github.com/qintmb/herdr-theme-picker
+    license: MIT
+    notes: "palette_to_tokens role table (Ghostty palette -> herdr [theme.custom] tokens) and darken_hex math ported into dot_local/share/herdr/ghostty-theme-sync/theme-sync.py compute()/darken() (accessed 2026-09-13)."

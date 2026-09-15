@@ -1,0 +1,8 @@
+{
+  "tools": {
+    "webSearch": { "enabled": false },
+    "sourceCheck": { "enabled": false },
+    "fetchContent": { "enabled": true },
+    "getSearchContent": { "enabled": false }
+  }
+}
