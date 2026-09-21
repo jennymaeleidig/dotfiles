@@ -14,6 +14,8 @@ docs/
 .pi/docs/
 tools/
 .scratch/
+pi-warden.md
+warden-local-rules.md
 
 # Runtime state (target side) — pi package/skill trees materialized imperatively
 
@@ -29,6 +31,15 @@ tools/
 !.pi/agent/skills/create-obsidian-reference/**
 !.pi/agent/skills/cc-safety-net/**
 !.pi/agent/skills/pi-sandbox/**
+!.pi/agent/skills/setup-warden-rules/**
+
+# Guard runtime state (target side) — written by the tools and never managed: warden's
+# consent and settings file plus its hold ledger, and the pi-typesafe key store that
+# `/typesafe login` writes. The key store is deliberately outside Source so the key is
+# never committed; ADR 0004 keeps the fence narrow rather than managing these paths.
+
+.pi/agent/pi-warden/
+.pi/agent/pi-typesafe/
 
 # Extension runtime deps (target side) — node_modules materialized by
 
@@ -38,14 +49,6 @@ tools/
 
 .pi/agent/extensions/mermaid-lint/node_modules/
 .pi/agent/extensions/mermaid-lint/package-lock.json
-
-# Workflow runtime state (target side) — the pi-workflows server owns state.sqlite*
-# and the host/ socket dir beside the authored workflows. Source state owns only
-# the *.workflow.{ts,js,mts,mjs} files the loader discovers there; the .gitkeep
-# declares the directory so a host has it before any workflow is authored.
-
-.pi/agent/workflows/state.sqlite*
-.pi/agent/workflows/host/
 
 # Python bytecode (target side) — created when a vendored plugin script is run
 # or compiled on the host; never Source state.

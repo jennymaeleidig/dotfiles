@@ -1,15 +1,3 @@
-## Scripts: Temporary, Inline, & Here documents
-
-- Multi-step scripts: write a temp file with the write tool (e.g. `$TMPDIR/script.py`) and execute it; one-liners stay inline. This is the substitute for two hard blocks (CC Safety Net): heredocs into anything but `cat`, `tee`, `git apply`, `git commit`, `gh pr create`, `gh issue create`, and multi-line inline `-c`/`-e` blobs — where a backtick in script text breaks CC Safety Net's quote tracking and a later `<<` false-blocks as a heredoc.
-
-## Guards first
-
-Two guards shape every command this agent runs — load the matching skill *before* the work that touches it, so patterns are known upfront, not discovered mid-failure:
-
-- About to run dev servers or any background/long-lived process, or debugging local-server weirdness (stale 404/200 on your port, `EADDRINUSE`, `kill`/`pkill` refusing) — load the `pi-sandbox` skill first.
-- About to touch secrets or credentials, run destructive commands, or mutate git history — load the `cc-safety-net` skill first.
-- When a guard fires anyway (safety-net `block`, `EPERM`/`operation not permitted`): hand the blocked command verbatim to the user to run in their own unguarded terminal, and confirm any substitute plan before downgrading tooling or skipping the step.
-
 ## Subagents: Always delegate via Herdr
 
 - Subagents and background agents run as Herdr panes under the same guards as this session — dispatching to them never escapes a denial.
@@ -33,5 +21,4 @@ uncommitted edits.
 
 ## License
 
-- When writing new code, license it [CC0-1.0](https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt) (SPDX `CC0-1.0`): CC0 §2 waives all rights "for any purpose whatsoever" with no attribution condition, so no per-file notices — mark it with the optional `// SPDX-License-Identifier: CC0-1.0` line as machine-readable convenience.
-- When borrowing or adapting external code — verbatim or paraphrased, in code or in a doc snippet: add a citation block above the code and update the root `CITATION.cff`, per [CITATION.md](~/.pi/agent/seed/prompts/CITATION.md) — the source’s license survives the borrow (CC0 §2 waives only the Affirmer's own rights), so it must be attributed.
+- New code is CC0-1.0 (SPDX `CC0-1.0`) and needs no per-file notice. Borrowed code follows [CITATION.md](~/.pi/agent/seed/prompts/CITATION.md): a citation block above the borrowed text plus a verifiable `CITATION.cff`. Warden's rules enforce the file-visible parts, not the same-change `CITATION.cff` update — do that too.

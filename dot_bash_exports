@@ -48,3 +48,16 @@ export PI_MARKDOWN_PREVIEW_REGISTER_EXPORT_TOOL=false
 
 # pi security (cc-safety-net)
 export CC_SAFETY_NET_LEVEL=strict
+
+# pi warden — TypeSafe (jev) judgments
+# Standing consent, the same thing /warden enable writes. With a key present, each
+# guarded call sends a redacted, truncated summary to TypeSafe.
+export PI_WARDEN_ENABLED=1
+# pi-typesafe — the typesafe_evaluate tool, for judgments the agent asks for itself.
+# /typesafe enable only lasts the session that runs it; this is the standing switch.
+export PI_TYPESAFE_ENABLED=1
+# The key is never committed here. /typesafe login stores it in
+# ~/.pi/agent/pi-typesafe/auth.json, owner-only, which is what the tools read by
+# default. If a shell needs it in the environment instead, put
+# `export TYPESAFE_API_KEY=...` in the unmanaged file sourced below (chmod 600).
+[ -r "$HOME/.config/pi/pi-typesafe.env" ] && . "$HOME/.config/pi/pi-typesafe.env"

@@ -1,18 +1,19 @@
 {
   "collapseChangelog": true,
   "compaction": {
-    "enabled": true
+    "enabled": true,
+    "reserveTokens": 65536
   },
   "defaultModel": "deepseek-flash",
   "defaultProjectTrust": "always",
   "defaultProvider": "deepseek",
-  "defaultThinkingLevel": "high",
+  "defaultThinkingLevel": "low",
   "doubleEscapeAction": "tree",
   "editorPaddingX": 0,
   "enableInstallTelemetry": false,
   "enabledModels": ["zai/glm-5.3-flash", "deepseek/deepseek-flash"],
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.85.1",
+  "lastChangelogVersion": "0.86.1",
   "lazyTools": {
     "defer": [
       "Defer(web_*)",
@@ -30,8 +31,8 @@
     "mermaid": "final"
   },
   "oppiMirror": {
-    "autoStart": false,
-    "workspaceCreation": "never"
+    "autoStart": true,
+    "workspaceCreation": "ask"
   },
   "outputPad": 0,
   "packageDocs": [
@@ -87,14 +88,25 @@
       "git:github.com/NVlabs/SoL-Pi": "https://github.com/NVlabs/SoL-Pi"
     },
     {
-      "npm:@osolmaz/pi-workflows": "https://github.com/osolmaz/pi-workflows"
+      "git:github.com/tinypi-extension/tinysubagent": "https://github.com/tinypi-extension/tinysubagent"
+    },
+    {
+      "npm:oppi-mirror": "https://github.com/duh17/oppi"
+    },
+    {
+      "npm:pi-workspace-history": "https://github.com/wcldyx/pi-workspace-history"
+    },
+    {
+      "npm:pi-warden": "https://github.com/DevMortimer/pi-warden"
+    },
+    {
+      "npm:pi-typesafe": "https://github.com/DevMortimer/pi-typesafe"
     }
   ],
   "packages": [
     "npm:pi-vim",
     "npm:@ff-labs/pi-fff",
     "npm:pi-markdown-preview",
-    "npm:@narumitw/pi-btw",
     "npm:pi-zentui",
     "npm:@upstash/context7-pi",
     "npm:@bigboss2063/pi-clip",
@@ -108,7 +120,11 @@
     "npm:@narumitw/pi-usage",
     "npm:pi-web-access",
     "git:github.com/NVlabs/SoL-Pi",
-    "npm:@osolmaz/pi-workflows"
+    "git:github.com/tinypi-extension/tinysubagent",
+    "npm:oppi-mirror",
+    "npm:pi-workspace-history",
+    "npm:pi-warden",
+    "npm:pi-typesafe"
   ],
   "piVim": {
     "modeColors": {

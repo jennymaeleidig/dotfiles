@@ -1,6 +1,6 @@
 ---
 name: cc-safety-net
-description: Boundary and CLI guidance for the global CC Safety Net pre-tool guard — secrets access, destructive commands, git-history mutation, and its rule allow-lists. Use when a tool is blocked with a safety-net reason, before destructive or git-history work, when running `npx -y cc-safety-net`, or when its rules are discussed, including heredoc and stdin-consumer blocks. For filesystem/network denials and permission prompts, use the pi-sandbox skill.
+description: Boundary and CLI guidance for the global CC Safety Net pre-tool guard — secrets access, destructive commands, git-history mutation, and its rule allow-lists. Use when a tool is blocked with a safety-net reason, before touching secrets or credentials, before destructive or git-history work, when running `npx -y cc-safety-net`, or when its rules are discussed, including heredoc and stdin-consumer blocks. For filesystem/network denials and permission prompts, use the pi-sandbox skill.
 ---
 
 # CC Safety Net guidance

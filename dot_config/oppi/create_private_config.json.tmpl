@@ -1,0 +1,41 @@
+{
+  "configVersion": 2,
+  "port": 7749,
+  "host": "0.0.0.0",
+  "dataDir": "{{ .chezmoi.homeDir }}/.config/oppi",
+  "sessionIdleTimeoutMs": 600000,
+  "workspaceIdleTimeoutMs": 1800000,
+  "maxSessionsPerWorkspace": 20,
+  "maxSessionsGlobal": 40,
+  "runtimePathEntries": [
+    "{{ .chezmoi.homeDir }}/.local/bin",
+    "{{ .chezmoi.homeDir }}/.cargo/bin",
+    "/opt/homebrew/bin",
+    "/opt/homebrew/sbin",
+    "/usr/local/bin",
+    "/usr/bin",
+    "/bin",
+    "/usr/sbin",
+    "/sbin"
+  ],
+  "runtimeEnv": {},
+  "oppiDocsPrompt": {
+    "enabled": true
+  },
+  "oppiCliPrompt": {
+    "enabled": true
+  },
+  "tls": {
+    "mode": "tailscale"
+  },
+  "images": {
+    "autoResize": false
+  },
+  "uploadStore": {
+    "mode": "local",
+    "path": "{{ .chezmoi.homeDir }}/.config/oppi/uploads",
+    "maxFileBytes": 52428800,
+    "maxTurnBytes": 104857600,
+    "unusedTtlMs": 86400000
+  }
+}

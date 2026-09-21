@@ -1,4 +1,7 @@
 {
+  "shortcuts": {
+    "activity": "ctrl+shift+a"
+  },
   "tools": {
     "webSearch": { "enabled": false },
     "sourceCheck": { "enabled": false },

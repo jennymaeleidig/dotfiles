@@ -22,6 +22,7 @@
       "~/.docker",
       "~/.colima",
       "~/.npm",
+      "~/.cargo",
       "/opt/homebrew/Cellar",
       "/private/var/folders/*/pi-clipboard-*.png",
       "/var/folders/*/*/T/**",
@@ -32,7 +33,8 @@
       "~/.pi/agent/sessions",
       "~/.pi/agent/agent-memory",
       "/tmp",
-      "~/.npm"
+      "~/.npm",
+      "/private/var/folders/*/*/T/**"
     ],
     "denyWrite": [
       "~/.local/share/chezmoi/dot_pi/agent/sandbox.json",

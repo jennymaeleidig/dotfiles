@@ -1,6 +1,6 @@
 ---
 name: pi-sandbox
-description: The filesystem and network boundary every tool operates under, enforced by the pi-sandbox extension. Use when a tool call is denied with a sandbox reason, when a subprocess fails with EPERM or "operation not permitted", when a stale server holds a port or kill/pkill/pgrep fail inside the sandbox, when you need to know which paths or domains are allowed, or when sandbox configuration comes up.
+description: The filesystem and network boundary every tool operates under, enforced by the pi-sandbox extension. Use before starting dev servers or other long-lived background processes, when a tool call is denied with a sandbox reason, when a subprocess fails with EPERM or "operation not permitted", when a stale server holds a port or kill/pkill/pgrep fail inside the sandbox, when you need to know which paths or domains are allowed, or when sandbox configuration comes up.
 ---
 
 # pi-sandbox boundary
