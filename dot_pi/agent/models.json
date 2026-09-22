@@ -1,11 +1,10 @@
-{{- $pins := include "tools/local-llm/pins.json" | fromJson -}}
 {
   "providers": {
     "llama.cpp": {
       "modelOverrides": {
-        "{{ $pins.model.id }}": {
+        "gpt-oss-20b-MXFP4": {
           "reasoning": true,
-          "contextWindow": {{ $pins.server.contextWindow }},
+          "contextWindow": 32768,
           "compat": {
             "supportsReasoningEffort": true
           }

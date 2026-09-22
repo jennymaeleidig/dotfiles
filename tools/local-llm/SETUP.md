@@ -131,12 +131,13 @@ chezmoi apply
 ```
 
 This lands `~/.pi/agent/models.json` and the `LLAMA_BASE_URL` export in your
-shell dotfile. Both are rendered from `pins.json` (the model override is keyed
-by `model.id`, the export by `server.host`/`server.port`), so the pins file is
-still the only place either is named. Applying does **not** start the server.
+shell dotfile. The export is rendered from `pins.json` (`server.host` and
+`server.port`), so the pins file is still the only place the address is named.
+The `models.json` override is a plain file that repeats `model.id` and
+`server.contextWindow` by hand. Applying does **not** start the server.
 
-It also lands `~/.pi/agent/settings.json`, which carries two entries for this
-model, both derived from the same pins:
+It also lands `~/.pi/agent/settings.json`, a plain file that names this model
+twice:
 
 - `enabledModels` — so the model is in pi's list at startup;
 - `modelThinkingLevels["llama.cpp/<model.id>"] = "high"` — so **high reasoning
@@ -152,7 +153,7 @@ measures end to end.
 
 Pi rewrites `settings.json` when you press Ctrl+S in `/model` or `/thinking`, so
 a level changed there is host-local and a later `chezmoi apply` reverts it. Edit
-the template and re-apply to change it for real.
+the file and re-apply to change it for real.
 
 ## 5. Start the server
 
