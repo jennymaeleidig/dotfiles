@@ -50,11 +50,20 @@ export PI_MARKDOWN_PREVIEW_REGISTER_EXPORT_TOOL=false
 export CC_SAFETY_NET_LEVEL=strict
 
 # llama.cpp local model server (provisioning material in tools/local-llm/).
-# Connection only: the server is started by hand with
-# `bash tools/local-llm/serve.sh`, never at login. The host and port come from
+# Connection only: nothing here starts a server. The host and port come from
 # tools/local-llm/pins.json, the one place this setup names its build and model.
 {{- $llm := include "tools/local-llm/pins.json" | fromJson }}
 export LLAMA_BASE_URL="http://{{ $llm.server.host }}:{{ $llm.server.port }}"
+
+# The server and its gate are source-only, so they stay in the checkout rather
+# than going on PATH: tools/local-llm/ also holds pins.py, the pins, and the
+# model itself, and provisioning material is not a directory of commands. These
+# two functions are the whole interface. serve.sh runs in the foreground on
+# purpose — Ctrl-C is the stop, and there is no login item to forget (ADR 0005).
+# A fresh server loads nothing until you pick the model with /llama in pi.
+llm_root="{{ .chezmoi.sourceDir }}/tools/local-llm"
+llm-serve() { bash "$llm_root/serve.sh" "$@"; }
+llm-gate() { bash "$llm_root/gate.sh" "$@"; }
 
 # pi warden — TypeSafe (jev) judgments
 # Standing consent, the same thing /warden enable writes. With a key present, each

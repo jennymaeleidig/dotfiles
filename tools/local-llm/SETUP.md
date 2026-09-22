@@ -142,6 +142,10 @@ cd <dotfiles checkout>
 bash tools/local-llm/serve.sh
 ```
 
+If your shell has sourced `~/.bash_exports`, `llm-serve` does the same thing
+from any directory (it resolves the checkout at apply time, so nothing is
+hardcoded here). Either way it runs in the foreground: Ctrl-C is the stop.
+
 Round-trip check in another shell:
 
 ```bash
@@ -172,6 +176,8 @@ resident memory.
 ```bash
 bash tools/local-llm/gate.sh
 ```
+
+Or `llm-gate` from the exports file, which is the same script from anywhere.
 
 This is the one verification seam. It is read-only against the server (GETs
 plus stateless completions; it never loads, unloads, or reconfigures), so it is
@@ -211,6 +217,8 @@ to the spec's "configure it explicitly and check it" that stays honest.
 ```bash
 bash tools/local-llm/gate.sh --measure
 ```
+
+Or `llm-gate --measure`.
 
 Prints wall-clock throughput at a short prompt and at roughly a 26K-token
 prompt, the llama-server peak RSS during the long run, and the live

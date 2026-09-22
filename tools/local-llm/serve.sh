@@ -54,6 +54,7 @@ echo "==> llama.cpp $LLAMA_CPP_RELEASE"
 echo "    binary  $BIN"
 echo "    model   $MODELS_DIR/$MODEL_FILE ($MODEL_BYTES bytes)"
 echo "    router   http://$SERVER_HOST:$SERVER_PORT  (-c $CONTEXT_WINDOW, --models-max 1)"
+echo "    in pi   /llama to load it, /model to select it (nothing loads until then)"
 echo "    stop     Ctrl-C"
 
 # Flag notes (see SETUP.md for the reasoning):
