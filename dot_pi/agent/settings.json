@@ -95,7 +95,7 @@
       "git:github.com/NVlabs/SoL-Pi": "https://github.com/NVlabs/SoL-Pi"
     },
     {
-      "git:github.com/tinypi-extension/tinysubagent": "https://github.com/tinypi-extension/tinysubagent"
+      "git:github.com/jennymaeleidig/tinysubagent": "https://github.com/jennymaeleidig/tinysubagent"
     },
     {
       "npm:oppi-mirror": "https://github.com/duh17/oppi"
@@ -110,7 +110,16 @@
       "npm:pi-typesafe": "https://github.com/DevMortimer/pi-typesafe"
     },
     {
+      "npm:pi-compaction-model": "https://github.com/JMHSV/pi-compaction-model"
+    },
+    {
       "npm:pi-session-summary": "https://github.com/pasky/pi-session-summary"
+    },
+    {
+      "npm:pi-skill-arg-hints": "https://github.com/MiguelMachado-dev/pi-skill-arg-hints"
+    },
+    {
+      "npm:@pi-kaush/pi-inline-identifier": "https://github.com/kaushikgopal/pi-kaush/tree/main/extensions/pi-inline-identifier"
     }
   ],
   "packages": [
@@ -130,12 +139,15 @@
     "npm:@narumitw/pi-usage",
     "npm:pi-web-access",
     "git:github.com/NVlabs/SoL-Pi",
-    "git:github.com/tinypi-extension/tinysubagent",
+    "git:github.com/jennymaeleidig/tinysubagent",
     "npm:oppi-mirror",
     "npm:pi-workspace-history",
     "npm:pi-warden",
     "npm:pi-typesafe",
-    "npm:pi-session-summary"
+    "npm:pi-compaction-model",
+    "npm:pi-session-summary",
+    "npm:pi-skill-arg-hints",
+    "npm:@pi-kaush/pi-inline-identifier"
   ],
   "piVim": {
     "modeColors": {
@@ -149,5 +161,10 @@
     "showImages": true
   },
   "theme": "Monokai Pro (CE)",
-  "tuiMode": "fullscreen"
+  "tuiMode": "fullscreen",
+  "compactionModel": {
+    "model": "zai/glm-5.3-flash",
+    "thinkingLevel": "off",
+    "reasons": ["threshold", "overflow"]
+  }
 }
