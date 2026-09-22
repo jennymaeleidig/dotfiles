@@ -108,6 +108,9 @@
     },
     {
       "npm:pi-typesafe": "https://github.com/DevMortimer/pi-typesafe"
+    },
+    {
+      "npm:pi-session-summary": "https://github.com/pasky/pi-session-summary"
     }
   ],
   "packages": [
@@ -131,7 +134,8 @@
     "npm:oppi-mirror",
     "npm:pi-workspace-history",
     "npm:pi-warden",
-    "npm:pi-typesafe"
+    "npm:pi-typesafe",
+    "npm:pi-session-summary"
   ],
   "piVim": {
     "modeColors": {
