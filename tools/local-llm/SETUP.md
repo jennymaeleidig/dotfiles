@@ -135,6 +135,25 @@ shell dotfile. Both are rendered from `pins.json` (the model override is keyed
 by `model.id`, the export by `server.host`/`server.port`), so the pins file is
 still the only place either is named. Applying does **not** start the server.
 
+It also lands `~/.pi/agent/settings.json`, which carries two entries for this
+model, both derived from the same pins:
+
+- `enabledModels` — so the model is in pi's list at startup;
+- `modelThinkingLevels["llama.cpp/<model.id>"] = "high"` — so **high reasoning
+  is this model's default** without touching `defaultThinkingLevel`, which is
+  set for the other providers and stays where it is.
+
+That last one is the difference between permitting reasoning and asking for it.
+The `models.json` override makes a level *reachable*; the settings entry is what
+actually requests one. With both in place pi sends `reasoning_effort: "high"`
+verbatim on every request for this model (there is no `thinkingLevelMap`, so
+nothing remaps the level), which is exactly what the gate's reasoning check
+measures end to end.
+
+Pi rewrites `settings.json` when you press Ctrl+S in `/model` or `/thinking`, so
+a level changed there is host-local and a later `chezmoi apply` reverts it. Edit
+the template and re-apply to change it for real.
+
 ## 5. Start the server
 
 ```bash
@@ -193,19 +212,22 @@ loudly, naming the boundary that failed, and exits non-zero. It asserts:
 5. the harness is pointed at this server — provider visibility is asserted from
    the declaration rather than assumed, so a provider that would never appear
    in pi's model list fails here and not later;
-6. the pinned launch flags in `serve.sh` are intact: offload, window, slots and
+6. the harness actually asks for a reasoning level for this model, and it is not
+   `off` — so a later settings edit cannot leave it sitting at the global
+   `defaultThinkingLevel` set for the other providers;
+7. the pinned launch flags in `serve.sh` are intact: offload, window, slots and
    the Harmony template;
-7. a tool spec produces a structured `tool_calls` entry — prose describing the
+8. a tool spec produces a structured `tool_calls` entry — prose describing the
    call is a failure, which is the Harmony-template regression it exists to
    catch;
-8. reasoning effort changes the response in the expected direction, end to end
+9. reasoning effort changes the response in the expected direction, end to end
    from the config to the server: one request at high effort, one with
    `reasoning_effort` omitted — the request the harness sends when thinking is
    off.
 
-Two of those are not HTTP, and the gate names them as such. Checks 1-4 and 7-8
-are external behaviour, read-only against the server. Check 5 reads the
-harness's own declaration (the environment, else the applied dotfile). Check 6
+Two of those are not HTTP, and the gate names them as such. Checks 1-4 and 8-9
+are external behaviour, read-only against the server. Checks 5-6 read the
+harness's own configuration (its declaration and its startup level). Check 7
 reads `serve.sh`, because the pinned build exposes no GPU-offload field in any
 of its endpoints — verified against the binary itself — so residency cannot be
 asserted remotely, and asserting throughput would be a measurement, which this

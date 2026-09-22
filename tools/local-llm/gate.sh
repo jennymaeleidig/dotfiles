@@ -50,9 +50,16 @@ EOF
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --measure) MEASURE=1 ;;
-    --help | -h) usage; exit 0 ;;
-    *) echo "unknown argument: $1" >&2; usage >&2; exit 2 ;;
+  --measure) MEASURE=1 ;;
+  --help | -h)
+    usage
+    exit 0
+    ;;
+  *)
+    echo "unknown argument: $1" >&2
+    usage >&2
+    exit 2
+    ;;
   esac
   shift
 done
@@ -90,8 +97,8 @@ if [ "$CODE" = "000" ]; then
   fail "server reachable" "server not running at $BASE — start it with: bash tools/local-llm/serve.sh"
 fi
 case "$CODE" in
-  2*) ;;
-  *) fail "server reachable" "server answered HTTP $CODE at $BASE/health" ;;
+2*) ;;
+*) fail "server reachable" "server answered HTTP $CODE at $BASE/health" ;;
 esac
 pass "server reachable"
 
@@ -196,6 +203,36 @@ if [ "$BASE_DECLARED" != "$BASE" ]; then
 fi
 pass "harness provider connection ($BASE_DECLARED)"
 
+# --- 4d. the harness asks for a reasoning level for this model ----------------
+# Permitting reasoning and asking for it are different failures. The override in
+# models.json makes the level reachable; this is what makes it the default, so a
+# later edit cannot leave the local model silently sitting at the global default
+# (which is set for other providers).
+LEVEL_SPEC="$HOME/.pi/agent/settings.json"
+if [ ! -f "$LEVEL_SPEC" ]; then
+  fail "harness default thinking level" "$LEVEL_SPEC is missing — run chezmoi apply"
+fi
+LEVEL="$(python3 -c '
+import json, sys
+path, key = sys.argv[1], sys.argv[2]
+try:
+    cfg = json.load(open(path))
+except Exception as exc:
+    print(f"{path} is not valid JSON: {exc}")
+    sys.exit(1)
+levels = cfg.get("modelThinkingLevels") or {}
+level = levels.get(key)
+default = cfg.get("defaultThinkingLevel")
+if level is None:
+    print(f"{path} declares no modelThinkingLevels[{key!r}], so this model starts at the global defaultThinkingLevel ({default!r}) instead")
+    sys.exit(1)
+if str(level).lower() in ("off", "none"):
+    print(f"modelThinkingLevels[{key!r}] is {level!r}, which turns reasoning off for this model")
+    sys.exit(1)
+print(level)
+' "$LEVEL_SPEC" "llama.cpp/$MODEL_ID")" || fail "harness default thinking level" "${LEVEL:-no reason reported}"
+pass "harness default thinking level ($LEVEL)"
+
 # --- 5. the pinned launch flags are intact ----------------------------------
 # Not HTTP: the pinned build's HTTP surface has no GPU-offload field at all, so
 # residency cannot be asserted from here, and throughput would be a measurement.
@@ -223,14 +260,14 @@ REQUIRED_FLAGS=(
   '--port "$SERVER_PORT"'
 )
 for flag in "${REQUIRED_FLAGS[@]}"; do
-  if ! grep -qF -- "$flag" <<< "$LAUNCH_ARGS"; then
+  if ! grep -qF -- "$flag" <<<"$LAUNCH_ARGS"; then
     fail "pinned launch flags" "serve.sh no longer passes $flag — window, slots, tool calling or GPU offload would change silently"
   fi
 done
 pass "pinned launch flags intact (offload -ngl 99, window, slots, jinja)"
 
 # --- 6. a tool spec produces a structured tool call -------------------------
-python3 - "$MODEL_ID" > "$TMP/tool_req.json" <<'PY'
+python3 - "$MODEL_ID" >"$TMP/tool_req.json" <<'PY'
 import json, sys
 print(json.dumps({
     "model": sys.argv[1],
@@ -261,10 +298,11 @@ if [ "$CODE" = "000" ]; then
   fail "tool call structured" "server not running at $BASE — start it with: bash tools/local-llm/serve.sh"
 fi
 case "$CODE" in
-  2*) ;;
-  *) fail "tool call structured" "chat completion returned HTTP $CODE: $(head -c 300 "$TMP/tool_resp.json")" ;;
+2*) ;;
+*) fail "tool call structured" "chat completion returned HTTP $CODE: $(head -c 300 "$TMP/tool_resp.json")" ;;
 esac
-REASON="$(python3 - "$TMP/tool_resp.json" <<'PY'
+REASON="$(
+  python3 - "$TMP/tool_resp.json" <<'PY'
 import json, sys
 try:
     data = json.load(open(sys.argv[1]))
@@ -302,7 +340,7 @@ pass "tool call structured (read)"
 
 # --- 7. reasoning effort changes the response --------------------------------
 reason_probe() { # $1 label: 'high', or 'default' to omit the field
-  python3 - "$MODEL_ID" "$1" > "$TMP/reason_$1.json" <<'PY'
+  python3 - "$MODEL_ID" "$1" >"$TMP/reason_$1.json" <<'PY'
 import json, sys
 body = {
     "model": sys.argv[1],
@@ -318,7 +356,7 @@ if sys.argv[2] != "default":
     body["reasoning_effort"] = sys.argv[2]
 print(json.dumps(body))
 PY
-  post_chat "$TMP/reason_$1.json" "$2" 180 > "$TMP/reason_$1.code"
+  post_chat "$TMP/reason_$1.json" "$2" 180 >"$TMP/reason_$1.code"
 }
 
 reason_probe high "$TMP/reason_high_resp.json"
@@ -328,7 +366,8 @@ for effort in high default; do
   [ "$code" = "000" ] && fail "reasoning effort honoured" "server not running at $BASE (the $effort probe)"
   case "$code" in 2*) ;; *) fail "reasoning effort honoured" "the $effort probe returned HTTP $code" ;; esac
 done
-REASON="$(python3 - "$TMP/reason_high_resp.json" "$TMP/reason_default_resp.json" <<'PY'
+REASON="$(
+  python3 - "$TMP/reason_high_resp.json" "$TMP/reason_default_resp.json" <<'PY'
 import json, sys
 
 def measure(path, effort):
@@ -384,7 +423,10 @@ echo "    iogpu.wired_limit_mb: $WIRED MiB"
 
 PID="$(pgrep -f 'llama-server' 2>/dev/null | head -n 1 || true)"
 if [ -n "$PID" ]; then
-  (while :; do ps -o rss= -p "$PID" 2>/dev/null || break; sleep 0.5; done) > "$TMP/rss.txt" 2>/dev/null &
+  (while :; do
+    ps -o rss= -p "$PID" 2>/dev/null || break
+    sleep 0.5
+  done) >"$TMP/rss.txt" 2>/dev/null &
   SAMPLER=$!
 else
   echo "    peak memory: unavailable (llama-server pid not visible from here)"
@@ -396,10 +438,10 @@ run_completion() { # $1 body file, $2 response file, $3 wall file
   code="$(post_chat "$1" "$2" 900)"
   end="$(python3 -c 'import time; print(time.time())')"
   case "$code" in
-    2*) ;;
-    *) fail "measurement request" "chat completion returned HTTP $code" ;;
+  2*) ;;
+  *) fail "measurement request" "chat completion returned HTTP $code" ;;
   esac
-  python3 -c 'import sys; print(float(sys.argv[2]) - float(sys.argv[1]))' "$start" "$end" > "$3"
+  python3 -c 'import sys; print(float(sys.argv[2]) - float(sys.argv[1]))' "$start" "$end" >"$3"
 }
 
 report_run() { # $1 label, $2 body, $3 response, $4 wall file, $5 phase to rate
@@ -424,7 +466,7 @@ print(f"    {sys.argv[3]:<13} prompt={prompt} completion={completion} reasoning=
 PY
 }
 
-python3 - "$MODEL_ID" > "$TMP/short_req.json" <<'PY'
+python3 - "$MODEL_ID" >"$TMP/short_req.json" <<'PY'
 import json, sys
 print(json.dumps({
     "model": sys.argv[1],
@@ -435,8 +477,8 @@ print(json.dumps({
 }))
 PY
 
-python3 -c 'import sys; sys.stdout.write("The quick brown fox jumps over the lazy dog. " * int(sys.argv[1]))' 2200 > "$TMP/long_prompt.txt"
-python3 - "$MODEL_ID" "$TMP/long_prompt.txt" > "$TMP/long_req.json" <<'PY'
+python3 -c 'import sys; sys.stdout.write("The quick brown fox jumps over the lazy dog. " * int(sys.argv[1]))' 2200 >"$TMP/long_prompt.txt"
+python3 - "$MODEL_ID" "$TMP/long_prompt.txt" >"$TMP/long_req.json" <<'PY'
 import json, sys
 print(json.dumps({
     "model": sys.argv[1],

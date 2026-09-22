@@ -1,3 +1,4 @@
+{{- $pins := include "tools/local-llm/pins.json" | fromJson -}}
 {
   "collapseChangelog": true,
   "compaction": {
@@ -11,7 +12,11 @@
   "doubleEscapeAction": "tree",
   "editorPaddingX": 0,
   "enableInstallTelemetry": false,
-  "enabledModels": ["zai/glm-5.3-flash", "deepseek/deepseek-flash"],
+  "enabledModels": [
+    "zai/glm-5.3-flash",
+    "deepseek/deepseek-flash",
+    "llama.cpp/{{ $pins.model.id }}"
+  ],
   "hideThinkingBlock": true,
   "lastChangelogVersion": "0.86.1",
   "lazyTools": {
@@ -29,6 +34,9 @@
   },
   "markdown": {
     "mermaid": "final"
+  },
+  "modelThinkingLevels": {
+    "llama.cpp/{{ $pins.model.id }}": "high"
   },
   "oppiMirror": {
     "autoStart": true,
