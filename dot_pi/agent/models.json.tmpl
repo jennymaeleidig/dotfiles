@@ -1,0 +1,16 @@
+{{- $pins := include "tools/local-llm/pins.json" | fromJson -}}
+{
+  "providers": {
+    "llama.cpp": {
+      "modelOverrides": {
+        "{{ $pins.model.id }}": {
+          "reasoning": true,
+          "contextWindow": {{ $pins.server.contextWindow }},
+          "compat": {
+            "supportsReasoningEffort": true
+          }
+        }
+      }
+    }
+  }
+}

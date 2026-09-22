@@ -1,0 +1,24 @@
+{
+  "llamaCpp": {
+    "release": "b11095",
+    "commit": "58367713a6935c0810103378144008df32e3d5db",
+    "assetUrl": "https://github.com/ggml-org/llama.cpp/releases/download/b11095/llama-b11095-bin-macos-arm64.tar.gz",
+    "assetBytes": 11196555,
+    "assetSha256": "67a1b119fa4b495a1f17f5b3950de24fd0bfeecce73b1619559f85ca1e740bac"
+  },
+  "model": {
+    "repo": "ggml-org/gpt-oss-20b-GGUF",
+    "revision": "ef9b12f2ff56c69cf32153a02784e7a3c88bf524",
+    "file": "gpt-oss-20b-MXFP4.gguf",
+    "id": "gpt-oss-20b-MXFP4",
+    "bytes": 12109566624,
+    "sha256": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901"
+  },
+  "server": {
+    "host": "127.0.0.1",
+    "port": 8080,
+    "contextWindow": 32768,
+    "modelsDir": "local-llm/models",
+    "runtimeDir": "local-llm/runtime"
+  }
+}
