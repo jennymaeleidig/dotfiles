@@ -74,7 +74,7 @@ What remains checkable about an artifact is its shape, and a path or a pattern
 settles shape without judgement.
 
 Two checks already exist in this repo, and both are deterministic: the
-`pi-sandbox` skill's filesystem and network fence, and the `cc-safety-net`
+`pi-sandbox-runtime` skill's filesystem and network fence, and the `cc-safety-net`
 skill's guard over secrets, destructive commands, and git history.
 
 ### Telemetry reads after

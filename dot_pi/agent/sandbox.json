@@ -1,16 +1,37 @@
 {
   "enabled": true,
-  "permissionPromptTimeoutSeconds": 0,
   "network": {
     "allowLocalBinding": true,
     "allowAllUnixSockets": true,
-    "allowUnauthenticatedSocksProxy": true,
     "allowedDomains": [
-      "*"
+      "github.com",
+      "api.github.com",
+      "codeload.github.com",
+      "*.githubusercontent.com",
+      "registry.npmjs.org",
+      "*.npmjs.org",
+      "nodejs.org",
+      "mise-versions.jdx.dev",
+      "formulae.brew.sh",
+      "ghcr.io",
+      "huggingface.co",
+      "cdn-lfs.huggingface.co",
+      "pypi.org",
+      "files.pythonhosted.org",
+      "crates.io",
+      "static.crates.io",
+      "proxy.golang.org",
+      "sum.golang.org",
+      "cdn.jsdelivr.net",
+      "unpkg.com",
+      "esm.sh",
+      "discord.gg",
+      "*.discord.com"
     ],
     "deniedDomains": []
   },
   "filesystem": {
+    "denyRead": ["/Users", "/home"],
     "allowRead": [
       ".",
       "~/.local",
@@ -33,6 +54,7 @@
       "~/.pi/agent/sessions",
       "~/.pi/agent/agent-memory",
       "/tmp",
+      "/private/tmp",
       "~/.npm",
       "/private/var/folders/*/*/T/**"
     ],
@@ -40,5 +62,23 @@
       "~/.local/share/chezmoi/dot_pi/agent/sandbox.json",
       "~/.cc-safety-net"
     ]
+  },
+  "tools": {
+    "format_md_tables": { "fields": ["path"], "access": "write" },
+    "mermaid_lint": { "fields": ["path"], "access": "read" },
+    "ffgrep": { "fields": ["path"], "access": "read" },
+    "fffind": { "fields": ["path"], "access": "read" },
+    "fetch_content": { "fields": [], "access": "none" },
+    "web_search": { "fields": [], "access": "none" },
+    "source_check": { "fields": [], "access": "none" },
+    "get_search_content": { "fields": [], "access": "none" },
+    "subagent": { "fields": [], "access": "none" },
+    "subagent_report": { "fields": [], "access": "none" },
+    "typesafe_evaluate": { "fields": [], "access": "none" },
+    "update_plan": { "fields": [], "access": "none" },
+    "recall": { "fields": [], "access": "none" },
+    "obs_recall": { "fields": [], "access": "none" },
+    "resolve-library-id": { "fields": [], "access": "none" },
+    "query-docs": { "fields": [], "access": "none" }
   }
 }

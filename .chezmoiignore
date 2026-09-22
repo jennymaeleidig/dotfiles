@@ -30,7 +30,7 @@ warden-local-rules.md
 .pi/agent/skills/*
 !.pi/agent/skills/create-obsidian-reference/**
 !.pi/agent/skills/cc-safety-net/**
-!.pi/agent/skills/pi-sandbox/**
+!.pi/agent/skills/pi-sandbox-runtime/**
 !.pi/agent/skills/setup-warden-rules/**
 
 # Guard runtime state (target side) — written by the tools and never managed: warden's

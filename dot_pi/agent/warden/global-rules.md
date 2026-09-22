@@ -34,7 +34,7 @@ A `TODO` or `FIXME` comment must name a ticket or issue, for example `TODO(APP-1
 `TODO` is a violation.
 
 # Blocked boundaries are handed to the user, not bypassed
-When a command is blocked by the sandbox with `EPERM`/`operation not permitted`, or by a safety-net
+When a command is blocked by the `pi-sandbox-runtime` guard with `EPERM`/`operation not permitted`, or by a safety-net
 rule, do not retry it through a different interpreter, wrapper, subagent, or a Herdr pane to get
 around the block. Report the exact blocked command to the user so they can run it in their own
 terminal, and stop. Retrying a blocked operation through another venue is a violation.
