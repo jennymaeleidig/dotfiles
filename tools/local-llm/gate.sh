@@ -376,6 +376,8 @@ fi
 # --- measurement mode (never asserted) --------------------------------------
 echo
 echo "==> measurement (not asserted; wall-clock, includes prefill)"
+echo "    short  run is decode-bound; long run is prefill-bound (that is the"
+echo "           number where a lost GPU offload shows up first)"
 
 WIRED="$(sysctl -n iogpu.wired_limit_mb 2>/dev/null || echo unavailable)"
 echo "    iogpu.wired_limit_mb: $WIRED MiB"
@@ -400,16 +402,24 @@ run_completion() { # $1 body file, $2 response file, $3 wall file
   python3 -c 'import sys; print(float(sys.argv[2]) - float(sys.argv[1]))' "$start" "$end" > "$3"
 }
 
-report_run() { # $1 label, $2 body, $3 response, $4 wall file
+report_run() { # $1 label, $2 body, $3 response, $4 wall file, $5 phase to rate
   run_completion "$2" "$3" "$4"
-  python3 - "$3" "$4" "$1" <<'PY'
+  python3 - "$3" "$4" "$1" "$5" <<'PY'
 import json, sys
+
+# Wall time here covers both phases, so a single rate is only honest for the
+# phase that dominates the run. The short run is decode-bound; the long run is
+# prefill-bound (its completion is a handful of tokens after a huge prompt).
+# Labelling which one each run measures is the point: prefill is where a lost
+# GPU offload shows up first, and it is invisible in a decode-only number.
 usage = (json.load(open(sys.argv[1])).get("usage") or {})
 wall = float(open(sys.argv[2]).read())
 prompt = usage.get("prompt_tokens") or 0
 completion = usage.get("completion_tokens") or 0
 reasoning = (usage.get("completion_tokens_details") or {}).get("reasoning_tokens")
-rate = f"{completion / wall:.1f} tok/s (wall)" if wall > 0 else "no wall time"
+phase = sys.argv[4]
+tokens = prompt if phase == "prefill" else (completion + (reasoning or 0))
+rate = f"{tokens / wall:.1f} tok/s {phase}" if wall > 0 else f"no {phase} time"
 print(f"    {sys.argv[3]:<13} prompt={prompt} completion={completion} reasoning={reasoning} wall={wall:.1f}s {rate}")
 PY
 }
@@ -437,8 +447,8 @@ print(json.dumps({
 }))
 PY
 
-report_run "short" "$TMP/short_req.json" "$TMP/short_resp.json" "$TMP/short.wall"
-report_run "long" "$TMP/long_req.json" "$TMP/long_resp.json" "$TMP/long.wall"
+report_run "short" "$TMP/short_req.json" "$TMP/short_resp.json" "$TMP/short.wall" decode
+report_run "long" "$TMP/long_req.json" "$TMP/long_resp.json" "$TMP/long.wall" prefill
 
 if [ -n "$SAMPLER" ]; then
   kill "$SAMPLER" 2>/dev/null || true
