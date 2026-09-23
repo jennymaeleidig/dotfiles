@@ -27,6 +27,7 @@ import subprocess
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 
 SOURCE = "herdr:llama-state"
@@ -36,6 +37,7 @@ HTTP_TIMEOUT = 2.0
 LOADED = ("loaded", "sleeping")  # sleeping: loaded and idle after --sleep
 TOKENS_TOTAL = "llamacpp:tokens_predicted_total"
 TOKENS_SECONDS = "llamacpp:tokens_predicted_seconds_total"
+PREDICTED_TPS = "llamacpp:predicted_tokens_seconds"  # gauge: server's own throughput
 REQUESTS_PROCESSING = "llamacpp:requests_processing"
 
 
@@ -66,9 +68,20 @@ def _json(url: str):
         return None
 
 
-def _metrics(base_url: str) -> dict:
+def _model_query(model: str | None) -> str:
+    """`?model=<id>` for the router, `""` for the single-model server.
+
+    Router mode (serve.sh runs --models-dir) proxies /metrics and /slots to a
+    per-model child and answers 400 unless `?model=` names one; the
+    single-model server ignores the param, so it is safe to always send it
+    once /models has told us which model is loaded.
+    """
+    return f"?model={urllib.parse.quote(model)}" if model else ""
+
+
+def _metrics(base_url: str, model: str | None = None) -> dict:
     """Prometheus values, or {} when /metrics is off (serve.sh does not pass --metrics)."""
-    body = _text(f"{base_url}/metrics")
+    body = _text(f"{base_url}/metrics{_model_query(model)}")
     if body is None:
         return {}
     values = {}
@@ -111,15 +124,28 @@ def sample(base_url: str) -> dict:
         elif value == "loading":
             facts["loading"].append(model.get("id"))
 
-    facts["metrics"] = _metrics(base_url)
+    model = facts["loaded"][0] if facts["loaded"] else None
+    facts["metrics"] = _metrics(base_url, model)
     if REQUESTS_PROCESSING in facts["metrics"]:
         facts["busy"] = facts["metrics"][REQUESTS_PROCESSING] > 0
     else:
-        slots = _json(f"{base_url}/slots")
+        slots = _json(f"{base_url}/slots{_model_query(model)}")
         if isinstance(slots, list):
             facts["busy"] = any(slot.get("is_processing") for slot in slots)
 
     return facts
+
+
+def _gauge_tps(metrics: dict) -> float | None:
+    """The server's own throughput gauge, needing no previous sample.
+
+    /metrics reports `llamacpp:predicted_tokens_seconds` ("average generation
+    throughput in tokens/s") alongside the counters. A single `probe` has no
+    earlier sample to diff counters against, so the gauge is what lets it show
+    a rate while `monitor` keeps using the live counter interval.
+    """
+    gauge = metrics.get(PREDICTED_TPS)
+    return gauge if gauge else None
 
 
 def rate(facts: dict, previous: tuple[float, float] | None) -> tuple[float | None, tuple[float, float] | None]:
@@ -127,13 +153,14 @@ def rate(facts: dict, previous: tuple[float, float] | None) -> tuple[float | Non
 
     Prometheus counters are cumulative, so the interval rate is the only live
     figure: a finished request must decay to 0 t/s rather than keep its average.
+    The first sample (and any server without counters) falls back to the gauge.
     """
     metrics = facts["metrics"]
     if TOKENS_TOTAL not in metrics or TOKENS_SECONDS not in metrics:
-        return None, previous
+        return _gauge_tps(metrics), previous
     current = (metrics[TOKENS_TOTAL], metrics[TOKENS_SECONDS])
     if previous is None:
-        return None, current
+        return _gauge_tps(metrics), current
     tokens = current[0] - previous[0]
     seconds = current[1] - previous[1]
     if seconds <= 0:
