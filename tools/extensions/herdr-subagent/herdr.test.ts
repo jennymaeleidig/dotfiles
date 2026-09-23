@@ -3,8 +3,8 @@ import assert from "node:assert/strict"
 import { execFileSync } from "node:child_process"
 import {
   buildReadinessProbe,
+  extractAgent,
   extractPaneId,
-  foregroundArgv,
   isInsideHerdr,
   parseHerdrJson,
   unwrap,
@@ -30,18 +30,12 @@ test("extractPaneId reads the split result", () => {
   assert.equal(extractPaneId({}), null)
 })
 
-test("foregroundArgv flattens every foreground process's argv", () => {
-  const body = {
-    process_info: {
-      foreground_processes: [
-        { argv: ["-bash"] },
-        { argv: ["pi", "--session", "/tmp/s.jsonl"], name: "pi" },
-        { argv: "not-an-array" },
-      ],
-    },
-  }
-  assert.deepEqual(foregroundArgv(body), ["-bash", "pi", "--session", "/tmp/s.jsonl"])
-  assert.deepEqual(foregroundArgv({}), [])
+test("extractAgent reads the pane's agent and tolerates its absence", () => {
+  assert.equal(extractAgent({ pane: { agent: "pi", agent_status: "working" } }), "pi")
+  assert.equal(extractAgent({ pane: { agent: "pi", agent_status: "idle" } }), "pi")
+  assert.equal(extractAgent({ pane: { agent_status: "unknown" } }), null)
+  assert.equal(extractAgent({ pane: {} }), null)
+  assert.equal(extractAgent({}), null)
 })
 
 test("isInsideHerdr requires the env herdr injects into a managed pane", () => {

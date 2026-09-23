@@ -3,7 +3,7 @@
  *
  * The child reports by writing a JSON sidecar (see `child.ts`). No sidecar means
  * the child has not reported; the poll then asks herdr whether the pane still
- * exists and whether pi is still its foreground process:
+ * exists and whether pi is still its agent:
  *
  *   - pane gone            → cancelled
  *   - pane alive, pi gone  → failed (pi exited without reporting)
@@ -60,14 +60,10 @@ export function classify(input: ClassifyInput): ChildOutcome {
   return { kind: "pending" }
 }
 
-/** Whether a pane's foreground argv still contains the child's session file. */
-export function argvRunsChild(argv: string[], sessionFile: string): boolean {
-  return argv.join(" ").includes(sessionFile)
-}
-
 export interface WatchDeps {
   readReport(): Promise<string | null>
   paneExists(): Promise<boolean>
+  /** Whether pi still runs in the pane; true also when the pane cannot be read. */
   childRunning(): Promise<boolean>
   pollIntervalMs?: number
   /** How long to tolerate a not-yet-started child before calling it failed. */
@@ -75,8 +71,12 @@ export interface WatchDeps {
 }
 
 const DEFAULT_POLL_MS = 1000
-/** `pane run` returns before pi has exec'd; a not-running child is only a failure after this. */
-const DEFAULT_STARTUP_GRACE_MS = 2000
+/**
+ * `pane run` returns before the child pi has started, and pi only registers
+ * itself with herdr once it is up, so an agentless pane is not yet a failure.
+ * Measured cold start for a real child is ~3.5s.
+ */
+const DEFAULT_STARTUP_GRACE_MS = 5000
 
 function delay(ms: number, signal?: AbortSignal): Promise<void> {
   return new Promise((resolve) => {

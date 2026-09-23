@@ -1,7 +1,6 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
 import {
-  argvRunsChild,
   classify,
   formatBatch,
   parseReport,
@@ -37,11 +36,6 @@ test("parseReport accepts only an object with a string type", () => {
   assert.deepEqual(parseReport('{"type":"done","result":"x"}'), { type: "done", result: "x", reason: undefined })
   assert.equal(parseReport('{"result":"x"}'), null)
   assert.equal(parseReport("null"), null)
-})
-
-test("argvRunsChild finds the session path anywhere in the argv", () => {
-  assert.equal(argvRunsChild(["pi", "--session", "/tmp/s.jsonl"], "/tmp/s.jsonl"), true)
-  assert.equal(argvRunsChild(["-bash"], "/tmp/s.jsonl"), false)
 })
 
 test("watchChild polls past pending states until the child reports", async () => {

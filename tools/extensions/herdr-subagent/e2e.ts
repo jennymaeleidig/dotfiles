@@ -18,13 +18,13 @@ import {
   herdrBin,
   paneClose,
   paneExists,
-  paneForegroundArgv,
   paneRun,
+  paneRunsAgent,
   paneSplit,
   paneWaitReady,
 } from "../../../dot_pi/agent/extensions/herdr-subagent/herdr.ts"
 import { buildChildArgv, buildChildCommand, childPaths } from "../../../dot_pi/agent/extensions/herdr-subagent/spawn.ts"
-import { argvRunsChild, readTextOrNull, watchChild } from "../../../dot_pi/agent/extensions/herdr-subagent/watch.ts"
+import { readTextOrNull, watchChild } from "../../../dot_pi/agent/extensions/herdr-subagent/watch.ts"
 
 function herdrJson(args: string[]): Record<string, unknown> {
   return JSON.parse(execFileSync(herdrBin(), args, { encoding: "utf8" })) as Record<string, unknown>
@@ -53,10 +53,7 @@ try {
     {
       readReport: () => readTextOrNull(paths.reportFile),
       paneExists: () => paneExists(paneId as string),
-      childRunning: async () => {
-        const argv = await paneForegroundArgv(paneId as string)
-        return argv === null ? true : argvRunsChild(argv, paths.sessionFile)
-      },
+      childRunning: () => paneRunsAgent(paneId as string),
       pollIntervalMs: 1000,
       startupGraceMs: 5000,
     },

@@ -24,14 +24,14 @@ import {
   isInsideHerdr,
   paneClose,
   paneExists,
-  paneForegroundArgv,
   paneRename,
   paneRun,
+  paneRunsAgent,
   paneSplit,
   paneWaitReady,
 } from "./herdr.ts"
 import { buildChildArgv, buildChildCommand, childPaths, defaultBaseDir, runId } from "./spawn.ts"
-import { argvRunsChild, formatBatch, readTextOrNull, watchChild } from "./watch.ts"
+import { formatBatch, readTextOrNull, watchChild } from "./watch.ts"
 
 /** The child hook, passed as `-e` to every child. */
 const CHILD_EXTENSION = fileURLToPath(new URL("./child.ts", import.meta.url))
@@ -48,7 +48,6 @@ function message(error: unknown): string {
 interface SpawnedChild {
   name: string
   paneId: string
-  sessionFile: string
   reportFile: string
 }
 
@@ -129,7 +128,7 @@ export default function (pi: ExtensionAPI) {
           }
           await paneRun(paneId, command)
           void paneRename(paneId, name)
-          spawned.push({ name, paneId, sessionFile: paths.sessionFile, reportFile: paths.reportFile })
+          spawned.push({ name, paneId, reportFile: paths.reportFile })
         } catch (error) {
           // A pane we opened but never started would otherwise sit there with no
           // watcher to close it.
@@ -162,10 +161,7 @@ async function collect(pi: ExtensionAPI, children: SpawnedChild[], controller: A
         {
           readReport: () => readTextOrNull(child.reportFile),
           paneExists: () => paneExists(child.paneId),
-          childRunning: async () => {
-            const argv = await paneForegroundArgv(child.paneId)
-            return argv === null ? true : argvRunsChild(argv, child.sessionFile)
-          },
+          childRunning: () => paneRunsAgent(child.paneId),
         },
         controller.signal,
       )

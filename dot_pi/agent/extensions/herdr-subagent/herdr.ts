@@ -101,18 +101,18 @@ export function extractPaneId(splitBody: Record<string, unknown>): string | null
   return typeof paneId === "string" ? paneId : null
 }
 
-/** Flattened foreground argv from a `pane process-info` result body. */
-export function foregroundArgv(processInfoBody: Record<string, unknown>): string[] {
-  const info = processInfoBody.process_info
-  const processes =
-    info && typeof info === "object" && Array.isArray((info as Record<string, unknown>).foreground_processes)
-      ? ((info as Record<string, unknown>).foreground_processes as unknown[])
-      : []
-  return processes.flatMap((entry) => {
-    if (!entry || typeof entry !== "object") return []
-    const argv = (entry as Record<string, unknown>).argv
-    return Array.isArray(argv) ? argv.filter((word): word is string => typeof word === "string") : []
-  })
+/**
+ * The agent herdr associates with a pane, from a `pane get` result body.
+ *
+ * pi registers itself with herdr, so a live child is this field being "pi" —
+ * `working` or `idle` after a turn, but still pi. It is why liveness cannot be
+ * read from the process list: herdr does not publish a node child's argv.
+ */
+export function extractAgent(paneBody: Record<string, unknown>): string | null {
+  const pane = paneBody.pane
+  if (!pane || typeof pane !== "object") return null
+  const agent = (pane as Record<string, unknown>).agent
+  return typeof agent === "string" ? agent : null
 }
 
 export interface PaneSplitOptions {
@@ -200,11 +200,16 @@ export async function paneExists(paneId: string): Promise<boolean> {
   }
 }
 
-/** Foreground argv of the pane, or null when the pane cannot be read. */
-export async function paneForegroundArgv(paneId: string): Promise<string[] | null> {
+/**
+ * Whether pi is still running in the pane.
+ *
+ * A pane herdr cannot read counts as running, so a child is never called dead
+ * on herdr's silence; only a readable, agentless pane earns a false.
+ */
+export async function paneRunsAgent(paneId: string, agent = "pi"): Promise<boolean> {
   try {
-    return foregroundArgv(await runHerdrJson(["pane", "process-info", "--pane", paneId]))
+    return extractAgent(await runHerdrJson(["pane", "get", paneId])) === agent
   } catch {
-    return null
+    return true
   }
 }
