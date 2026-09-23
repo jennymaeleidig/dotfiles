@@ -14,6 +14,8 @@ derives from tools/local-llm/pins.json) and the model name is whatever
 Usage:
   llama-state.py monitor [--base-url URL] [--interval N] [--verbose]
         Pane entrypoint. Polls, prints on change, reports to herdr.
+  llama-state.py toggle
+        Open the monitor pane, or dismiss it when it is already open.
   llama-state.py probe [--base-url URL]
         One sample as JSON, no herdr calls. Test seam.
 """
@@ -32,6 +34,8 @@ import urllib.request
 
 SOURCE = "herdr:llama-state"
 AGENT = "llama-server"
+PLUGIN_ID = "llama-state"
+ENTRYPOINT = "monitor"
 DEFAULT_BASE_URL = "http://127.0.0.1:8080"  # llama-server's own default
 HTTP_TIMEOUT = 2.0
 LOADED = ("loaded", "sleeping")  # sleeping: loaded and idle after --sleep
@@ -237,6 +241,15 @@ def own_pane() -> str | None:
         return None
 
 
+def _panes() -> list[dict]:
+    """Every live pane, or [] when herdr cannot be asked."""
+    result = _herdr("pane", "list")
+    try:
+        return json.loads(result.stdout)["result"]["panes"]
+    except (ValueError, KeyError, TypeError):
+        return []
+
+
 # --- commands --------------------------------------------------------------
 
 
@@ -260,6 +273,30 @@ def cmd_probe(args: argparse.Namespace) -> int:
          "info": info, "facts": facts},
         indent=2, sort_keys=True,
     ))
+    return 0
+
+
+def cmd_toggle(_args: argparse.Namespace) -> int:
+    """Open the monitor pane, or dismiss it when it is already there.
+
+    herdr has no toggle primitive -- `plugin pane open` always opens another
+    split -- so find the pane the monitor registered itself in (it reports the
+    agent name AGENT) and act on that. Focused means the key is a dismiss;
+    otherwise it is a reveal. Any surplus panes from before this toggle existed
+    are closed, so it converges on at most one monitor.
+    """
+    mine = [pane for pane in _panes() if pane.get("agent") == AGENT]
+    if not mine:
+        _herdr("plugin", "pane", "open", "--plugin", PLUGIN_ID,
+               "--entrypoint", ENTRYPOINT, "--placement", "split", "--focus")
+        return 0
+    if any(pane.get("focused") for pane in mine):
+        for pane in mine:
+            _herdr("plugin", "pane", "close", pane["pane_id"])
+    else:
+        _herdr("plugin", "pane", "focus", mine[0]["pane_id"])
+        for pane in mine[1:]:
+            _herdr("plugin", "pane", "close", pane["pane_id"])
     return 0
 
 
@@ -315,6 +352,9 @@ def main(argv: list[str]) -> int:
     monitor.add_argument("--interval", type=float, default=2.0, help="seconds between samples")
     monitor.add_argument("--verbose", action="store_true", help="print every sample, not just changes")
     monitor.set_defaults(func=cmd_monitor)
+
+    toggle = subcommands.add_parser("toggle", help="open the monitor pane, or dismiss it if open")
+    toggle.set_defaults(func=cmd_toggle)
 
     probe = subcommands.add_parser("probe", help="one sample as JSON, no herdr calls")
     probe.add_argument("--base-url", help="override $LLAMA_BASE_URL")
