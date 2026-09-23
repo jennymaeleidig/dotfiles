@@ -37,7 +37,7 @@ warden-local-rules.md
 
 # or compiled on the host; never Source state.
 
-\*\*/**pycache**/
+**/__pycache__/
 
 # Runtime state (source side) — files the tools may drop in the source directory, never reach a host
 
