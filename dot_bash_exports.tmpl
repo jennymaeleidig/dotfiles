@@ -49,22 +49,20 @@ export PI_MARKDOWN_PREVIEW_REGISTER_EXPORT_TOOL=false
 # pi security (cc-safety-net)
 export CC_SAFETY_NET_LEVEL=strict
 
-# llama.cpp local model server (provisioning material in tools/local-llm/).
-# Connection only: nothing here starts a server. The host and port come from
-# tools/local-llm/pins.json, the one place this setup names its build and model.
-{{- $llm := include "tools/local-llm/pins.json" | fromJson }}
-export LLAMA_BASE_URL="http://{{ $llm.server.host }}:{{ $llm.server.port }}"
+# llama.cpp local model server. Connection only: nothing here starts a server.
+# The host and port are a host fact (the llm-serve checkout's pins.json names
+# the same pair and is what gate.sh checks against); keeping it literal means
+# Apply never parses another repo's schema at render time.
+export LLAMA_BASE_URL="http://127.0.0.1:8080"
 
-# The llm CLI (serve | verify | url | state probe) lives in its own checkout;
-# bin/ is the whole interface, so the checkout goes on PATH directly.
+# The llm CLI (serve | verify | url | state probe | herdr) lives in its own
+# checkout, cloned to ~/.local/share/llm-serve by the .chezmoiexternal.toml
+# git-repo entry; bin/ is the whole interface, so the checkout goes on PATH
+# directly (docs/adr/0007-the-model-runtime-is-its-own-repo.md).
 export PATH="$HOME/.local/share/llm-serve/bin:$PATH"
 
-# The server and its gate are source-only, so they stay in the checkout rather
-# than going on PATH: tools/local-llm/ also holds pins.py, the pins, and the
-# model itself, and provisioning material is not a directory of commands. These
-# two functions are the whole interface. serve.sh runs in the foreground on
-# purpose — Ctrl-C is the stop, and there is no login item to forget (ADR 0005).
-# A fresh server loads nothing until you pick the model with /llama in pi.
-llm_root="{{ .chezmoi.sourceDir }}/tools/local-llm"
-llm-serve() { bash "$llm_root/serve.sh" "$@"; }
-llm-gate() { bash "$llm_root/gate.sh" "$@"; }
+# No launcher functions here: `llm serve` / `llm verify` are the interface —
+# the old wrappers died with the runtime's move to its own repo (ADR 0007).
+# serve runs in the foreground on purpose — Ctrl-C is the stop, and there is no
+# login item to forget (ADR 0005). A fresh server loads nothing until you pick
+# the model with /llama in pi.

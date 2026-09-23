@@ -1,0 +1,23 @@
+#!/bin/bash
+set -euo pipefail
+#
+# Registers the llama-state sidebar plugin from the llm-serve checkout. The
+# plugin's source is not in this repo: it ships in the llm-serve external
+# (.chezmoiexternal.toml) and registers itself via `llm herdr --install`,
+# which reconciles a moved checkout by unlinking the stale path first.
+# Editing this script changes its content hash and reruns it (onchange
+# mechanism).
+#
+cd "$HOME"
+
+if ! command -v herdr >/dev/null 2>&1; then
+	echo "==> herdr not installed; skipping llama-state registration"
+	exit 0
+fi
+
+if [ ! -x "$HOME/.local/share/llm-serve/bin/llm" ]; then
+	echo "==> llm-serve checkout missing; skipping llama-state registration" >&2
+	exit 1
+fi
+
+exec "$HOME/.local/share/llm-serve/bin/llm" herdr --install

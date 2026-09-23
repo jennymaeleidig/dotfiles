@@ -5,3 +5,13 @@
 type = "file"
 # https://github.com/Kirlovon/monokai-ghostty
 url = "https://raw.githubusercontent.com/Kirlovon/monokai-ghostty/main/Monokai%20Pro"
+
+# The local model runtime — see docs/adr/0007-the-model-runtime-is-its-own-repo.md.
+# A git-repo external, not vendored content: Apply clones it to the target and
+# refresh pulls, so a fresh machine gets the llm CLI without a hand-clone. The
+# artifacts it pins (llama.cpp build, weights) are still fetched by hand; the
+# external pins launcher code only.
+[".local/share/llm-serve"]
+type = "git-repo"
+url = "https://github.com/jennymaeleidig/local-llm.git"
+refreshPeriod = "168h"

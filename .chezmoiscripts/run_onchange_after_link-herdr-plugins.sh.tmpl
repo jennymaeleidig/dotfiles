@@ -7,6 +7,10 @@ set -euo pipefail
 # alone. Editing this script changes its content hash and reruns it (onchange
 # mechanism).
 #
+# The llama-state plugin is NOT listed here: its source lives in the llm-serve
+# checkout (an external, .chezmoiexternal.toml) and is registered by
+# run_onchange_after-llm-herdr-install.sh.tmpl via `llm herdr --install`.
+#
 # Install is deferred to the user: this script runs only on `chezmoi apply`,
 # links source already present on the host, and is a no-op without herdr.
 #
@@ -22,7 +26,6 @@ fi
 # upstream's directory, herdr-theme-sync is upstream's id).
 PLUGINS=(
 	"herdr-theme-sync|$HOME/.local/share/herdr/ghostty-theme-sync"
-	"llama-state|$HOME/.local/share/herdr/llama-state"
 )
 
 # Plugins whose source is owned by another tool, so its absence is expected
