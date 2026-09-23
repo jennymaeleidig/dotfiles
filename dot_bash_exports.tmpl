@@ -55,6 +55,10 @@ export CC_SAFETY_NET_LEVEL=strict
 {{- $llm := include "tools/local-llm/pins.json" | fromJson }}
 export LLAMA_BASE_URL="http://{{ $llm.server.host }}:{{ $llm.server.port }}"
 
+# The llm CLI (serve | verify | url | state probe) lives in its own checkout;
+# bin/ is the whole interface, so the checkout goes on PATH directly.
+export PATH="$HOME/.local/share/llm-serve/bin:$PATH"
+
 # The server and its gate are source-only, so they stay in the checkout rather
 # than going on PATH: tools/local-llm/ also holds pins.py, the pins, and the
 # model itself, and provisioning material is not a directory of commands. These
