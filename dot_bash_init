@@ -20,7 +20,6 @@ OMB_USE_SUDO=true
 completions=(
   git
   ssh
-  mise
   brew
   docker
   gem

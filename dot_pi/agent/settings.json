@@ -61,9 +61,6 @@
       "npm:pi-extmgr": "https://github.com/ayagmar/pi-extmgr"
     },
     {
-      "npm:@estebanforge/pi-glm-tweaks": "https://github.com/EstebanForge/pi-glm-tweaks"
-    },
-    {
       "npm:pi-context-view": "https://github.com/dimk90/pi-context-view"
     },
     {
@@ -88,12 +85,6 @@
       "npm:pi-workspace-history": "https://github.com/wcldyx/pi-workspace-history"
     },
     {
-      "npm:pi-warden": "https://github.com/DevMortimer/pi-warden"
-    },
-    {
-      "npm:pi-typesafe": "https://github.com/DevMortimer/pi-typesafe"
-    },
-    {
       "npm:pi-compaction-model": "https://github.com/JMHSV/pi-compaction-model"
     },
     {
@@ -113,7 +104,6 @@
     "npm:cc-safety-net",
     "git:github.com/jennymaeleidig/pi-sandbox-runtime",
     "npm:pi-extmgr",
-    "npm:@estebanforge/pi-glm-tweaks",
     "npm:pi-context-view",
     "npm:@krfantasy/pi-monokai-pro",
     "npm:pi-compact-transcript",
@@ -122,8 +112,6 @@
     "git:github.com/NVlabs/SoL-Pi",
     "npm:oppi-mirror",
     "npm:pi-workspace-history",
-    "npm:pi-warden",
-    "npm:pi-typesafe",
     "npm:pi-compaction-model",
     "npm:pi-session-summary",
     "npm:@wolido/pi-lazy-tools",

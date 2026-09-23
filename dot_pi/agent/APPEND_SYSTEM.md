@@ -1,4 +1,4 @@
-## Git on a shared worktree
+# Git on a shared worktree
 
 Concurrent agents share this checkout; the hazard is the **sweep**:  
 `git add <file>` stages the whole file, dragging in another agent's  
@@ -9,6 +9,22 @@ uncommitted edits.
 - **The stat is ground truth.** `git show --stat HEAD` after every commit: exactly your files, every hunk attributable. Unattributable deletions under a refactor message mean a snapshot clobber — stop and surface it.
 - If history looks wrong, read `git reflog` before acting.
 
-## License
+# Borrowed code keeps its citation
 
-- New code is CC0-1.0 (SPDX `CC0-1.0`) and needs no per-file notice. Borrowed code follows [CITATION.md](~/.pi/agent/seed/prompts/CITATION.md): a citation block above the borrowed text plus a verifiable `CITATION.cff`. Warden's rules enforce the file-visible parts, not the same-change `CITATION.cff` update — do that too.
+Code, config, or a doc snippet copied or adapted from an external source — verbatim or paraphrased —
+must carry a citation block naming the creator, title, source, and license above the borrowed text.
+Format and required fields: see `~/.pi/agent/seed/prompts/CITATION.md`. Borrowed text with no
+citation block is a violation.
+
+# Temp scripts go to the OS temp directory
+
+Throwaway helper scripts, one-off migrations, and scratch files are written to `$TMPDIR` or `/tmp`,
+never into the repository or the home directory. Checked-in scripts and test fixtures are fine.
+
+# Guarded boundaries are handed to the user, not bypassed
+
+Two layers run on every tool call: `pi-sandbox-runtime` (every Tool call judged, and shell commands fenced at the OS level, against one filesystem policy), `cc-safety-net` (secrets, destructive commands, git history), When a call is blocked with a guard reason, `EPERM`/`operation not permitted`, or a safety-net reason, hand the exact command to the user to run in their own terminal — never retry through another interpreter, wrapper, or subagent
+
+# License
+
+New code is CC0-1.0 (SPDX `CC0-1.0`) and needs no per-file notice. Borrowed code follows [CITATION.md](~/.pi/agent/seed/prompts/CITATION.md): a citation block above the borrowed text plus a verifiable `CITATION.cff`.

@@ -14,8 +14,6 @@ docs/
 .pi/docs/
 tools/
 .scratch/
-pi-warden.md
-warden-local-rules.md
 
 # Runtime state (target side) — pi package/skill trees materialized imperatively
 
@@ -31,7 +29,6 @@ warden-local-rules.md
 !.pi/agent/skills/create-obsidian-reference/**
 !.pi/agent/skills/cc-safety-net/**
 !.pi/agent/skills/pi-sandbox-runtime/**
-!.pi/agent/skills/setup-warden-rules/**
 
 # Python bytecode (target side) — created when a vendored plugin script is run
 
