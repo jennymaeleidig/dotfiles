@@ -22,7 +22,7 @@ title = "llama-server state"
 placement = "split"
 command = ["python3", "llama-state.py", "monitor"]
 
-# Opened by the prefix+l keybinding in dot_config/herdr/config.toml.
+# Opened by the prefix+m keybinding in dot_config/herdr/config.toml.
 [[actions]]
 id = "monitor"
 title = "Monitor local llama-server state"
