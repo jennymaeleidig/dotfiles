@@ -55,7 +55,8 @@ Keep each Focus cell to one line — Content carries the substance.]
 ## Content
 
 [Structured explanation, analysis, comparisons, and findings. When a diagram
-would clarify the content, load the `mermaid-diagrammer` agent and follow its workflow. Wrap the resulting diagram in a fenced ```` ```mermaid ```` block.
+would clarify the content, embed the Mermaid source directly in a fenced
+```` ```mermaid ```` block. Obsidian renders ```mermaid fences natively.
 
 This section carries the substance. Prefer tables for comparisons. Prefer lists
 for sequences. Prefer concrete examples over abstract descriptions.
