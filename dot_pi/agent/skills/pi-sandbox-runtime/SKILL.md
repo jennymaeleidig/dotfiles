@@ -36,8 +36,8 @@ A Tool whose paths cannot be determined at all — including a Tool that touches
 ```json
 {
   "tools": {
-    "format_md_tables": { "fields": ["path"], "access": "write" },
-    "mermaid_lint": { "fields": ["path"], "access": "read" },
+    "some_path_tool": { "fields": ["path"], "access": "write" },
+    "some_read_tool": { "fields": ["path"], "access": "read" },
     "some_pathless_tool": { "fields": [], "access": "none" }
   }
 }

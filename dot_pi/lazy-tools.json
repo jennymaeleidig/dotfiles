@@ -1,0 +1,8 @@
+{
+  "lazy": [
+    "obs_recall",
+    "resolve-library-id",
+    "query-docs",
+    "typesafe_evaluate"
+  ]
+}

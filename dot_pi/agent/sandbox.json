@@ -31,7 +31,10 @@
     "deniedDomains": []
   },
   "filesystem": {
-    "denyRead": ["/Users", "/home"],
+    "denyRead": [
+      "/Users",
+      "/home"
+    ],
     "allowRead": [
       ".",
       "~/.local",
@@ -64,21 +67,75 @@
     ]
   },
   "tools": {
-    "format_md_tables": { "fields": ["path"], "access": "write" },
-    "mermaid_lint": { "fields": ["path"], "access": "read" },
-    "ffgrep": { "fields": ["path"], "access": "read" },
-    "fffind": { "fields": ["path"], "access": "read" },
-    "fetch_content": { "fields": [], "access": "none" },
-    "web_search": { "fields": [], "access": "none" },
-    "source_check": { "fields": [], "access": "none" },
-    "get_search_content": { "fields": [], "access": "none" },
-    "subagent": { "fields": [], "access": "none" },
-    "subagent_report": { "fields": [], "access": "none" },
-    "typesafe_evaluate": { "fields": [], "access": "none" },
-    "update_plan": { "fields": [], "access": "none" },
-    "recall": { "fields": [], "access": "none" },
-    "obs_recall": { "fields": [], "access": "none" },
-    "resolve-library-id": { "fields": [], "access": "none" },
-    "query-docs": { "fields": [], "access": "none" }
+    "ffgrep": {
+      "fields": [
+        "path"
+      ],
+      "access": "read"
+    },
+    "fffind": {
+      "fields": [
+        "path"
+      ],
+      "access": "read"
+    },
+    "fetch_content": {
+      "fields": [],
+      "access": "none"
+    },
+    "web_search": {
+      "fields": [],
+      "access": "none"
+    },
+    "source_check": {
+      "fields": [],
+      "access": "none"
+    },
+    "get_search_content": {
+      "fields": [],
+      "access": "none"
+    },
+    "subagent": {
+      "fields": [],
+      "access": "none"
+    },
+    "subagent_report": {
+      "fields": [],
+      "access": "none"
+    },
+    "typesafe_evaluate": {
+      "fields": [],
+      "access": "none"
+    },
+    "update_plan": {
+      "fields": [],
+      "access": "none"
+    },
+    "recall": {
+      "fields": [],
+      "access": "none"
+    },
+    "obs_recall": {
+      "fields": [],
+      "access": "none"
+    },
+    "resolve-library-id": {
+      "fields": [],
+      "access": "none"
+    },
+    "query-docs": {
+      "fields": [],
+      "access": "none"
+    },
+    "load_tools": {
+      "fields": [],
+      "access": "none"
+    },
+    "call_tool": {
+      "passThrough": {
+        "tool": "tool",
+        "params": "params"
+      }
+    }
   }
 }

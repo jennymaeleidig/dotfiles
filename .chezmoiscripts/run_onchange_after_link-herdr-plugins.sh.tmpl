@@ -17,19 +17,77 @@ if ! command -v herdr >/dev/null 2>&1; then
 	exit 0
 fi
 
-PLUGIN_ID="herdr-theme-sync"
-PLUGIN_SRC="$HOME/.local/share/herdr/ghostty-theme-sync"
+# id|source path — one entry per vendored plugin. The two are named separately
+# because a directory need not match its plugin id (ghostty-theme-sync is
+# upstream's directory, herdr-theme-sync is upstream's id).
+PLUGINS=(
+	"herdr-theme-sync|$HOME/.local/share/herdr/ghostty-theme-sync"
+	"llama-state|$HOME/.local/share/herdr/llama-state"
+)
 
-if [ ! -f "$PLUGIN_SRC/herdr-plugin.toml" ]; then
-	echo "==> missing plugin source: $PLUGIN_SRC" >&2
-	exit 1
-fi
+# Plugins whose source is owned by another tool, so its absence is expected
+# rather than a broken apply: the tinysubagent herdr plugin ships inside the pi
+# package clone for `git:github.com/tinypi-extension/tinysubagent`
+# (dot_pi/agent/settings.json), which exists only once pi has installed it.
+# Kept apart from PLUGINS because a missing vendored source must fail the apply
+# while a missing external clone must not.
+OPTIONAL_PLUGINS=(
+	"tinysubagent-panes|$HOME/.pi/agent/git/github.com/tinypi-extension/tinysubagent/herdr-plugin"
+)
 
-# Unlink then link, so a stale registration (changed id or moved path) is
-# reconciled instead of silently kept.
-if herdr plugin list 2>/dev/null | grep -q "^- $PLUGIN_ID "; then
-	herdr plugin unlink "$PLUGIN_ID"
-fi
+# Read the registry once, into a variable. Piping `herdr plugin list` into
+# `grep -q` looks equivalent and is not: grep exits at the first match, the
+# producer dies of SIGPIPE, and under `set -o pipefail` the pipeline reports
+# 141, so the unlink below is silently skipped.
+INSTALLED="$(herdr plugin list 2>/dev/null || true)"
 
-herdr plugin link "$PLUGIN_SRC"
-echo "==> linked herdr plugin: $PLUGIN_ID -> $PLUGIN_SRC"
+# Registry entries are listed as `- <id> (<name>) enabled [source]`, so the
+# trailing space anchors the id without matching a prefix of a longer one.
+registered() {
+	case "$INSTALLED" in
+	*"- $1 "*) return 0 ;;
+	*) return 1 ;;
+	esac
+}
+
+link_plugin() {
+	local plugin_id="$1" plugin_src="$2"
+
+	# Unlink then link, so a stale registration (changed id or moved path) is
+	# reconciled instead of silently kept.
+	if registered "$plugin_id"; then
+		herdr plugin unlink "$plugin_id"
+	fi
+
+	# A manifest herdr rejects must fail the script, not scroll past as one
+	# warning among many.
+	herdr plugin link "$plugin_src"
+	echo "==> linked herdr plugin: $plugin_id -> $plugin_src"
+}
+
+for entry in "${PLUGINS[@]}"; do
+	PLUGIN_ID="${entry%%|*}"
+	PLUGIN_SRC="${entry#*|}"
+
+	if [ ! -f "$PLUGIN_SRC/herdr-plugin.toml" ]; then
+		echo "==> missing plugin source: $PLUGIN_SRC" >&2
+		exit 1
+	fi
+
+	link_plugin "$PLUGIN_ID" "$PLUGIN_SRC"
+done
+
+for entry in "${OPTIONAL_PLUGINS[@]}"; do
+	PLUGIN_ID="${entry%%|*}"
+	PLUGIN_SRC="${entry#*|}"
+
+	if [ -f "$PLUGIN_SRC/herdr-plugin.toml" ]; then
+		link_plugin "$PLUGIN_ID" "$PLUGIN_SRC"
+	elif registered "$PLUGIN_ID"; then
+		# The clone is gone (package uninstalled, or the repo moved owner
+		# again): unlink, or herdr keeps reporting the dangling path as
+		# "manifest unavailable".
+		herdr plugin unlink "$PLUGIN_ID"
+		echo "==> unlinked stale herdr plugin: $PLUGIN_ID (source gone: $PLUGIN_SRC)" >&2
+	fi
+done

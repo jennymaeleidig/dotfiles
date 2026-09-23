@@ -1,10 +1,6 @@
 **/literal_*
 .vscode/
 openspec/changes/
-# mermaid-lint extension: node_modules is runtime state, materialized locally
-# for dev only (see .chezmoiignore for the target-side split)
-dot_pi/agent/extensions/mermaid-lint/node_modules/
-dot_pi/agent/extensions/mermaid-lint/package-lock.json
 # chezmoi external targets — materialized by apply, never committed
 dot_config/ghostty/themes/Monokai Pro
 dot_config/opencode/themes/monokai-pro.json

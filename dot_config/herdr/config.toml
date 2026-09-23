@@ -32,6 +32,16 @@ type = "plugin_action"
 command = "herdr-theme-sync.sync"
 description = "sync herdr theme from ghostty"
 
+# Local llama-server state in the sidebar (llama-state plugin, source in
+# dot_local/share/herdr/llama-state): opens a monitor pane that reports state
+# and tokens/sec for the server `llm-serve` (tools/local-llm/serve.sh) started.
+# Observation only — the server's own pane is untouched.
+[[keys.command]]
+key = "prefix+l"
+type = "plugin_action"
+command = "llama-state.monitor"
+description = "monitor local llama-server state"
+
 [ui.sound]
 enabled = false
 

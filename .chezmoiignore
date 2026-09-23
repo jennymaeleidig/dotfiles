@@ -33,15 +33,6 @@ warden-local-rules.md
 !.pi/agent/skills/pi-sandbox-runtime/**
 !.pi/agent/skills/setup-warden-rules/**
 
-# Extension runtime deps (target side) — node_modules materialized by
-
-# run_onchange_after_install-mermaid-lint-deps.sh.tmpl, same source/runtime split as
-
-# the pi package trees.
-
-.pi/agent/extensions/mermaid-lint/node_modules/
-.pi/agent/extensions/mermaid-lint/package-lock.json
-
 # Python bytecode (target side) — created when a vendored plugin script is run
 
 # or compiled on the host; never Source state.
