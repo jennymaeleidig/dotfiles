@@ -1,0 +1,9 @@
+{
+  "name": "herdr-subagent",
+  "private": true,
+  "type": "module",
+  "description": "Spawn fire-and-forget pi subagents in real herdr shell panes",
+  "pi": {
+    "extensions": ["./index.ts"]
+  }
+}
