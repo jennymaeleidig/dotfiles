@@ -1,9 +1,9 @@
-# Local coding agent: gpt-oss-20b on llama.cpp
+# Local coding agent: gemma-4-26B-A4B on llama.cpp
 
-Host-owner material for the local-only coding model: a 20B GGUF served by a
-pinned `llama-server`, wired into pi's built-in `llama.cpp` provider, verified
-by one gate script. Nothing here runs on Apply and nothing starts at login —
-the server is up when you start it, and not otherwise.
+Host-owner material for the local-only coding model: a 26B-A4B MoE GGUF served
+by a pinned `llama-server`, wired into pi's built-in `llama.cpp` provider,
+verified by one gate script. Nothing here runs on Apply and nothing starts at
+login — the server is up when you start it, and not otherwise.
 
 Everything that names a build or a model lives in `pins.json`, and this
 document reads it rather than repeating it, so a pin bump is a one-line diff:
@@ -31,8 +31,10 @@ The Metal wired limit on a 24 GB machine defaults to roughly **18,186 MiB**
 sysctl iogpu.wired_limit_mb
 ```
 
-The model weights plus a KV cache of roughly 0.8 GiB at the pinned
-`$CONTEXT_WINDOW`-token window with q8_0 KV fit comfortably under **15 GiB**.
+The weights are 12.9 GB, the MTP drafter adds 0.46 GB, and the KV cache stays
+small: attention is windowed at 1024 tokens on all but five layers, and this
+model ties K to V (`attention_k_eq_v`), so the pinned window costs roughly
+0.25 GiB even with q8_0 KV. All of it fits under **15 GiB**.
 Do not lower this value. A value of
 `14336` (14 GiB, about 15.03 GB) *lowers* the limit below the default by
 ~3.8 GiB and is exactly the kind of change a handoff like this gets inverted.
@@ -114,13 +116,41 @@ mkdir -p "$HOME/$MODELS_DIR"
 cd "$HOME/$MODELS_DIR"
 curl -fL -C - --retry 3 -o "$MODEL_FILE" \
   "https://huggingface.co/$MODEL_REPO/resolve/$MODEL_REVISION/$MODEL_FILE"
-echo "$MODEL_SHA256  $MODEL_FILE" | shasum -a 256 -c -
-stat -f '%z' "$MODEL_FILE"   # must equal $MODEL_BYTES
+cd "$HOME"   # the checks below carry full paths, so this is belt and braces
+echo "$MODEL_SHA256  $HOME/$MODELS_DIR/$MODEL_FILE" | shasum -a 256 -c -
+stat -f '%z' "$HOME/$MODELS_DIR/$MODEL_FILE"   # must equal $MODEL_BYTES
 ```
 
 The models directory must hold exactly one GGUF; `serve.sh` refuses to start
 otherwise. A second file there would let the router load something other than
 what the pins describe.
+
+## 3a. Download the MTP drafter
+
+Speculative decoding pairs the target with a small MTP draft model that shares
+the target's KV cache. The drafter ships in the **same repository at the same
+revision** as the target, so `pins.json` names only the file and `pins.py`
+emits `DRAFT_REPO`/`DRAFT_REVISION` from the model block — a revision bump moves
+both artifacts.
+
+It lives in its own directory on purpose: `$MODELS_DIR` is the router
+catalogue, and the one-GGUF rule above would reject a second file there.
+`serve.sh` checks the drafter the way it checks the target — present, and the
+pinned byte count — because a missing drafter would otherwise degrade to plain
+decoding with no error at all.
+
+```bash
+eval "$(python3 tools/local-llm/pins.py)"
+mkdir -p "$HOME/$DRAFT_DIR"
+curl -fL -C - --retry 3 -o "$HOME/$DRAFT_DIR/$DRAFT_FILE" \
+  "https://huggingface.co/$DRAFT_REPO/resolve/$DRAFT_REVISION/$DRAFT_FILE"
+echo "$DRAFT_SHA256  $HOME/$DRAFT_DIR/$DRAFT_FILE" | shasum -a 256 -c -
+stat -f '%z' "$HOME/$DRAFT_DIR/$DRAFT_FILE"   # must equal $DRAFT_BYTES
+```
+
+The checksum lines carry absolute paths because the check file holds a bare
+filename: run from a checkout and `shasum` reads it relative to the current
+directory, reporting `FAILED open or read` for a file that is present and fine.
 
 ## 4. Apply the harness configuration
 
@@ -140,16 +170,29 @@ It also lands `~/.pi/agent/settings.json`, a plain file that names this model
 twice:
 
 - `enabledModels` — so the model is in pi's list at startup;
-- `modelThinkingLevels["llama.cpp/<model.id>"] = "high"` — so **high reasoning
-  is this model's default** without touching `defaultThinkingLevel`, which is
-  set for the other providers and stays where it is.
+- `modelThinkingLevels["llama.cpp/<model.id>"] = "high"` — so thinking is on by
+  default without touching `defaultThinkingLevel`, which is set for the other
+  providers and stays where it is.
 
-That last one is the difference between permitting reasoning and asking for it.
-The `models.json` override makes a level *reachable*; the settings entry is what
-actually requests one. With both in place pi sends `reasoning_effort: "high"`
-verbatim on every request for this model (there is no `thinkingLevelMap`, so
-nothing remaps the level), which is exactly what the gate's reasoning check
-measures end to end.
+Thinking on this model is a boolean, not a level, so the override wires it
+explicitly: `compat.thinkingFormat: "chat-template"` with
+
+```json
+"chatTemplateKwargs": {
+  "enable_thinking":  { "$var": "thinking.enabled" },
+  "preserve_thinking": { "$var": "thinking.enabled" }
+}
+```
+
+pi sends those as `chat_template_kwargs` in the request body, and the pinned
+`llama-server` reads `enable_thinking` from there (the chat-params parser in
+`tools/server/server-common.cpp`). `reasoning_effort` is inert for this model's
+template — it is never read — so no effort level is set anywhere. Every pi
+level above `off` means the same thing here: `enable_thinking` true, with only
+`off` turning it off.
+
+The gate does not assert any of this; step 7 says what is no longer checked and
+how to check it by hand.
 
 Pi rewrites `settings.json` when you press Ctrl+S in `/model` or `/thinking`, so
 a level changed there is host-local and a later `chezmoi apply` reverts it. Edit
@@ -209,31 +252,54 @@ loudly, naming the boundary that failed, and exits non-zero. It asserts:
 2. the server is in llama.cpp router mode;
 3. exactly one model is loaded, and it is the pinned one;
 4. the context window the harness believes in equals the window the server
-   allocated, and the harness config still permits reasoning;
+   allocated;
 5. the harness is pointed at this server — provider visibility is asserted from
    the declaration rather than assumed, so a provider that would never appear
    in pi's model list fails here and not later;
-6. the harness actually asks for a reasoning level for this model, and it is not
-   `off` — so a later settings edit cannot leave it sitting at the global
-   `defaultThinkingLevel` set for the other providers;
-7. the pinned launch flags in `serve.sh` are intact: offload, window, slots and
-   the Harmony template;
-8. a tool spec produces a structured `tool_calls` entry — prose describing the
-   call is a failure, which is the Harmony-template regression it exists to
-   catch;
-9. reasoning effort changes the response in the expected direction, end to end
-   from the config to the server: one request at high effort, one with
-   `reasoning_effort` omitted — the request the harness sends when thinking is
-   off.
+6. the pinned launch flags in `serve.sh` are intact: offload, window, slots, the
+   Jinja template, and the MTP draft pairing;
+7. a tool spec produces a structured `tool_calls` entry — prose describing the
+   call is a failure, which is the template's tool-call-parser regression it
+   exists to catch.
 
-Two of those are not HTTP, and the gate names them as such. Checks 1-4 and 8-9
-are external behaviour, read-only against the server. Checks 5-6 read the
-harness's own configuration (its declaration and its startup level). Check 7
-reads `serve.sh`, because the pinned build exposes no GPU-offload field in any
-of its endpoints — verified against the binary itself — so residency cannot be
-asserted remotely, and asserting throughput would be a measurement, which this
-gate does not do. Asserting the line that decides offload is the closest thing
-to the spec's "configure it explicitly and check it" that stays honest.
+Checks 1-4 and 7 are external behaviour, read-only against the server. Check 5
+reads the harness's own declaration. Check 6 reads `serve.sh`, because the
+pinned build exposes no GPU-offload field in any of its endpoints — verified
+against the binary itself — so residency cannot be asserted remotely, and
+asserting throughput would be a measurement, which this gate does not do.
+Asserting the line that decides offload is the closest thing to the spec's
+"configure it explicitly and check it" that stays honest.
+
+### What the gate deliberately does not assert: thinking
+
+Three checks were removed when the pin moved from gpt-oss-20b to this model,
+because they encoded one model's reasoning shape rather than a boundary:
+
+- that `models.json` set `reasoning: true` and
+  `compat.supportsReasoningEffort: true`;
+- that `settings.json` asks for a level above `off` for this model;
+- that `reasoning_effort: high` produces more reasoning than omitting it.
+
+gpt-oss has graded effort; gemma's template has a boolean `enable_thinking` and
+never reads `reasoning_effort`. Re-expressing those checks would mean the gate
+asserting this setup's *preference* for thinking-on, and the next model would
+need them rewritten again. That is a real reduction in coverage: a regression
+that leaves thinking silently off now passes the gate. Check it by hand:
+
+```bash
+eval "$(python3 tools/local-llm/pins.py)"
+curl -sS "http://$SERVER_HOST:$SERVER_PORT/v1/chat/completions" \
+  -H 'Content-Type: application/json' -d '{
+    "model": "'"$MODEL_ID"'",
+    "messages": [{"role": "user", "content": "A train travels 60 km in 45 minutes. What is its average speed in km/h?"}],
+    "max_tokens": 1024, "temperature": 0, "stream": false,
+    "chat_template_kwargs": {"enable_thinking": true}
+  }' | python3 -c 'import json,sys; m=json.load(sys.stdin)["choices"][0]["message"]; print("reasoning_content chars:", len(m.get("reasoning_content") or ""))'
+```
+
+A non-zero count means the toggle reached the template and this build still
+extracts the thought channel into `reasoning_content`; run it once with `false`
+to see the delta.
 
 ## 8. Measure (never asserted)
 
@@ -267,19 +333,20 @@ the model directory allows only one GGUF, so stage the old one outside it.
 
 MLX is faster on paper on Apple silicon, and that is not the deciding factor.
 The two things this setup cannot lose are **protocol correctness**: the model's
-Harmony chat template has to be applied server-side, including the tool-call
-parser that turns a generation into a structured `tool_calls` array, and the
-`reasoning_effort` control has to reach the template. MLX's tool-call parsing
-is not Harmony-shaped, and pi has first-class support only for the llama.cpp
-server. A hand-rolled direct-endpoint provider could bridge that, at the cost
-of owning the protocol parser — the exact thing the gate proves.
+own chat template has to be applied server-side, including the tool-call parser
+that turns a generation into a structured `tool_calls` array, and the thinking
+control (`chat_template_kwargs.enable_thinking` on this model,
+`reasoning_effort` on gpt-oss) has to reach that template. MLX's tool-call
+parsing is not shaped like llama.cpp's, and pi has first-class support only for
+the llama.cpp server. A hand-rolled direct-endpoint provider could bridge that,
+at the cost of owning the protocol parser — the exact thing the gate proves.
 
-Revisit MLX only when **all** of these hold: it applies the gguf/Harmony chat
-template server-side; it emits structured `tool_calls`; it accepts and forwards
-`reasoning_effort`; pi can talk to it without a custom provider; and `gate.sh`
-passes against it unchanged and read-only. Until then, a faster runtime that
-quietly returns prose where a tool call belongs is a regression the gate exists
-to catch.
+Revisit MLX only when **all** of these hold: it applies the gguf chat template
+server-side; it emits structured `tool_calls`; it accepts and forwards
+`chat_template_kwargs`; pi can talk to it without a custom provider; and
+`gate.sh` passes against it unchanged and read-only. Until then, a faster
+runtime that quietly returns prose where a tool call belongs is a regression the
+gate exists to catch.
 
 ## 11. Claims in the earlier handoff that this supersedes
 
@@ -297,8 +364,8 @@ not carried forward.
   already `enabled`; it is kept *explicit* here so the pinned setup does not
   rest on a build default, but the gate does not depend on it being either.
 - **q8_0 KV was oversold as the memory fix.** It halves KV (about 418 MiB
-  instead of 786 MiB at this window), but the lever that mattered was the
-  window-sized SWA cache, not the cache type.
+  instead of 786 MiB at gpt-oss's window), but the lever that mattered there was
+  the window-sized SWA cache, not the cache type.
 - **`--cache-ram 0` was described as a reservation.** It *disables* the
   host-RAM prompt cache (the flag's own wording for zero); it reserves nothing.
 - **`--swa-full` was called stale.** It is simply unnecessary here; there is no
@@ -308,9 +375,9 @@ not carried forward.
   `read`, `bash`, `powershell`, `edit`, `write`, `grep`, `find`, `ls`.
   `apply_patch` is not a pi built-in.
 - **`--reasoning-effort` was described as unavailable server-side.** It exists
-  in the pinned build (help says default `default`). Leaving it unset is a
-  deliberate choice so each request's own level is what the template sees —
-  not a workaround for a missing flag.
+  in the pinned build (help says default `default`). It is left unset, and for
+  this model it is inert either way: the template reads `enable_thinking`, not
+  an effort level.
 - **"CPU fallback degrades tool calls silently" was not established**, and the
   26% SWE-bench figure belongs to the 120b entry, not this model. Neither
   claim is used in the reasoning above.
@@ -321,16 +388,28 @@ Load-bearing in `serve.sh`:
 
 - `--models-dir`, `--models-max 1`, `--no-models-autoload` — router mode with
   one loadable model and no load on startup.
-- `--jinja` — explicit Harmony template, hence tool calls and
-  `reasoning_effort`.
+- `--spec-type draft-mtp`, `--spec-draft-model "$DRAFT_PATH"` — speculative
+  decoding against the pinned MTP drafter in `$DRAFT_DIR`. The drafter shares
+  the target's KV cache, which is why it costs 0.46 GB rather than a second
+  full model. The gate asserts both flags are still present, so a silent drop to
+  plain decoding fails instead of quietly costing throughput.
+- `--spec-draft-n-max 1` — how many tokens are drafted per step. Deliberately 1,
+  not the build's default of 3: on bandwidth-limited Apple silicon the verify
+  forward scales with draft depth while acceptance does not, so deeper
+  speculation has been measured to regress. This is the one knob to tune, and
+  `--measure` is the evidence — try 1 against 2 or 3 before changing it. Note
+  the old `--draft` / `--draft-n` / `--draft-max` spelling is removed in this
+  build and now errors, pointing at `--spec-draft-n-max`.
+- `--jinja` — explicit GGUF chat template, hence tool calls and the
+  `enable_thinking` toggle.
 - `-ngl 99` — every layer on the GPU (the flag also accepts `all`); the
   weights fit. The gate asserts this flag is still present, because the build
   exposes no offload field over HTTP.
 - `-c "$CONTEXT_WINDOW"` — the single declaration of the context window, read
   from pins; the harness entry must agree, and the gate asserts that it does.
 - `--parallel 1` — one slot carrying that window.
-- `--cache-type-k q8_0 --cache-type-v q8_0` — halves KV, ~370 MiB against the
-  window-sized default; a real but modest saving.
+- `--cache-type-k q8_0 --cache-type-v q8_0` — halves KV; a real but modest
+  saving, since the windowed attention already keeps it small.
 - `-fa on`, `--cache-ram 0` — flash attention on, host prompt cache disabled
   (zero disables it; it reserves nothing).
 - `--host "$SERVER_HOST"` — local only; no network exposure.
@@ -340,13 +419,12 @@ Deliberately absent:
 - `--model` — router mode catalogues the directory instead.
 - `--batch-size` — see §11.
 - `--swa-full` — unnecessary.
-- `--reasoning-effort` — the flag *exists* in this build (default `default`);
-  it is left unset so each request's own level is what the template sees. The
-  gate proves the level arrives.
+- `--reasoning-effort` — the flag *exists* in this build (default `default`)
+  but this model's template never reads it: thinking is a per-request boolean
+  (`chat_template_kwargs.enable_thinking`), so no server-side default is set.
 
 Left at the build default, and load-bearing anyway:
 
 - `--reasoning-format` — the default `auto` is what extracts the analysis
-  channel into `message.reasoning_content`. The gate's reasoning check reads
-  that field, so a release that changed this default fails the gate instead of
-  passing silently.
+  channel into `message.reasoning_content`. Nothing asserts this any more; the
+  one-liner in step 7 is how you check it by hand.

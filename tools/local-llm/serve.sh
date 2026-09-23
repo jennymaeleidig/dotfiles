@@ -1,7 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 #
-# Serve the pinned gpt-oss-20b GGUF with the pinned llama.cpp build.
+# Serve the pinned gemma-4-26B-A4B GGUF with the pinned llama.cpp build.
+#
+# The target is paired with its pinned MTP drafter (pins.json `model.draft`) for
+# speculative decoding. The drafter lives outside the models directory, which is
+# the router catalogue and stays at exactly one GGUF.
 #
 # This is host-owner material: run it yourself, in the foreground, when you want
 # the model up. It is not an Apply effect and there is no login item — the
@@ -50,16 +54,33 @@ if [ "$ACTUAL_BYTES" != "$MODEL_BYTES" ]; then
   exit 1
 fi
 
+# The drafter is checked the same way the target is: a missing or truncated
+# draft model would otherwise degrade into plain decoding with no error, which is
+# the one failure this pairing exists to prevent.
+DRAFT_PATH="$HOME/$DRAFT_DIR/$DRAFT_FILE"
+if [ ! -f "$DRAFT_PATH" ]; then
+  echo "FAIL: draft model not found at $DRAFT_PATH" >&2
+  echo "      Download the pinned drafter first; see tools/local-llm/SETUP.md." >&2
+  exit 1
+fi
+DRAFT_ACTUAL_BYTES="$(stat -f '%z' "$DRAFT_PATH")"
+if [ "$DRAFT_ACTUAL_BYTES" != "$DRAFT_BYTES" ]; then
+  echo "FAIL: $DRAFT_PATH is $DRAFT_ACTUAL_BYTES bytes, pins.json expects $DRAFT_BYTES" >&2
+  exit 1
+fi
+
 echo "==> llama.cpp $LLAMA_CPP_RELEASE"
 echo "    binary  $BIN"
 echo "    model   $MODELS_DIR/$MODEL_FILE ($MODEL_BYTES bytes)"
+echo "    draft   $DRAFT_DIR/$DRAFT_FILE ($DRAFT_BYTES bytes, --spec-type draft-mtp)"
 echo "    router   http://$SERVER_HOST:$SERVER_PORT  (-c $CONTEXT_WINDOW, --models-max 1)"
 echo "    in pi   /llama to load it, /model to select it (nothing loads until then)"
 echo "    stop     Ctrl-C"
 
 # Flag notes (see SETUP.md for the reasoning):
-#   --jinja            explicit, not left to a build default; the Harmony
-#                      template is what parses tool calls and reasoning_effort.
+#   --jinja            explicit, not left to a build default; the GGUF's own
+#                      gemma4 template is what parses tool calls and the
+#                      thinking toggle (chat_template_kwargs.enable_thinking).
 #   -ngl 99            all layers of this model on the GPU; "all" is also
 #                      accepted. Offload is the one silent slowdown, so the
 #                      gate asserts this flag is still here.
@@ -67,13 +88,25 @@ echo "    stop     Ctrl-C"
 #   -c, --parallel 1   one slot, one window as declared.
 #   --cache-ram 0      disables the host-RAM prompt cache (0 disables); it is
 #                      not a reservation.
+#   --spec-type draft-mtp, --spec-draft-model
+#                      speculative decoding with the pinned MTP drafter, which
+#                      shares the target's KV. The flag pair is asserted by the
+#                      gate so a silent drop to plain decoding is caught.
+#   --spec-draft-n-max 1
+#                      tokens drafted per step. 1 is the measured optimum on
+#                      bandwidth-limited Apple silicon, where the verify forward
+#                      scales with draft depth while acceptance does not; the
+#                      build's own default is 3. Raise it only with --measure
+#                      evidence. (--draft-n is gone; it now errors.)
 #   no --batch-size    it bounds the logical batch, not prefill compute.
 #   no --swa-full      unnecessary: the window-sized SWA cache is the norm.
-#   no --reasoning-effort  the flag exists (default "default"); it is left unset
-#                      so each request's own level is what the template sees.
+#   no --reasoning-effort  the flag exists (default "default") but this model's
+#                      template does not read it: thinking is a boolean the
+#                      request sets through chat_template_kwargs, so no
+#                      server-side default is imposed here.
 #   no --reasoning-format  the default "auto" is what puts thoughts in
-#                      message.reasoning_content; the gate's reasoning check
-#                      depends on it, so a change of default is caught there.
+#                      message.reasoning_content for the harness to read. The
+#                      gate no longer asserts this; verify it by hand (SETUP.md).
 exec "$BIN" \
   --models-dir "$MODELS_DIR" \
   --models-max 1 \
@@ -86,5 +119,8 @@ exec "$BIN" \
   --cache-type-v q8_0 \
   -fa on \
   --cache-ram 0 \
+  --spec-type draft-mtp \
+  --spec-draft-model "$DRAFT_PATH" \
+  --spec-draft-n-max 1 \
   --host "$SERVER_HOST" \
   --port "$SERVER_PORT"

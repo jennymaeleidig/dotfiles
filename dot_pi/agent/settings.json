@@ -14,7 +14,7 @@
   "enabledModels": [
     "zai/glm-5.3-flash",
     "deepseek/deepseek-flash",
-    "llama.cpp/gpt-oss-20b-MXFP4"
+    "llama.cpp/gemma-4-26B-A4B-it-UD-Q3_K_XL"
   ],
   "hideThinkingBlock": true,
   "lastChangelogVersion": "0.86.1",
@@ -22,7 +22,7 @@
     "mermaid": "final"
   },
   "modelThinkingLevels": {
-    "llama.cpp/gpt-oss-20b-MXFP4": "high"
+    "llama.cpp/gemma-4-26B-A4B-it-UD-Q3_K_XL": "high"
   },
   "oppiMirror": {
     "autoStart": true,

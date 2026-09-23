@@ -2,11 +2,15 @@
   "providers": {
     "llama.cpp": {
       "modelOverrides": {
-        "gpt-oss-20b-MXFP4": {
+        "gemma-4-26B-A4B-it-UD-Q3_K_XL": {
           "reasoning": true,
           "contextWindow": 32768,
           "compat": {
-            "supportsReasoningEffort": true
+            "thinkingFormat": "chat-template",
+            "chatTemplateKwargs": {
+              "enable_thinking": { "$var": "thinking.enabled" },
+              "preserve_thinking": { "$var": "thinking.enabled" }
+            }
           }
         }
       }

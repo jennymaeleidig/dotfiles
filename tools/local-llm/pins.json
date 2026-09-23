@@ -7,18 +7,24 @@
     "assetSha256": "67a1b119fa4b495a1f17f5b3950de24fd0bfeecce73b1619559f85ca1e740bac"
   },
   "model": {
-    "repo": "ggml-org/gpt-oss-20b-GGUF",
-    "revision": "ef9b12f2ff56c69cf32153a02784e7a3c88bf524",
-    "file": "gpt-oss-20b-MXFP4.gguf",
-    "id": "gpt-oss-20b-MXFP4",
-    "bytes": 12109566624,
-    "sha256": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901"
+    "repo": "unsloth/gemma-4-26B-A4B-it-GGUF",
+    "revision": "c099eb48e663fd284577b04978a94ffccb261841",
+    "file": "gemma-4-26B-A4B-it-UD-Q3_K_XL.gguf",
+    "id": "gemma-4-26B-A4B-it-UD-Q3_K_XL",
+    "bytes": 12907280096,
+    "sha256": "90a918830420e6a36e01c0d219e563f1d0ca7f223dffd90ad4e02ef4f3253fde",
+    "draft": {
+      "file": "mtp-gemma-4-26B-A4B-it.gguf",
+      "bytes": 461766816,
+      "sha256": "6326fb9f5e487aa8dcdd313a091e3c67724cb2a666ec3b7d2895b5b26d93ed1b"
+    }
   },
   "server": {
     "host": "127.0.0.1",
     "port": 8080,
     "contextWindow": 32768,
     "modelsDir": "local-llm/models",
+    "draftsDir": "local-llm/drafts",
     "runtimeDir": "local-llm/runtime"
   }
 }

@@ -12,6 +12,12 @@ release archive unpacks to: the archive's single top-level directory is
 pins.json and only checked here against the model file name, because the router
 catalog id is what the harness has to agree with and a declaration that is
 verified beats a convention that is assumed.
+
+The draft model (`DRAFT_*`) is deliberately named by file only: it ships in the
+same repository at the same revision as the target, so `DRAFT_REPO` and
+`DRAFT_REVISION` are emitted from `model.repo` and `model.revision` rather than
+declared a second time. A repo bump therefore moves both artifacts, and there is
+no second revision to drift.
 """
 
 import json
@@ -34,10 +40,16 @@ PINNED = (
     ("MODEL_ID", "model.id"),
     ("MODEL_BYTES", "model.bytes"),
     ("MODEL_SHA256", "model.sha256"),
+    ("DRAFT_REPO", "model.repo"),
+    ("DRAFT_REVISION", "model.revision"),
+    ("DRAFT_FILE", "model.draft.file"),
+    ("DRAFT_BYTES", "model.draft.bytes"),
+    ("DRAFT_SHA256", "model.draft.sha256"),
     ("SERVER_HOST", "server.host"),
     ("SERVER_PORT", "server.port"),
     ("CONTEXT_WINDOW", "server.contextWindow"),
     ("MODELS_DIR", "server.modelsDir"),
+    ("DRAFT_DIR", "server.draftsDir"),
     ("RUNTIME_ROOT", "server.runtimeDir"),
 )
 
@@ -68,6 +80,14 @@ def main():
         print(
             f"pins.json is inconsistent: model.id is {flat['MODEL_ID']!r} "
             f"but model.file implies {stem!r}",
+            file=sys.stderr,
+        )
+        return 1
+
+    if not flat["DRAFT_FILE"].endswith(".gguf") or flat["DRAFT_FILE"] == flat["MODEL_FILE"]:
+        print(
+            f"pins.json is inconsistent: model.draft.file is {flat['DRAFT_FILE']!r}, "
+            "which must be a .gguf other than the target model.file",
             file=sys.stderr,
         )
         return 1

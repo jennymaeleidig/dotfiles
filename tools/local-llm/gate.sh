@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 #
-# The gate for the local gpt-oss-20b / llama.cpp setup.
+# The gate for the local gemma-4-26B-A4B / llama.cpp setup.
 #
 #   bash tools/local-llm/gate.sh            verify the boundaries
 #   bash tools/local-llm/gate.sh --measure  verify, then measure (never asserted)
@@ -14,13 +14,12 @@ set -euo pipefail
 # non-zero. A server that is down is reported as "server not running", not as a
 # connection trace.
 #
-# The reasoning check is the end-to-end proof that the harness config still
-# permits reasoning (`reasoning: true` and `compat.supportsReasoningEffort:
-# true` in models.json — the built-in values pin reasoning off) and that an
-# effort level changes what the model does: one request at high effort, one with
-# `reasoning_effort` omitted, which is the request the harness sends when
-# thinking is off. The wire request itself is not observable from here; the
-# config assertion plus the behavioural delta is the evidence.
+# Thinking is not asserted here. The checks that used to do it encoded gpt-oss's
+# graded `reasoning_effort`, which this model's template does not read: gemma's
+# thinking is a boolean (`enable_thinking`, off by default) that a request sets
+# through chat_template_kwargs. Asserting either shape would assert a harness
+# preference rather than a boundary, so the reasoning checks were removed rather
+# than rewritten per model. Checking it by hand is in SETUP.md step 7.
 #
 # Two checks are not HTTP at all, and are labelled as such in their output.
 # Provider visibility is asserted from the harness's own declaration rather than
@@ -153,9 +152,9 @@ if [ "$SERVER_CTX" != "$CONTEXT_WINDOW" ]; then
   fail "context window parity" "server reports n_ctx=$SERVER_CTX, pins.json declares $CONTEXT_WINDOW; restart the server with serve.sh"
 fi
 
-# --- 4b. the harness config permits reasoning and agrees on the window -------
+# --- 4b. the harness agrees on the window -----------------------------------
 if [ ! -f "$MODEL_SPEC" ]; then
-  fail "harness config permits reasoning" "$MODEL_SPEC is missing — run chezmoi apply"
+  fail "harness window parity" "$MODEL_SPEC is missing — run chezmoi apply"
 fi
 REASON="$(python3 -c '
 import json, sys
@@ -168,22 +167,14 @@ except Exception as exc:
 override = ((cfg.get("providers") or {}).get("llama.cpp") or {}).get("modelOverrides") or {}
 entry = override.get(mid)
 if entry is None:
-    print(f"{path} has no providers.llama.cpp.modelOverrides[{mid!r}] entry; the harness falls back to the built-in openai-completions defaults, which pin reasoning off. Run chezmoi apply.")
-    sys.exit(1)
-found_reasoning = entry.get("reasoning")
-if found_reasoning is not True:
-    print(f"the override for {mid} must set reasoning: true (found {found_reasoning!r})")
-    sys.exit(1)
-found_effort = (entry.get("compat") or {}).get("supportsReasoningEffort")
-if found_effort is not True:
-    print(f"the override for {mid} must set compat.supportsReasoningEffort: true (found {found_effort!r}); the built-in value is false and suppresses reasoning_effort")
+    print(f"{path} has no providers.llama.cpp.modelOverrides[{mid!r}] entry; the harness falls back to the built-in openai-completions defaults, whose window may not match the server. Run chezmoi apply.")
     sys.exit(1)
 window = entry.get("contextWindow")
 if window != server_ctx:
     print(f"the harness declares contextWindow={window!r} but the server reports n_ctx={server_ctx}")
     sys.exit(1)
-' "$MODEL_SPEC" "$MODEL_ID" "$SERVER_CTX")" || fail "harness config permits reasoning" "${REASON:-no reason reported}"
-pass "context window parity ($SERVER_CTX) and harness config permits reasoning"
+' "$MODEL_SPEC" "$MODEL_ID" "$SERVER_CTX")" || fail "harness window parity" "${REASON:-no reason reported}"
+pass "harness window parity ($SERVER_CTX)"
 
 # --- 4c. the harness is pointed at this server -------------------------------
 # Provider visibility is asserted rather than assumed: the model only appears in
@@ -202,36 +193,6 @@ if [ "$BASE_DECLARED" != "$BASE" ]; then
   fail "harness provider connection" "the harness is pointed at $BASE_DECLARED but the server is at $BASE (pins.json)"
 fi
 pass "harness provider connection ($BASE_DECLARED)"
-
-# --- 4d. the harness asks for a reasoning level for this model ----------------
-# Permitting reasoning and asking for it are different failures. The override in
-# models.json makes the level reachable; this is what makes it the default, so a
-# later edit cannot leave the local model silently sitting at the global default
-# (which is set for other providers).
-LEVEL_SPEC="$HOME/.pi/agent/settings.json"
-if [ ! -f "$LEVEL_SPEC" ]; then
-  fail "harness default thinking level" "$LEVEL_SPEC is missing — run chezmoi apply"
-fi
-LEVEL="$(python3 -c '
-import json, sys
-path, key = sys.argv[1], sys.argv[2]
-try:
-    cfg = json.load(open(path))
-except Exception as exc:
-    print(f"{path} is not valid JSON: {exc}")
-    sys.exit(1)
-levels = cfg.get("modelThinkingLevels") or {}
-level = levels.get(key)
-default = cfg.get("defaultThinkingLevel")
-if level is None:
-    print(f"{path} declares no modelThinkingLevels[{key!r}], so this model starts at the global defaultThinkingLevel ({default!r}) instead")
-    sys.exit(1)
-if str(level).lower() in ("off", "none"):
-    print(f"modelThinkingLevels[{key!r}] is {level!r}, which turns reasoning off for this model")
-    sys.exit(1)
-print(level)
-' "$LEVEL_SPEC" "llama.cpp/$MODEL_ID")" || fail "harness default thinking level" "${LEVEL:-no reason reported}"
-pass "harness default thinking level ($LEVEL)"
 
 # --- 5. the pinned launch flags are intact ----------------------------------
 # Not HTTP: the pinned build's HTTP surface has no GPU-offload field at all, so
@@ -256,15 +217,18 @@ REQUIRED_FLAGS=(
   '-ngl 99'
   '-c "$CONTEXT_WINDOW"'
   '--parallel 1'
+  '--spec-type draft-mtp'
+  '--spec-draft-model "$DRAFT_PATH"'
+  '--spec-draft-n-max 1'
   '--host "$SERVER_HOST"'
   '--port "$SERVER_PORT"'
 )
 for flag in "${REQUIRED_FLAGS[@]}"; do
   if ! grep -qF -- "$flag" <<<"$LAUNCH_ARGS"; then
-    fail "pinned launch flags" "serve.sh no longer passes $flag — window, slots, tool calling or GPU offload would change silently"
+    fail "pinned launch flags" "serve.sh no longer passes $flag — window, slots, speculative decoding, tool calling or GPU offload would change silently"
   fi
 done
-pass "pinned launch flags intact (offload -ngl 99, window, slots, jinja)"
+pass "pinned launch flags intact (offload -ngl 99, window, slots, jinja, MTP drafter)"
 
 # --- 6. a tool spec produces a structured tool call -------------------------
 python3 - "$MODEL_ID" >"$TMP/tool_req.json" <<'PY'
@@ -315,7 +279,7 @@ content = (message.get("content") or "").strip()
 if not calls:
     if content:
         print("the model answered in prose instead of returning a structured tool_calls entry; "
-              "the Harmony tool-call parser did not run (is --jinja active?). "
+              "the template's tool-call parser did not run (is --jinja active?). "
               f"Content began: {content[:160]!r}")
     else:
         print("response had neither tool_calls nor content")
@@ -337,74 +301,6 @@ if not isinstance(arguments, dict) or "path" not in arguments:
 PY
 )" || fail "tool call structured" "${REASON:-no reason reported}"
 pass "tool call structured (read)"
-
-# --- 7. reasoning effort changes the response --------------------------------
-reason_probe() { # $1 label: 'high', or 'default' to omit the field
-  python3 - "$MODEL_ID" "$1" >"$TMP/reason_$1.json" <<'PY'
-import json, sys
-body = {
-    "model": sys.argv[1],
-    "messages": [{
-        "role": "user",
-        "content": "A train travels 60 km in 45 minutes. What is its average speed in km/h? Answer with the number only.",
-    }],
-    "max_tokens": 1024,
-    "temperature": 0,
-    "stream": False,
-}
-if sys.argv[2] != "default":
-    body["reasoning_effort"] = sys.argv[2]
-print(json.dumps(body))
-PY
-  post_chat "$TMP/reason_$1.json" "$2" 180 >"$TMP/reason_$1.code"
-}
-
-reason_probe high "$TMP/reason_high_resp.json"
-reason_probe default "$TMP/reason_default_resp.json"
-for effort in high default; do
-  code="$(cat "$TMP/reason_$effort.code")"
-  [ "$code" = "000" ] && fail "reasoning effort honoured" "server not running at $BASE (the $effort probe)"
-  case "$code" in 2*) ;; *) fail "reasoning effort honoured" "the $effort probe returned HTTP $code" ;; esac
-done
-REASON="$(
-  python3 - "$TMP/reason_high_resp.json" "$TMP/reason_default_resp.json" <<'PY'
-import json, sys
-
-def measure(path, effort):
-    try:
-        data = json.load(open(path))
-        message = data["choices"][0]["message"]
-    except Exception as exc:
-        print(f"the {effort} probe returned no choices[0].message: {exc}")
-        sys.exit(1)
-    usage = data.get("usage") or {}
-    tokens = (usage.get("completion_tokens_details") or {}).get("reasoning_tokens")
-    if not isinstance(tokens, int):
-        tokens = None
-    text = message.get("reasoning_content") or message.get("reasoning") or ""
-    if not isinstance(text, str):
-        text = ""
-    return {"tokens": tokens, "chars": len(text)}
-
-def describe(value):
-    return f"{value['tokens']} tokens" if value["tokens"] is not None else f"{value['chars']} chars"
-
-high = measure(sys.argv[1], "high")
-off = measure(sys.argv[2], "default")
-high_effort = high["tokens"] if high["tokens"] is not None else high["chars"]
-off_effort = off["tokens"] if off["tokens"] is not None else off["chars"]
-if high_effort == 0:
-    print("the high-effort probe produced no reasoning output and no reasoning token count; "
-          "cannot tell whether reasoning_effort reached the model")
-    sys.exit(1)
-if not high_effort > off_effort:
-    print(f"reasoning_effort did not change the response in the expected direction: "
-          f"high={high!r}, reasoning-off={off!r}")
-    sys.exit(1)
-print(f"high={describe(high)}, reasoning-off={describe(off)}")
-PY
-)" || fail "reasoning effort honoured" "${REASON:-no reason reported}"
-pass "reasoning effort honoured ($REASON)"
 
 echo "PASS: all boundaries green"
 
