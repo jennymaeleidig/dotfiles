@@ -98,6 +98,9 @@
     },
     {
       "npm:pi-session-summary": "https://github.com/pasky/pi-session-summary"
+    },
+    {
+      "git:github.com/tinypi-extension/tinysubagent": "https://github.com/tinypi-extension/tinysubagent"
     }
   ],
   "packages": [
@@ -128,15 +131,11 @@
   ],
   "piVim": {
     "modeColors": {
-      "insert": "text",
-      "normal": "accent"
+      "insert": "text"
     }
   },
   "quietStartup": true,
   "showHardwareCursor": true,
-  "terminal": {
-    "showImages": true
-  },
   "theme": "Monokai Pro (CE)",
   "tuiMode": "fullscreen",
   "compactionModel": {
