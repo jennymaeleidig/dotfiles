@@ -15,9 +15,19 @@ if ! command -v herdr >/dev/null 2>&1; then
 	exit 0
 fi
 
-if [ ! -x "$HOME/.local/share/llm-serve/bin/llm" ]; then
+LLM="$HOME/.local/share/llm-serve/bin/llm"
+
+# The git-repo external refreshes on its own schedule, so the checkout can be
+# behind origin right after a push; pull --ff-only here so registration never
+# runs a stale CLI. ff-only on purpose: a diverged checkout is an owner
+# problem, and an apply script must not resolve it.
+if [ -d "$HOME/.local/share/llm-serve/.git" ]; then
+	git -C "$HOME/.local/share/llm-serve" pull --ff-only --quiet
+fi
+
+if [ ! -x "$LLM" ]; then
 	echo "==> llm-serve checkout missing; skipping llama-state registration" >&2
 	exit 1
 fi
 
-exec "$HOME/.local/share/llm-serve/bin/llm" herdr --install
+exec "$LLM" herdr --install
