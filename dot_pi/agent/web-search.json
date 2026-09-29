@@ -8,6 +8,7 @@
     "fetchContent": { "enabled": true },
     "getSearchContent": { "enabled": false }
   },
+  "toolActivation": "eager",
   "commands": {
     "websearch": { "enabled": false },
     "curator": { "enabled": false },
