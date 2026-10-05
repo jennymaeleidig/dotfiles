@@ -38,8 +38,8 @@ tools/
 .config/pi-hashline-edit-pro/sessions/
 .config/pi-hashline-edit-pro/config.json.corrupt-*
 
-# Runtime state (target side) — written by the herdr integration into the
-# extensions dir alongside the authored extension.
+# Runtime state (target side) — written by the herdr integration into an
+# extensions dir that has no Source counterpart.
 
 .pi/agent/extensions/herdr-agent-state.ts
 
