@@ -1,6 +1,6 @@
 # The sandbox guard is pi-sandbox-runtime
 
-> **Superseded by [ADR-0009](0009-the-os-fence-is-removed.md).** This records the guard that was removed; it is no longer current configuration.
+> **Historical.** The guard this records has been removed; it is no longer current configuration.
 
 The OS-level boundary is `git:github.com/jennymaeleidig/pi-sandbox-runtime`, which drives [`@anthropic-ai/sandbox-runtime`](https://github.com/anthropic-experimental/sandbox-runtime) directly, in place of `carderne/pi-sandbox` v0.6.8. The older extension fenced `bash` only: `grep`, `find` and `ls` ran unchecked against the whole filesystem, and a Tool contributed by another package — a formatter that rewrites files in place is neither `write` nor `edit` — was never judged. The replacement judges every Tool call before it runs and fences shell commands through the same runtime, so one policy governs both. It is stricter on the axes that mattered: Tool coverage, and a fail-closed policy where an unrecognised config key is a load error and a Tool whose paths cannot be determined is refused rather than allowed. It also trades the predecessor's interactive write prompt for in-memory session grants (`/guard-allow`), so nothing the agent opens becomes file state nobody remembers granting.
 
