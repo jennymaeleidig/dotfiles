@@ -30,6 +30,19 @@ tools/
 !.pi/agent/skills/create-obsidian-reference/**
 !.pi/agent/skills/cc-safety-net/**
 
+# Runtime state (target side) — hashline's anchor store, per-session claim
+# sidecars, and quarantined configs. Source state carries only the pinned
+# config.json beside them.
+
+.config/pi-hashline-edit-pro/hash-store.sqlite
+.config/pi-hashline-edit-pro/sessions/
+.config/pi-hashline-edit-pro/config.json.corrupt-*
+
+# Runtime state (target side) — written by the herdr integration into the
+# extensions dir alongside the authored extension.
+
+.pi/agent/extensions/herdr-agent-state.ts
+
 # Python bytecode (target side) — created when a vendored plugin script is run
 
 # or compiled on the host; never Source state.

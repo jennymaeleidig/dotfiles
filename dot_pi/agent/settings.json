@@ -88,6 +88,9 @@
     },
     {
       "git:github.com/tinypi-extension/tinysubagent": "https://github.com/tinypi-extension/tinysubagent"
+    },
+    {
+      "npm:pi-hashline-edit-pro": "https://github.com/YuGiMob/pi-hashline-edit-pro"
     }
   ],
   "packages": [
@@ -109,7 +112,8 @@
     "npm:pi-workspace-history",
     "npm:pi-compaction-model",
     "npm:pi-session-summary",
-    "git:github.com/tinypi-extension/tinysubagent"
+    "git:github.com/tinypi-extension/tinysubagent",
+    "npm:pi-hashline-edit-pro"
   ],
   "piVim": {
     "modeColors": {
