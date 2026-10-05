@@ -23,7 +23,7 @@ never into the repository or the home directory. Checked-in scripts and test fix
 
 # Guarded boundaries are handed to the user, not bypassed
 
-Two layers run on every tool call: `pi-sandbox-runtime` (every Tool call judged, and shell commands fenced at the OS level, against one filesystem policy), `cc-safety-net` (secrets, destructive commands, git history), When a call is blocked with a guard reason, `EPERM`/`operation not permitted`, or a safety-net reason, hand the exact command to the user to run in their own terminal — never retry through another interpreter, wrapper, or subagent
+`cc-safety-net` runs on every tool call and blocks known-bad commands at the tool layer: secrets access, destructive commands, git-history mutation. When a call is blocked with a safety-net reason, hand the exact command to the user to run in their own terminal — never retry through another interpreter, wrapper, or subagent.
 
 # License
 

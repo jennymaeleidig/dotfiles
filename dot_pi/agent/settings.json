@@ -55,9 +55,6 @@
       "npm:cc-safety-net": "https://github.com/kenryu42/cc-safety-net"
     },
     {
-      "git:github.com/jennymaeleidig/pi-sandbox-runtime": "https://github.com/jennymaeleidig/pi-sandbox-runtime"
-    },
-    {
       "npm:pi-extmgr": "https://github.com/ayagmar/pi-extmgr"
     },
     {
@@ -102,7 +99,6 @@
     "npm:@upstash/context7-pi",
     "npm:@bigboss2063/pi-clip",
     "npm:cc-safety-net",
-    "git:github.com/jennymaeleidig/pi-sandbox-runtime",
     "npm:pi-extmgr",
     "npm:pi-context-view",
     "npm:@krfantasy/pi-monokai-pro",

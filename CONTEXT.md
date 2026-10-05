@@ -26,6 +26,10 @@ _Avoid_: cache, unmanaged files, junk
 The act of reconciling Source state into Target state: writing dotfiles, removing those no longer in Source state, and running scripts whose inputs changed.
 _Avoid_: sync, deploy
 
+**Secret**:
+A credential Source state references but never contains; it lives in an unmanaged file in the home root, outside Apply and outside the agent's read boundary.
+_Avoid_: API key, credential, token
+
 ### Files and scripts
 
 **Dotfile**:
