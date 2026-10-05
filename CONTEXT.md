@@ -27,7 +27,7 @@ The act of reconciling Source state into Target state: writing dotfiles, removin
 _Avoid_: sync, deploy
 
 **Secret**:
-A credential Source state references but never contains; it lives in an unmanaged file in the home root, outside Apply and outside the agent's read boundary.
+A credential Source state references but never contains; it lives in an unmanaged file in the home root, outside Apply — kept out of state by convention, not by an enforced read boundary.
 _Avoid_: API key, credential, token
 
 ### Files and scripts
