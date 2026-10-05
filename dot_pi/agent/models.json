@@ -8,8 +8,12 @@
           "compat": {
             "thinkingFormat": "chat-template",
             "chatTemplateKwargs": {
-              "enable_thinking": { "$var": "thinking.enabled" },
-              "preserve_thinking": { "$var": "thinking.enabled" }
+              "enable_thinking": {
+                "$var": "thinking.enabled"
+              },
+              "preserve_thinking": {
+                "$var": "thinking.enabled"
+              }
             }
           }
         }
