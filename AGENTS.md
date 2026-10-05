@@ -10,7 +10,7 @@ Two contexts, one per split domain: `CONTEXT.md` at the repo root (config — Ma
 
 ### Applying state
 
-Applying is the user's job. The guard fences target state on both sides — `allowWrite` excludes most host paths, and `denyRead` covers the home root while `allowRead` re-allows named roots but not the home root itself, so `chezmoi apply`, `diff`, and `status` all fail at the first `lstat` of a home-root file (`~/.aerospace.toml`), dry run included. Stage the source and hand the user the command; work source-side yourself with `chezmoi managed`, `target-path`, `source-path`, and `execute-template`.
+Applying is the user's job — repo policy, not an enforced fence. The OS sandbox is gone; `cc-safety-net` (tool-layer, command-pattern based) is the only guard left. Stage the source and hand the user the apply command; work source-side yourself with `chezmoi managed`, `target-path`, `source-path`, and `execute-template`. See `docs/adr/0004-agents-stage-source.md`.
 
 ### Coding standards
 
