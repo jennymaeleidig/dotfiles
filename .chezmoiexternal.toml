@@ -1,4 +1,4 @@
-# Theme dependencies — see docs/adr/0003-themes-are-dependencies.md
+# Theme dependencies
 # Themes are kept as dependencies (chezmoi externals), not vendored copies.
 
 [".config/ghostty/themes/Monokai Pro"]

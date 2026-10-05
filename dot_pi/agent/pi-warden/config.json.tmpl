@@ -1,0 +1,17 @@
+{
+  "typesafe": true,
+  "rules": {
+    "enabled": true,
+    "files": [
+      "{{ .chezmoi.homeDir }}/.pi/agent/pi-warden/rules/global.md",
+      "warden-local-rules.md"
+    ],
+    "fallback": false,
+    "skip": [".scratch/**", "docs/agents/**", "CONTEXT-MAP.md"],
+    "threshold": 0.7,
+    "softThreshold": 0
+  },
+  "rulesAtTurnStart": {
+    "enabled": false
+  }
+}

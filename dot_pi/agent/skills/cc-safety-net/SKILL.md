@@ -16,7 +16,7 @@ On by default and owner-configurable: secret access (SSH keys, `.env`, `~/.aws`,
 The most common blocks that are neither secrets nor destructive commands, under the `strict` preset:
 
 - A heredoc may feed only `cat`, `tee`, `git apply`, `git commit`, `gh pr create`, `gh issue create` — sinks that read stdin as data. Anything reading stdin as a program (`python3 -`, `bash`, `sqlite3`, …) is blocked: the analyzer cannot vet interpreter stdin. Multiple heredocs, unquoted delimiters with `$`/backslash/`\` in the body, and heredocs alongside other input redirections are blocked too.
-- A backtick in quoted script text (`node -e '…`template`…'`) breaks the parser's quote tracking: a later `<<` in the same text is misread as a heredoc declaration and blocks the whole command (`heredoc delimiter … was not found`) — a known parser false positive (issue drafted in `.scratch/ccsn-heredoc-false-positive/`).
+- A backtick in quoted script text (`node -e '…`template`…'`) breaks the parser's quote tracking: a later `<<` in the same text is misread as a heredoc declaration and blocks the whole command (`heredoc delimiter … was not found`) — a known parser false positive.
 - The substitute for both is the temp-file pattern: write the script with the write tool, execute it as a one-liner. That is the pattern the allow-list expects, not a bypass — the block message's "restructure the command" points here.
 
 ## When a tool is blocked

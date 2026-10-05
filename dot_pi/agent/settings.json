@@ -91,6 +91,9 @@
     },
     {
       "npm:pi-hashline-edit-pro": "https://github.com/YuGiMob/pi-hashline-edit-pro"
+    },
+    {
+      "npm:pi-warden": "https://github.com/DevMortimer/pi-warden"
     }
   ],
   "packages": [
@@ -113,7 +116,8 @@
     "npm:pi-compaction-model",
     "npm:pi-session-summary",
     "git:github.com/tinypi-extension/tinysubagent",
-    "npm:pi-hashline-edit-pro"
+    "npm:pi-hashline-edit-pro",
+    "npm:pi-warden"
   ],
   "piVim": {
     "modeColors": {

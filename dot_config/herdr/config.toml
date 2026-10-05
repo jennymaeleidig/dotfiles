@@ -5,7 +5,7 @@
 # herdr-theme-sync sync`): it rewrites [theme.custom] and every sidebar fg below
 # from Ghostty's palette, validates with `herdr config check`, then reloads.
 # Panes themselves are colored by the host terminal (ghostty theme
-# "Monokai Pro", see docs/adr/0003-themes-are-dependencies.md). Because sync
+# "Monokai Pro"). Because sync
 # rewrites this chezmoi-managed file, a later `chezmoi apply` reverts to Source
 # state unless the generated values are folded back in.
 #

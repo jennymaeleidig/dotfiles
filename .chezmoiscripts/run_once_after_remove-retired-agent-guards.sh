@@ -4,7 +4,7 @@ set -euo pipefail
 # One-time cleanup for the retired pi packages pi-system-one and
 # pi-sandbox-runtime. Their declarations leave dot_pi/agent/settings.json, but
 # pi materializes packages into runtime state that .chezmoiignore deliberately
-# excludes (ADR-0002), so no Apply deletes those trees. This script removes the
+# excludes, so no Apply deletes those trees. This script removes the
 # host paths the two packages deployed. It runs once per host; on a host that
 # never installed them every path is already absent and the rm is a no-op.
 #

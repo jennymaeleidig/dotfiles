@@ -1,4 +1,4 @@
-# Source-only artifacts never reach a host (see docs/adr/0002-source-only-artifacts.md)
+# Source-only artifacts never reach a host
 
 README.md
 CONTEXT.md
@@ -11,6 +11,7 @@ CODING_STANDARDS.md
 **/AGENTS.md
 \*\*/CODING_STANDARDS.md
 .pi/CODING_STANDARDS.md
+warden-local-rules.md
 docs/
 .pi/docs/
 tools/
