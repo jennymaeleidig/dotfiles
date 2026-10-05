@@ -32,19 +32,6 @@ type = "plugin_action"
 command = "herdr-theme-sync.sync"
 description = "sync herdr theme from ghostty"
 
-# Local llama-server state in the sidebar (llama-state plugin, source in the
-# llm-serve checkout, ~/.local/share/llm-serve/llama-state): toggles a monitor
-# pane that reports state and tokens/sec for the server `llm serve` started.
-# Observation only — the server's own pane is untouched. Registered by
-# `llm herdr --install` (run_onchange_after-llm-herdr-install.sh.tmpl).
-# prefix+m, not prefix+l: herdr's default focus_pane_right is prefix+l, and a
-# [[keys.command]] entry overrides it, breaking vim-style pane navigation.
-[[keys.command]]
-key = "prefix+m"
-type = "plugin_action"
-command = "llama-state.toggle"
-description = "toggle local llama-server monitor"
-
 [ui.sound]
 enabled = false
 

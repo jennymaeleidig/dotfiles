@@ -48,21 +48,3 @@ export PI_MARKDOWN_PREVIEW_REGISTER_EXPORT_TOOL=false
 
 # pi security (cc-safety-net)
 export CC_SAFETY_NET_LEVEL=strict
-
-# llama.cpp local model server. Connection only: nothing here starts a server.
-# The host and port are a host fact (the llm-serve checkout's pins.json names
-# the same pair and is what gate.sh checks against); keeping it literal means
-# Apply never parses another repo's schema at render time.
-export LLAMA_BASE_URL="http://127.0.0.1:8080"
-
-# The llm CLI (serve | verify | url | state probe | herdr) lives in its own
-# checkout, cloned to ~/.local/share/llm-serve by the .chezmoiexternal.toml
-# git-repo entry; bin/ is the whole interface, so the checkout goes on PATH
-# directly (docs/adr/0007-the-model-runtime-is-its-own-repo.md).
-export PATH="$HOME/.local/share/llm-serve/bin:$PATH"
-
-# No launcher functions here: `llm serve` / `llm verify` are the interface —
-# the old wrappers died with the runtime's move to its own repo (ADR 0007).
-# serve runs in the foreground on purpose — Ctrl-C is the stop, and there is no
-# login item to forget (ADR 0005). A fresh server loads nothing until you pick
-# the model with /llama in pi.

@@ -16,16 +16,12 @@
     "opencode-go/deepseek-v4.1-flash",
     "opencode-go/glm-5.3-flash",
     "opencode-go/gpt-6-luna",
-    "opencode-go/space-bunny-free",
-    "llama.cpp/gemma-4-26B-A4B-it-UD-Q3_K_XL"
+    "opencode-go/space-bunny-free"
   ],
   "hideThinkingBlock": true,
   "lastChangelogVersion": "1.0.3",
   "markdown": {
     "mermaid": "final"
-  },
-  "modelThinkingLevels": {
-    "llama.cpp/gemma-4-26B-A4B-it-UD-Q3_K_XL": "high"
   },
   "oppiMirror": {
     "autoStart": true,

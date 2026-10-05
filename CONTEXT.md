@@ -79,7 +79,3 @@ _Avoid_: config, dotfile folder
 **Theme**:
 Styling choices — colors, fonts, cursor — shared across app configs; currently Monokai Pro. A published theme is an External source; an unpublished one lives in Source state.
 _Avoid_: color scheme, style
-
-**Local model runtime**:
-The pinned llama.cpp build and GGUF pair together with the `llm` CLI that serves and gates it; it lives in its own repository, not in Source state, and reaches hosts as an External source.
-_Avoid_: local-llm, tools/local-llm, LLM setup
