@@ -90,6 +90,9 @@
       "git:github.com/tinypi-extension/tinysubagent": "https://github.com/tinypi-extension/tinysubagent"
     },
     {
+      "npm:pi-typesafe": "https://github.com/DevMortimer/pi-typesafe"
+    },
+    {
       "npm:pi-warden": "https://github.com/DevMortimer/pi-warden"
     },
     {
@@ -116,6 +119,7 @@
     "npm:pi-compaction-model",
     "npm:pi-session-summary",
     "git:github.com/tinypi-extension/tinysubagent",
+    "npm:pi-typesafe",
     "npm:pi-warden",
     "npm:pi-hashline-edit-pro"
   ],
