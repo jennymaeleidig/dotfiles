@@ -2,8 +2,7 @@
 //
 // `@ff-labs/pi-fff` registers `fffind` *beside* pi's built-in `find` unless it
 // runs in `override` mode — and that mode is all-or-nothing: it also takes the
-// `grep` name, which `pi-hashline-edit-pro` owns (see
-// docs/adr/0009-hashline-owns-the-edit-surface.md). So pi-fff stays in its
+// `grep` name, which `pi-hashline-edit-pro` owns. So pi-fff stays in its
 // default mode and this drops the built-in `find` instead of racing hashline
 // for `grep` on undocumented `session_start` ordering.
 //
