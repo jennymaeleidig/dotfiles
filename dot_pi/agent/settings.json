@@ -99,6 +99,9 @@
       "npm:pi-pigment": "https://github.com/kuoruan/pi-mono/tree/master/extensions/pi-pigment"
     },
     {
+      "npm:pi-tool-manager": "https://github.com/Star-233/pi-tool-manager"
+    },
+    {
       "npm:@wolido/pi-lazy-tools": "https://github.com/Wolido/pi-lazy-tools"
     }
   ],
@@ -125,6 +128,7 @@
     "npm:pi-system-one",
     "npm:pi-warden",
     "npm:pi-pigment",
+    "npm:pi-tool-manager",
     "npm:@wolido/pi-lazy-tools"
   ],
   "piVim": {
