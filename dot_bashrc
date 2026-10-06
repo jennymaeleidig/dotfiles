@@ -17,6 +17,11 @@ case ":$PATH:" in
 *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 
+# Exports, loaded for non-interactive shells too: pi and the tools it starts read
+# secrets and toolchain paths from the environment, and they never reach the
+# interactive-only block below.
+[[ -f ~/.bash_exports ]] && source ~/.bash_exports
+
 # Enable the subsequent settings only in interactive sessions
 case $- in
 *i*) ;;
@@ -24,6 +29,6 @@ case $- in
 esac
 
 # Source modular config files
-for rc in ~/.bash_exports ~/.bash_init ~/.bash_aliases; do
+for rc in ~/.bash_init ~/.bash_aliases; do
 	[[ -f "$rc" ]] && source "$rc"
 done
