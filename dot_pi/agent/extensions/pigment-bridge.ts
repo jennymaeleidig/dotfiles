@@ -30,7 +30,7 @@
  * wrapped in a second copy of themselves.
  */
 
-import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import type { ExtensionAPI, ToolRenderers } from "@earendil-works/pi-coding-agent";
 
 const RENDER_KIT_KEY = "pi-pigment.render-kit.v1";
 
@@ -46,16 +46,14 @@ interface RenderKitPublication {
 
 /** The borrowed slice of the kit: one decorator, one support check. */
 interface RenderKit {
+  /** Whether the kit can decorate this tool; false outside its tool set. */
   hasTool: (name: string) => boolean;
-  decorate: (definition: Record<string, unknown>) => Renderers;
+  /** Installs pi-pigment's renderers on `definition`, dispatched by its name. */
+  decorate: (definition: DecorationInput) => ToolRenderers;
 }
 
-/** The renderer trio a resolver returns. */
-interface Renderers {
-  renderShell?: unknown;
-  renderCall?: unknown;
-  renderResult?: unknown;
-}
+/** What `decorate` needs off a definition: the name it dispatches on. */
+type DecorationInput = { name: string } & Partial<ToolRenderers>;
 
 /** Whether an extension owning `name` is pi-pigment itself. */
 function pigmentOwns(pi: ExtensionAPI, name: string): boolean {
@@ -71,7 +69,7 @@ function pigmentOwns(pi: ExtensionAPI, name: string): boolean {
 
 export default function pigmentBridge(pi: ExtensionAPI): void {
   let kit: RenderKit | undefined;
-  const resolved = new Map<string, Renderers>();
+  const resolved = new Map<string, ToolRenderers>();
 
   pi.on("session_start", async (_event, ctx) => {
     resolved.clear();
@@ -98,13 +96,10 @@ export default function pigmentBridge(pi: ExtensionAPI): void {
     const native = next();
     // No registered tool, no native display to borrow.
     if (!native) return native;
+    // The kit hands back the whole definition with its renderers swapped in;
+    // the resolver contract is just the renderer trio, which is all pi reads.
     const decorated = current.decorate({ name: toolName, ...native });
-    const renderers: Renderers = {
-      renderShell: decorated.renderShell,
-      renderCall: decorated.renderCall,
-      renderResult: decorated.renderResult,
-    };
-    resolved.set(toolName, renderers);
-    return renderers;
+    resolved.set(toolName, decorated);
+    return decorated;
   });
 }
