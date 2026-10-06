@@ -19,7 +19,7 @@
     "opencode-go/space-bunny-free"
   ],
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "1.0.3",
+  "lastChangelogVersion": "1.0.4",
   "markdown": {
     "mermaid": "final"
   },
@@ -63,9 +63,6 @@
       "npm:@krfantasy/pi-monokai-pro": "https://github.com/krfantasy/pi-monokai-pro"
     },
     {
-      "npm:pi-compact-transcript": "https://github.com/avhagedorn/pi-compact-transcript"
-    },
-    {
       "npm:@narumitw/pi-usage": "https://github.com/narumiruna/pi-extensions/tree/main/packages/pi-usage"
     },
     {
@@ -107,7 +104,6 @@
     "npm:pi-extmgr",
     "npm:pi-context-view",
     "npm:@krfantasy/pi-monokai-pro",
-    "npm:pi-compact-transcript",
     "npm:@narumitw/pi-usage",
     "npm:pi-web-access",
     "git:github.com/NVlabs/SoL-Pi",
