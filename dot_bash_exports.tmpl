@@ -48,3 +48,12 @@ export PI_MARKDOWN_PREVIEW_REGISTER_EXPORT_TOOL=false
 
 # pi security (cc-safety-net)
 export CC_SAFETY_NET_LEVEL=strict
+
+# pi judges: `SYSTEM_ONE_*` for pi-system-one's `system_one` tool, and
+# `TYPESAFE_API_KEY` for pi-warden (which falls back to the login store). The
+# values stay in unmanaged files below, never in source state; `set -a` exports
+# them so extensions read them from process.env, and no file means no exports.
+set -a
+[ -f "$HOME/.secrets/system-one.env" ] && . "$HOME/.secrets/system-one.env"
+[ -f "$HOME/.secrets/typesafe.env" ] && . "$HOME/.secrets/typesafe.env"
+set +a
