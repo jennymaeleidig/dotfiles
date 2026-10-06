@@ -8,9 +8,6 @@
   "defaultProjectTrust": "always",
   "defaultProvider": "opencode-go",
   "defaultThinkingLevel": "low",
-  "defaultTools": [
-    "+codemode"
-  ],
   "doubleEscapeAction": "tree",
   "editorPaddingX": 2,
   "enableInstallTelemetry": false,
