@@ -17,20 +17,17 @@ docs/
 tools/
 .scratch/
 
-# Runtime state (target side) — pi package/skill trees materialized imperatively
-
-# (pi packages on startup, third-party skills by the skills CLI), left in place by
-
-# Apply. First-match wins: ignore each immediate skills-dir child, then re-include
-
-# the authored skills by negation.
-
+# Runtime state (target side) — pi package trees materialized imperatively on
+# startup, left in place by Apply.
 .pi/agent/npm/
 .pi/agent/git/
-.pi/agent/skills/\*
-!.pi/agent/skills/create-obsidian-reference/**
-!.pi/agent/skills/cc-safety-net/**
-!.pi/agent/skills/pi-sandbox/**
+
+# ~/.pi/agent/skills is deliberately NOT ignored: it holds only the authored,
+# chezmoi-managed skills. Third-party skills live in ~/.agents/skills (the
+# skills CLI's pi global dir since 1.7.1), which chezmoi does not manage; see
+# .chezmoiscripts/run_onchange_install-agent-skills.sh.tmpl for the parity rule.
+# Ignoring children here would let stale third-party copies accrete and shadow
+# the ~/.agents/skills versions, since pi scans this dir first.
 
 
 # Runtime state (target side) — written by the herdr integration into an
