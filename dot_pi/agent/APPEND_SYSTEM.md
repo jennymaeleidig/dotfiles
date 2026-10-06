@@ -9,13 +9,6 @@ uncommitted edits.
 - **The stat is ground truth.** `git show --stat HEAD` after every commit: exactly your files, every hunk attributable. Unattributable deletions under a refactor message mean a snapshot clobber — stop and surface it.
 - If history looks wrong, read `git reflog` before acting.
 
-# Borrowed code keeps its citation
-
-Code, config, or a doc snippet copied or adapted from an external source — verbatim or paraphrased —
-must carry a citation block naming the creator, title, source, and license above the borrowed text.
-Format and required fields: see `~/.pi/agent/seed/prompts/CITATION.md`. Borrowed text with no
-citation block is a violation.
-
 # Temp scripts go to the OS temp directory
 
 Throwaway helper scripts, one-off migrations, and scratch files are written to `$TMPDIR` or `/tmp`,
