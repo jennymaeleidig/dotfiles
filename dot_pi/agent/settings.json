@@ -97,6 +97,9 @@
     },
     {
       "npm:pi-pigment": "https://github.com/kuoruan/pi-mono/tree/master/extensions/pi-pigment"
+    },
+    {
+      "npm:@wolido/pi-lazy-tools": "https://github.com/Wolido/pi-lazy-tools"
     }
   ],
   "packages": [
@@ -121,7 +124,8 @@
     "git:github.com/tinypi-extension/tinysubagent",
     "npm:pi-system-one",
     "npm:pi-warden",
-    "npm:pi-pigment"
+    "npm:pi-pigment",
+    "npm:@wolido/pi-lazy-tools"
   ],
   "piVim": {
     "modeColors": {
