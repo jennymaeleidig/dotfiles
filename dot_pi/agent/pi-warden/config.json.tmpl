@@ -1,5 +1,20 @@
 {
   "typesafe": true,
+  "action": {
+    "enabled": false
+  },
+  "stuck": {
+    "enabled": true
+  },
+  "done": {
+    "enabled": true
+  },
+  "slop": {
+    "enabled": true
+  },
+  "subagent": {
+    "enabled": false
+  },
   "rules": {
     "enabled": true,
     "files": [
@@ -7,7 +22,11 @@
       "warden-local-rules.md"
     ],
     "fallback": false,
-    "skip": [".scratch/**", "docs/agents/**", "CONTEXT-MAP.md"],
+    "skip": [
+      ".scratch/**",
+      "docs/agents/**",
+      "CONTEXT-MAP.md"
+    ],
     "threshold": 0.7,
     "softThreshold": 0
   },
@@ -18,6 +37,15 @@
     "enabled": false
   },
   "context": {
+    "enabled": false
+  },
+  "runaway": {
+    "enabled": false
+  },
+  "waste": {
+    "enabled": false
+  },
+  "prefs": {
     "enabled": false
   },
   "widget": {
