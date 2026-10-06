@@ -1,11 +1,11 @@
 ---
 name: cc-safety-net
-description: Boundary and CLI guidance for the global CC Safety Net pre-tool guard — secrets access, destructive commands, git-history mutation, and its rule allow-lists. Use when a tool is blocked with a safety-net reason, before touching secrets or credentials, before destructive or git-history work, when running `npx -y cc-safety-net`, or when its rules are discussed, including heredoc and stdin-consumer blocks.
+description: CC Safety Net, a command-layer guard for secrets access, destructive commands, and git-history mutation. Use when a command is blocked with a safety-net reason (including heredoc and stdin-consumer blocks), before secrets, destructive, or git-history work, or when its rules or CLI come up.
 ---
 
 # CC Safety Net guidance
 
-A CC Safety Net pre-tool guard runs as a tool-layer hook for **every** pi agent, including subagents and background agents. It judges commands, it does not contain processes: it is the only guard layer in this setup.
+A CC Safety Net pre-tool guard runs as a tool-layer hook for **every** pi agent, including subagents and background agents. It judges commands; it does not contain processes.
 
 ## Boundary
 

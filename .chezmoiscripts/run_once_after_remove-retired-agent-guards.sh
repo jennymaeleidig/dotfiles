@@ -12,12 +12,12 @@ set -euo pipefail
 # this executes — they are listed anyway, so the removal holds whichever half
 # runs first. Real (resolved) target paths on this host:
 #
-#   /Users/jennyleidig/.pi/agent/sandbox.json
 #   /Users/jennyleidig/.pi/agent/skills/pi-sandbox-runtime
 #   /Users/jennyleidig/.pi/agent/git/github.com/jennymaeleidig/pi-sandbox-runtime
 #
-# Not removed: env files under ~/.secrets. They are unmanaged, may hold live
-# credentials, and are the owner's to delete.
+# Not removed: ~/.pi/agent/sandbox.json, which pi-sandbox reads again, and env
+# files under ~/.secrets. They are unmanaged, may hold live credentials, and are
+# the owner's to delete.
 
 # Runtime tree pi materialized from the package declaration.
 rm -rf \
@@ -26,8 +26,5 @@ rm -rf \
 # Skills the package contributed.
 rm -rf \
 	"$HOME/.pi/agent/skills/pi-sandbox-runtime"
-
-# chezmoi-managed config the sandbox extension read.
-rm -f "$HOME/.pi/agent/sandbox.json"
 
 echo "==> removed retired pi-sandbox-runtime state"

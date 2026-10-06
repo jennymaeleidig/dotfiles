@@ -54,6 +54,9 @@
       "npm:cc-safety-net": "https://github.com/kenryu42/cc-safety-net"
     },
     {
+      "npm:pi-sandbox": "https://github.com/carderne/pi-sandbox"
+    },
+    {
       "npm:pi-extmgr": "https://github.com/ayagmar/pi-extmgr"
     },
     {
@@ -91,6 +94,9 @@
     },
     {
       "npm:pi-warden": "https://github.com/DevMortimer/pi-warden"
+    },
+    {
+      "npm:pi-pigment": "https://github.com/kuoruan/pi-mono/tree/master/extensions/pi-pigment"
     }
   ],
   "packages": [
@@ -101,6 +107,7 @@
     "npm:@upstash/context7-pi",
     "npm:@bigboss2063/pi-clip",
     "npm:cc-safety-net",
+    "npm:pi-sandbox",
     "npm:pi-extmgr",
     "npm:pi-context-view",
     "npm:@krfantasy/pi-monokai-pro",
@@ -113,7 +120,8 @@
     "npm:pi-session-summary",
     "git:github.com/tinypi-extension/tinysubagent",
     "npm:pi-system-one",
-    "npm:pi-warden"
+    "npm:pi-warden",
+    "npm:pi-pigment"
   ],
   "piVim": {
     "modeColors": {

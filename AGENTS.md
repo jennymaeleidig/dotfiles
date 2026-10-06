@@ -10,7 +10,7 @@ Two contexts, one per split domain: `CONTEXT.md` at the repo root (config — Ma
 
 ### Applying state
 
-Applying is the user's job — repo policy, not an enforced fence. The OS sandbox is gone; `cc-safety-net` (tool-layer, command-pattern based) is the only guard left. Stage the source and hand the user the apply command; work source-side yourself with `chezmoi managed`, `target-path`, `source-path`, and `execute-template`.
+Applying is the user's job — repo policy, not an enforced fence. `pi-sandbox` fences the filesystem at the OS level and `cc-safety-net` judges commands at the tool layer. Stage the source and hand the user the apply command; work source-side yourself with `chezmoi managed`, `target-path`, `source-path`, and `execute-template`.
 
 ### Coding standards
 
