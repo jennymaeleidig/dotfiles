@@ -94,9 +94,6 @@
     },
     {
       "npm:pi-warden": "https://github.com/DevMortimer/pi-warden"
-    },
-    {
-      "npm:pi-pigment": "https://github.com/kuoruan/pi-mono/tree/master/extensions/pi-pigment"
     }
   ],
   "packages": [
@@ -120,8 +117,7 @@
     "npm:pi-session-summary",
     "git:github.com/tinypi-extension/tinysubagent",
     "npm:pi-system-one",
-    "npm:pi-warden",
-    "npm:pi-pigment"
+    "npm:pi-warden"
   ],
   "piVim": {
     "modeColors": {
