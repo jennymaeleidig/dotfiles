@@ -2,7 +2,7 @@
   "enabled": true,
   "permissionPromptTimeoutSeconds": 0,
   "network": {
-    "disabled": true
+    "allowedDomains": ["*"]
   },
   "filesystem": {
     "allowRead": [
