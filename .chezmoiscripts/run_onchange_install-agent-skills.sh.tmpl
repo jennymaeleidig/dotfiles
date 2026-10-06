@@ -41,13 +41,18 @@ echo "==> Installing third-party pi agent skills..."
 npx -y skills@latest add https://github.com/petergyang/no-ai-slop \
 	--skill no-ai-slop -g -a pi -y
 
-# mattpocock/skills: install only the curated "base" set (the 21 skills
-# listed in the repo's .claude-plugin/plugin.json). Without -s the CLI
-# defaults to --skill '*' and installs all 35, including in-progress/misc.
+# mattpocock/skills: install a curated subset, not the whole repo (the repo
+# also ships in-progress and misc skills). Without -s the CLI defaults to
+# --skill '*'.
+#
+# The CLI skips unknown -s names silently, so a skill retired upstream just
+# stops being installed while any older copy lingers — resolving-merge-conflicts
+# drifted that way (upstream demoted it to docs/engineering/). After editing
+# this list, check the run's `skills ls -g` tail against the names below.
 npx -y skills@latest add mattpocock/skills -g -a pi -y \
 	-s code-review codebase-design diagnosing-bugs domain-modeling \
 	grill-with-docs implement improve-codebase-architecture prototype \
-	research resolving-merge-conflicts setup-matt-pocock-skills tdd to-spec \
+	research setup-matt-pocock-skills tdd to-spec \
 	to-tickets wayfinder wizard \
 	grill-me grilling handoff teach writing-for-agents
 
