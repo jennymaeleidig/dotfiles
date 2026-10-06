@@ -1,0 +1,12 @@
+// ../pigment-bridge.ts restores pi-pigment's `bash` rendering through pi's
+// registerToolRenderer, which works even though pi-sandbox owns the tool name.
+// So nothing is left for pi-pigment to register here. Saying so keeps its
+// startup report honest — it no longer announces that bash rendering is
+// skipped, which stopped being true when the bridge landed — and stops it
+// building a bash definition it would only discard.
+//
+// Registration only: hasTool and decorate read the tool list, not this file,
+// so the bridge's rendering is unaffected.
+{
+  "disabledTools": ["bash"]
+}
