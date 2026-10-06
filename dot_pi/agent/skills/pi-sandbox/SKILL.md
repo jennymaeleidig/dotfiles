@@ -13,7 +13,7 @@ description: pi-sandbox, an OS-level fence over shell commands and the read/writ
 
 - **Reads** — `denyRead` (default `["/Users", "/home"]`) marks regions denied by default. A read is prompted unless the path is in `allowRead` or `allowWrite`; granting the prompt adds the path to `allowRead`, which overrides `denyRead`.
 - **Writes** — allowed only inside `allowWrite`; `denyWrite` takes precedence and is never prompted, and an empty `allowWrite` means no write access. `allowWrite` also grants read.
-- **Network is disabled** in this config, so shell commands and sockets reach the network directly while the filesystem fence stays on. Re-adding `network.allowedDomains` turns the proxy back on, with per-domain prompts for anything outside the list.
+- **Network** — `network.allowedDomains` turns the proxy on: shell commands and sockets go through it, with per-domain prompts for anything outside the list. This config lists `["*"]`, so every domain is inside and nothing is prompted. Dropping the key sets `network.disabled` instead — the proxy goes off and sockets reach the network directly, while the filesystem fence stays on.
 
 Discovery at runtime: `/sandbox` shows the effective policy and session allowances; `/sandbox-allow domain|read|write <value>` prompts to add a grant; `/sandbox-enable`, `/sandbox-disable`, Alt+S, and `pi --no-sandbox` gate the whole session. Grants live in memory only and reset when the extension reloads — the agent cannot read or modify them.
 
