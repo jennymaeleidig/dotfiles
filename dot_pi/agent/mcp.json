@@ -15,10 +15,6 @@
       "command": "kagi",
       "args": ["mcp", "--default-output", "json"],
       "exposure": "codemode",
-      "toolExposure": {
-        "kagi_search": "direct",
-        "kagi_quick": "direct"
-      },
       "timeout": 120,
       "description": "Kagi search and research utilities through the user's subscription: web search, quick answers, summarize, extract, news feeds, smallweb, translate, and assistant reads."
     }
