@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "zotero": {
+      "enabled": false,
+      "command": "zotero-mcp",
+      "args": ["serve"],
+      "env": {
+        "ZOTERO_LOCAL": "true"
+      },
+      "exposure": "codemode",
+      "timeout": 120,
+      "description": "The user's local Zotero research library: search and read items, read PDF pages as text or images, extract and create annotations, manage notes, and add items by DOI/URL/ISBN."
+    }
+  }
+}
