@@ -3,7 +3,7 @@
     "arxiv": {
       "enabled": false,
       "command": "uvx",
-      "args": ["arxiv-mcp-server"],
+      "args": ["--from", "arxiv-mcp-server[pro,pdf]", "arxiv-mcp-server"],
       "exposure": "codemode",
       "timeout": 120,
       "description": "arXiv literature work: search, original-LaTeX section reads, paper outlines, BibTeX from arXiv metadata, citation graphs, and topic watches; papers stay cached on disk."
