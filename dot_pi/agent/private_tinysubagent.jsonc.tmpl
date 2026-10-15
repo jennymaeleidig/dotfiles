@@ -1,6 +1,0 @@
-{{- if not (env "TYPESAFE_API_KEY") }}{{ fail "TYPESAFE_API_KEY is unset — export it from ~/.secrets/typesafe.env before chezmoi apply" }}{{ end -}}
-{
-  "systemOneAPIKey": "{{ env "TYPESAFE_API_KEY" }}",
-  "systemOneBaseUrl": "https://api.typesafe.ai",
-  "systemOneModel": "jev-latest"
-}

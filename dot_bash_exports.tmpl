@@ -49,9 +49,22 @@ export PI_MARKDOWN_PREVIEW_REGISTER_EXPORT_TOOL=false
 # pi security (cc-safety-net)
 export CC_SAFETY_NET_LEVEL=strict
 
+# pi subagents (tinysubagent)
+# A subagent pane is a child of the herdr server, not of this shell: it runs no
+# login shell and no rc files, so a spawned pi never sees ~/.secrets. Prefix each
+# child's command with a shell that loads the secrets first; the trailing `--`
+# hands the child's pi argv to `exec "$@"`.
+#
+# Setting this replaces tinysubagent's direnv mechanism: `resolveLaunchPrefix`
+# returns this template before it ever checks for a project `.envrc`, so a project
+# that needs `.envrc` loaded inside its subagents must fold it in here, e.g.
+# `direnv exec {cwd} bash -c '...' --` (`{cwd}` is substituted by tinysubagent).
+export PI_HERDR_LAUNCH_PREFIX="bash -c 'set -a; [ -f \"\$HOME/.secrets/typesafe.env\" ] && . \"\$HOME/.secrets/typesafe.env\"; set +a; exec \"\$@\"' --"
+
 # pi judges, all on TypeSafe's own endpoint: `TYPESAFE_API_KEY` for pi-warden and
-# tinysubagent's SystemOne routing, and `SYSTEM_ONE_*` for pi-system-one's
-# `system_one` tool. The values stay in unmanaged files below, never in source
+# tinysubagent's `classifierModel` routing (resolved by pi's built-in TypeSafe
+# classifier provider), and `SYSTEM_ONE_*` for pi-system-one's `system_one` tool.
+# The values stay in unmanaged files below, never in source
 # state; `set -a` exports them so extensions read them from process.env, and no
 # file means no exports. `typesafe.env` is sourced last, so it pins the endpoint
 # and model over anything an earlier file set.
