@@ -11,7 +11,7 @@
     "zotero": {
       "enabled": false,
       "command": "uvx",
-      "args": ["--from", "zotero-mcp-server[semantic]", "zotero-mcp", "serve"],
+      "args": ["--from", "zotero-mcp-server[semantic,pdf]", "zotero-mcp", "serve"],
       "env": {
         "ZOTERO_LOCAL": "true"
       },
