@@ -10,8 +10,8 @@
     },
     "zotero": {
       "enabled": false,
-      "command": "zotero-mcp",
-      "args": ["serve"],
+      "command": "uvx",
+      "args": ["--from", "zotero-mcp-server[semantic]", "zotero-mcp", "serve"],
       "env": {
         "ZOTERO_LOCAL": "true"
       },
