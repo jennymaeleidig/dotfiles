@@ -1,36 +1,48 @@
-# Source-only artifacts never reach a host
+# Source-only artifacts never reach a host.
+
+#
+
+# One explicit path or pattern per line; a blanket `*.md` rule is forbidden
+
+# because it would swallow applied markdown under dot_pi/agent/.
 
 README.md
-CONTEXT.md
-CONTEXT-MAP.md
-AGENTS.md
-CODING_STANDARDS.md
 **/README.md
-**/CONTEXT.md
-**/CONTEXT-MAP.md
+AGENTS.md
 **/AGENTS.md
-\*\*/CODING_STANDARDS.md
-.pi/CODING_STANDARDS.md
-warden-local-rules.md
 docs/
-.pi/docs/
 tools/
 .scratch/
 
+# Agent domain docs: /domain-modeling creates these lazily. Source-only, never
+# a host file. The pi-context glossary sits under the deployed dot_pi/ dir, so
+# it is listed explicitly (a blanket *.md is forbidden - it would swallow
+# applied markdown under dot_pi/agent/).
+GLOSSARY.md
+**/GLOSSARY.md
+GLOSSARY-MAP.md
+**/GLOSSARY-MAP.md
+
+# A project's own rules file. Each project creates its own at its root, where
+# pi-warden resolves it; the source copy here is the reference, never a host file.
+warden-local-rules.md
+
 # Runtime state (target side) — pi package trees materialized imperatively on
+
 # startup, left in place by Apply.
+
 .pi/agent/npm/
 .pi/agent/git/
+.pi/cache/
 
-# ~/.pi/agent/skills is deliberately NOT ignored: it holds only the authored,
-# chezmoi-managed skills. Third-party skills live in ~/.agents/skills (the
-# skills CLI's pi global dir since 1.7.1), which chezmoi does not manage; see
-# .chezmoiscripts/run_onchange_install-agent-skills.sh.tmpl for the parity rule.
-# Ignoring children here would let stale third-party copies accrete and shadow
-# the ~/.agents/skills versions, since pi scans this dir first.
+# Skills (~/.pi/agent/skills, ~/.agents/skills) are runtime state with no Source
 
+# counterpart, so they need no ignore entry: Apply prunes the ones
+
+# .chezmoiremove lists, and pi materializes package skills on startup.
 
 # Runtime state (target side) — written by the herdr integration into an
+
 # extensions dir that has no Source counterpart.
 
 .pi/agent/extensions/herdr-agent-state.ts
@@ -39,9 +51,8 @@ tools/
 
 # or compiled on the host; never Source state.
 
-**/__pycache__/
+\*\*/**pycache**/
 
 # Runtime state (source side) — files the tools may drop in the source directory, never reach a host
 
-skills-lock.json
 .vscode/

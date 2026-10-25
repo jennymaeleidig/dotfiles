@@ -1,7 +1,0 @@
-{
-  "lazy": [
-    "resolve-library-id",
-    "query-docs",
-    "recall"
-  ]
-}

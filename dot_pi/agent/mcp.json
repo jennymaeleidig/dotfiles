@@ -11,7 +11,12 @@
     "zotero": {
       "enabled": false,
       "command": "uvx",
-      "args": ["--from", "zotero-mcp-server[semantic,pdf]", "zotero-mcp", "serve"],
+      "args": [
+        "--from",
+        "zotero-mcp-server[semantic,pdf]",
+        "zotero-mcp",
+        "serve"
+      ],
       "env": {
         "ZOTERO_LOCAL": "true"
       },
@@ -20,11 +25,18 @@
       "description": "The user's local Zotero research library: search and read items, read PDF pages as text or images, extract and create annotations, manage notes, and add items by DOI/URL/ISBN."
     },
     "kagi": {
+      "enabled": true,
       "command": "kagi",
-      "args": ["mcp", "--default-output", "json"],
+      "args": [
+        "mcp",
+        "--default-output",
+        "json",
+        "--exclude-tools",
+        "kagi_extract,kagi_fastgpt,kagi_enrich_web,kagi_enrich_news"
+      ],
       "exposure": "codemode",
       "timeout": 120,
-      "description": "Kagi search and research utilities through the user's subscription: web search, quick answers, summarize, extract, news feeds, smallweb, translate, and assistant reads."
+      "description": "Kagi search and research through the user's subscription: web search, quick answers, summarize (pass subscriber:true), news feeds, smallweb, translate, and assistant reads."
     }
   }
 }

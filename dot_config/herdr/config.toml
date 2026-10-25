@@ -85,3 +85,10 @@ red = "#ff6188"
 teal = "#78dce8"
 peach = "#ff6188"
 surface_dim = "#29262a"
+
+# Herdr Open Links
+[[keys.command]]
+key = "prefix+u"
+type = "plugin_action"
+command = "hosikiti.open-links.pick"
+description = "open links from pane"

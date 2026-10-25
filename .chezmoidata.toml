@@ -1,0 +1,24 @@
+# One judge, rendered into every consumer. `dot_pi/agent/tinysubagent.jsonc.tmpl`
+# takes `<provider>/<model>` for pi's model registry; `dot_pi/agent/pi-warden/config.json.tmpl`
+# takes the backend name or an endpoint object built from the same fields.
+#
+# `provider = "typesafe"` renders warden's built-in backend and needs no host: the
+# key comes from TYPESAFE_API_KEY in the unmanaged ~/.secrets/systemone.env, which
+# pi's `typesafe` classifier provider and pi-warden both read.
+#
+# A local System One endpoint changes only this block: set `provider` to the pi
+# provider that serves the classifier, `model` to its model id, and fill
+# `label`/`host`/`path`/`keyEnv` for warden.
+#
+# `keyEnv` must name a variable other than TYPESAFE_API_KEY: pi-typesafe refuses
+# an endpoint object whose keyEnv is TYPESAFE_API_KEY, because that key is only
+# ever sent to api.typesafe.ai. Any nonempty value satisfies it, so a loopback
+# endpoint can use a placeholder. The variable itself is exported from the same
+# ~/.secrets/systemone.env file as TYPESAFE_API_KEY.
+[judge]
+provider = "typesafe"
+model = "jev-latest"
+label = "Jev"
+host = "https://api.typesafe.ai"
+path = "/v1/systemone"
+keyEnv = "WARDEN_JUDGE_KEY"

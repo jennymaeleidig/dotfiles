@@ -9,3 +9,5 @@ dot_config/ghostty/themes/Monokai Pro
 # Python bytecode — created by any local py_compile/pytest run, never source
 __pycache__/
 *.pyc
+# pi runtime state when pi runs with its cwd inside this repo
+.pi/

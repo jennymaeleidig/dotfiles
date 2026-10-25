@@ -49,6 +49,9 @@ export PI_MARKDOWN_PREVIEW_REGISTER_EXPORT_TOOL=false
 # pi security (cc-safety-net)
 export CC_SAFETY_NET_LEVEL=strict
 
+# pi incise (semantic markdown editing)
+export INCISE_PROFILE=auto
+
 # pi subagents (tinysubagent)
 # A subagent pane is a child of the herdr server, not of this shell: it runs no
 # login shell and no rc files, so a spawned pi never sees ~/.secrets. Prefix each
@@ -59,16 +62,24 @@ export CC_SAFETY_NET_LEVEL=strict
 # returns this template before it ever checks for a project `.envrc`, so a project
 # that needs `.envrc` loaded inside its subagents must fold it in here, e.g.
 # `direnv exec {cwd} bash -c '...' --` (`{cwd}` is substituted by tinysubagent).
-export PI_HERDR_LAUNCH_PREFIX="bash -c 'set -a; [ -f \"\$HOME/.secrets/typesafe.env\" ] && . \"\$HOME/.secrets/typesafe.env\"; set +a; exec \"\$@\"' --"
+export PI_HERDR_LAUNCH_PREFIX="bash -c 'set -a; [ -f \"\$HOME/.secrets/systemone.env\" ] && . \"\$HOME/.secrets/systemone.env\"; set +a; exec \"\$@\"' --"
 
-# pi judges, all on TypeSafe's own endpoint: `TYPESAFE_API_KEY` for pi-warden and
-# tinysubagent's `classifierModel` routing (resolved by pi's built-in TypeSafe
-# classifier provider), and `SYSTEM_ONE_*` for pi-system-one's `system_one` tool.
-# The values stay in unmanaged files below, never in source
-# state; `set -a` exports them so extensions read them from process.env, and no
-# file means no exports. `typesafe.env` is sourced last, so it pins the endpoint
-# and model over anything an earlier file set.
+# pi judges, one credential for every consumer. Today the judge is TypeSafe's
+# Jev, `POST https://api.typesafe.ai/v1/systemone`, model `jev-latest`, set once
+# in .chezmoidata.toml.
+#
+#   TYPESAFE_API_KEY  pi's `typesafe` classifier provider (tinysubagent's
+#                     `classifierModel` for profile routing and the child report
+#                     check) and pi-warden's built-in judgment backend. The value
+#                     comes from https://console.typesafe.ai/keys and lives in the
+#                     unmanaged systemone.env below; no file means no export.
+#
+# A local System One endpoint exports its own `keyEnv` here instead; the key
+# names in .chezmoidata.toml and this file must match. That variable must not be
+# TYPESAFE_API_KEY: pi-typesafe refuses an endpoint object that names the TypeSafe
+# key, which only ever goes to api.typesafe.ai.
+#
+# `set -a` exports them so extensions and child panes read them from process.env.
 set -a
-[ -f "$HOME/.secrets/system-one.env" ] && . "$HOME/.secrets/system-one.env"
-[ -f "$HOME/.secrets/typesafe.env" ] && . "$HOME/.secrets/typesafe.env"
+[ -f "$HOME/.secrets/systemone.env" ] && . "$HOME/.secrets/systemone.env"
 set +a

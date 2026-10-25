@@ -1,4 +1,4 @@
 ---
 name: general
-description: General-purpose subagent. Use when no specialized role fits.
+description: General-purpose subagent.
 ---

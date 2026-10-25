@@ -1,8 +1,4 @@
 {
   "version": 1,
-  "disabledTools": [
-    "warden_loops",
-    "warden_recall",
-    "warden_remember"
-  ]
+  "disabledTools": []
 }

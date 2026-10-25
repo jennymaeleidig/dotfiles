@@ -1,0 +1,6 @@
+{
+  "$schema": "https://unpkg.com/@aliou/pi-neuralwatt@0.18.0/schema.json",
+  "quotaWarnings": {
+    "enabled": false
+  }
+}

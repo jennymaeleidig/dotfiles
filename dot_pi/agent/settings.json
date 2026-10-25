@@ -1,135 +1,52 @@
 {
   "collapseChangelog": true,
   "compaction": {
-    "enabled": true,
-    "reserveTokens": 65536
+    "enabled": true
   },
-  "defaultModel": "deepseek-v4.1-flash",
   "defaultProjectTrust": "always",
-  "defaultProvider": "opencode-go",
   "defaultThinkingLevel": "low",
-  "doubleEscapeAction": "tree",
-  "editorPaddingX": 2,
-  "enableInstallTelemetry": false,
-  "enabledModels": [
-    "zai/glm-5.3-flash",
-    "opencode-go/deepseek-v4.1-flash",
-    "opencode-go/glm-5.3-flash",
-    "opencode-go/gpt-6-luna",
-    "opencode-go/space-bunny-free"
+  "defaultTools": [
+    "read",
+    "grep",
+    "find",
+    "write",
+    "edit",
+    "bash",
+    "codemode"
   ],
+  "doubleEscapeAction": "tree",
+  "editorPaddingX": 0,
+  "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "1.0.4",
+  "lastChangelogVersion": "1.4.0",
   "markdown": {
     "mermaid": "final"
   },
-  "oppiMirror": {
-    "autoStart": true,
-    "workspaceCreation": "ask"
-  },
-  "outputPad": 2,
-  "packageDocs": [
-    {
-      "npm:pi-vim": "https://github.com/lajarre/pi-vim"
-    },
-    {
-      "npm:@ff-labs/pi-fff": "https://github.com/dmtrKovalenko/fff/tree/main/packages/pi-fff"
-    },
-    {
-      "npm:pi-markdown-preview": "https://github.com/omaclaren/pi-markdown-preview"
-    },
-    {
-      "npm:@narumitw/pi-btw": "https://github.com/narumiruna/pi-extensions/tree/main/packages/pi-btw"
-    },
-    {
-      "npm:pi-zentui": "https://github.com/lmilojevicc/pi-zentui"
-    },
-    {
-      "npm:@upstash/context7-pi": "https://github.com/upstash/context7"
-    },
-    {
-      "npm:@bigboss2063/pi-clip": "https://github.com/bigboss2063/pi-clip"
-    },
-    {
-      "npm:cc-safety-net": "https://github.com/kenryu42/cc-safety-net"
-    },
-    {
-      "npm:pi-sandbox": "https://github.com/carderne/pi-sandbox"
-    },
-    {
-      "npm:pi-extmgr": "https://github.com/ayagmar/pi-extmgr"
-    },
-    {
-      "npm:pi-blackhole": "https://github.com/k0valik/pi-blackhole"
-    },
-    {
-      "npm:pi-context-view": "https://github.com/dimk90/pi-context-view"
-    },
-    {
-      "npm:@krfantasy/pi-monokai-pro": "https://github.com/krfantasy/pi-monokai-pro"
-    },
-    {
-      "npm:@narumitw/pi-usage": "https://github.com/narumiruna/pi-extensions/tree/main/packages/pi-usage"
-    },
-    {
-      "npm:pi-web-access": "https://github.com/nicobailon/pi-web-access"
-    },
-    {
-      "npm:oppi-mirror": "https://github.com/duh17/oppi"
-    },
-    {
-      "npm:pi-workspace-history": "https://github.com/wcldyx/pi-workspace-history"
-    },
-    {
-      "npm:pi-compaction-model": "https://github.com/JMHSV/pi-compaction-model"
-    },
-    {
-      "npm:pi-session-summary": "https://github.com/pasky/pi-session-summary"
-    },
-    {
-      "git:github.com/tinypi-extension/tinysubagent": "https://github.com/tinypi-extension/tinysubagent"
-    },
-    {
-      "npm:pi-system-one": "https://github.com/iamaamir/system-one"
-    },
-    {
-      "npm:pi-warden": "https://github.com/DevMortimer/pi-warden"
-    },
-    {
-      "npm:pi-pigment": "https://github.com/kuoruan/pi-mono/tree/master/extensions/pi-pigment"
-    },
-    {
-      "npm:pi-tool-manager": "https://github.com/Star-233/pi-tool-manager"
-    },
-    {
-      "npm:@wolido/pi-lazy-tools": "https://github.com/Wolido/pi-lazy-tools"
-    }
-  ],
+  "outputPad": 0,
   "packages": [
     "npm:pi-vim",
     "npm:@ff-labs/pi-fff",
     "npm:pi-markdown-preview",
     "npm:pi-zentui",
-    "npm:@upstash/context7-pi",
     "npm:@bigboss2063/pi-clip",
-    "npm:cc-safety-net",
-    "npm:pi-sandbox",
     "npm:pi-extmgr",
-    "npm:pi-blackhole",
-    "npm:pi-context-view",
     "npm:@krfantasy/pi-monokai-pro",
-    "npm:@narumitw/pi-usage",
-    "npm:pi-web-access",
-    "npm:oppi-mirror",
     "npm:pi-workspace-history",
-    "npm:pi-compaction-model",
-    "npm:pi-session-summary",
     "git:github.com/tinypi-extension/tinysubagent",
-    "npm:pi-system-one",
-    "npm:pi-warden",
-    "npm:pi-pigment",
+    "npm:pi-x-ide",
+    "npm:pi-localllm-provider",
+    "npm:@upstash/context7-pi",
+    "npm:@pi-archimedes/session-name",
+    "npm:@aliou/pi-neuralwatt",
+    "npm:@pi-lab/webfetch",
     "npm:pi-tool-manager",
-    "npm:@wolido/pi-lazy-tools"
+    "npm:pi-context-view",
+    "npm:pi-skill-shiori",
+    "npm:pi-compact-transcript",
+    "npm:@juicesharp/rpiv-todo",
+    "npm:@sting8k/pi-vcc",
+    "npm:@zigai/pi-mention-skill",
+    "npm:pi-auto-compact"
   ],
   "piVim": {
     "modeColors": {
@@ -140,12 +57,77 @@
   "showHardwareCursor": true,
   "theme": "Monokai Pro (CE)",
   "tuiMode": "fullscreen",
-  "compactionModel": {
-    "model": "zai/glm-5.3-flash",
-    "thinkingLevel": "off",
-    "reasons": [
-      "threshold",
-      "overflow"
+  "localllm": {
+    "servers": [
+      {
+        "id": "f9odnq",
+        "name": "oMLX",
+        "baseUrl": "http://localhost:8000/v1",
+        "apiKey": "",
+        "apiType": "omlx",
+        "models": [
+          {
+            "id": "GLM-OCR-bf16",
+            "name": "GLM-OCR-bf16",
+            "contextWindow": 131072,
+            "maxTokens": 32768,
+            "reasoning": false,
+            "input": [
+              "text",
+              "image"
+            ],
+            "loaded": false,
+            "sizeBytes": 2325615934
+          },
+          {
+            "id": "LFM2.5-8B-A1B-OptiQ-4bit",
+            "name": "LFM2.5-8B-A1B-OptiQ-4bit",
+            "contextWindow": 128000,
+            "maxTokens": 32768,
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "loaded": true,
+            "sizeBytes": 5728040583
+          },
+          {
+            "id": "Qwen3.5-9B-MLX-4bit",
+            "name": "Qwen3.5-9B-MLX-4bit",
+            "contextWindow": 262144,
+            "maxTokens": 32768,
+            "reasoning": true,
+            "input": [
+              "text",
+              "image"
+            ],
+            "loaded": false,
+            "sizeBytes": 6247732125
+          },
+          {
+            "id": "gemma-4-E4B-it-MLX-4bit",
+            "name": "gemma-4-E4B-it-MLX-4bit",
+            "contextWindow": 131072,
+            "maxTokens": 32768,
+            "reasoning": false,
+            "input": [
+              "text",
+              "image"
+            ],
+            "loaded": false,
+            "sizeBytes": 7170765522
+          }
+        ]
+      }
     ]
-  }
+  },
+  "enabledModels": [
+    "localllm-omlx/Qwen3.5-9B-MLX-4bit",
+    "localllm-omlx/GLM-OCR-bf16",
+    "localllm-omlx/LFM2.5-8B-A1B-OptiQ-4bit",
+    "localllm-omlx/gemma-4-E4B-it-MLX-4bit",
+    "neuralwatt/qwen-3.8-27b"
+  ],
+  "defaultProvider": "neuralwatt",
+  "defaultModel": "qwen-3.8-27b"
 }

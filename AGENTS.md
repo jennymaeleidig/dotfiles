@@ -4,14 +4,10 @@
 
 Issues and specs live as markdown files under `.scratch/<feature>/` in this repo. See `docs/agents/issue-tracker.md`.
 
+### Triage labels
+
+Five canonical roles; label strings equal the role names. See `docs/agents/triage-labels.md`.
+
 ### Domain docs
 
-Two contexts, one per split domain: `CONTEXT.md` at the repo root (config — Machine Configuration) and `dot_pi/CONTEXT.md` (pi config — Agent tooling). `CONTEXT-MAP.md` at the root points at each of them. Read the one relevant to the topic; read both for cross-cutting work. Decisions live in `docs/adr/`. See `docs/agents/domain.md`.
-
-### Applying state
-
-Applying is the user's job — repo policy, not an enforced fence. `pi-sandbox` fences the filesystem at the OS level and `cc-safety-net` judges commands at the tool layer. Stage the source and hand the user the apply command; work source-side yourself with `chezmoi managed`, `target-path`, `source-path`, and `execute-template`.
-
-### Coding standards
-
-Same split: `CODING_STANDARDS.md` at the repo root (config) and `dot_pi/CODING_STANDARDS.md` (pi config).
+Two contexts: `GLOSSARY-MAP.md` at the root points at `GLOSSARY.md` (machine config) and `dot_pi/GLOSSARY.md` (pi / agent tooling). Decisions live in `docs/adr/` (system-wide) and `dot_pi/docs/adr/` (pi). Read the glossary for the context you're in. See `docs/agents/domain.md`.

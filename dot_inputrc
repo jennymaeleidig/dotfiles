@@ -4,7 +4,7 @@ set keymap vi-command
 set show-mode-in-prompt on
 
 # Custom mode strings with cursor shape (block in cmd, bar in insert)
-set vi-cmd-mode-string "\1\e[1 q\2(cmd) "
+set vi-cmd-mode-string "\1\e[1 q\2(nrm) "
 set vi-ins-mode-string "\1\e[5 q\2(ins) "
 
 # Optional: Set vi-insert mode if you want to explicitly map keys there

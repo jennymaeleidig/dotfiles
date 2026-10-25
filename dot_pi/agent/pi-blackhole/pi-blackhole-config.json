@@ -1,9 +1,0 @@
-{
-  "_comment_models": "Worker roles route to zai/glm-5.3-flash (cheap, 1M ctx); the base `model` covers observer/reflector/dropper, and sessionFallback carries the session model behind it.",
-  "model": {
-    "provider": "zai",
-    "id": "glm-5.3-flash",
-    "thinking": "off"
-  },
-  "midRunCompaction": "resume"
-}
