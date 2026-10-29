@@ -8,6 +8,9 @@ set -euo pipefail
 # TIDAL_VERSION changes the rendered hash and re-runs it.
 TIDAL_VERSION="1.10"
 
+# ghc-pkg and cabal both live in brew's bin, which scripts do not inherit.
+eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || true)"
+
 if ! command -v ghc-pkg >/dev/null 2>&1; then
 	echo "==> GHC not found; skipping Tidal" >&2
 	exit 1

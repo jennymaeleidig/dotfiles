@@ -6,8 +6,18 @@ set -euo pipefail
 # the string below changes this script's rendered hash and re-runs it.
 PI_VERSION="1.4.0"
 
+# Neither brew's bin nor mise's shims are guaranteed here, for the reason given
+# in run_onchange_setup-mise-tools.
+case "$(uname -s)" in
+Darwin) eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || true)" ;;
+Linux) eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv 2>/dev/null || true)" ;;
+esac
+if command -v mise >/dev/null 2>&1; then
+	eval "$(mise activate bash)"
+fi
+
 if ! command -v pnpm >/dev/null 2>&1; then
-	echo "==> pnpm not found; mise has not activated — skipping pi" >&2
+	echo "==> pnpm not found; mise has not installed it — skipping pi" >&2
 	exit 1
 fi
 

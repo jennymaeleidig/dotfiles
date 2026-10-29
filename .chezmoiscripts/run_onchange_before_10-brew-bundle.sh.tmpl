@@ -25,6 +25,14 @@ if brew bundle check --file="$BREWFILE" >/dev/null 2>&1; then
 	exit 0
 fi
 
+# Homebrew records trust per artifact rather than per tap, and untapping clears
+# it, so assert it before bundling. Both entries are fully qualified in
+# packages/Brewfile. Non-fatal: trusting an unknown artifact is harmless.
+if [ "$(uname -s)" = Darwin ]; then
+	brew trust --formula jundot/omlx/omlx >/dev/null 2>&1 || true
+	brew trust --cask nikitabobko/tap/aerospace >/dev/null 2>&1 || true
+fi
+
 # One flaky cask should not abort the whole apply. Three attempts, then fail
 # loudly rather than reporting a half-provisioned host as success.
 attempt=1

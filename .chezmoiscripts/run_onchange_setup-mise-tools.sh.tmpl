@@ -2,6 +2,21 @@
 set -euo pipefail
 {{- $hash := (include "dot_config/mise/config.toml" | sha256sum) }}
 # config-hash: {{ $hash }}
+
+# Chezmoi scripts source no rc file: they inherit only the environment of the
+# process that launched chezmoi. On the Mac that already has brew's bin, so bare
+# `mise` resolves by accident. On a fresh Linux guest it never does, because
+# 00-bootstrap evals shellenv inside itself and nowhere else.
+case "$(uname -s)" in
+Darwin) eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || true)" ;;
+Linux) eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv 2>/dev/null || true)" ;;
+esac
+
+if ! command -v mise >/dev/null 2>&1; then
+	echo "==> mise not found; brew bundle has not installed it — skipping" >&2
+	exit 1
+fi
+
 echo "==> Installing mise tools from config.toml..."
 mise install
 

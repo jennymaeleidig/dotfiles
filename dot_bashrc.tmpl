@@ -45,3 +45,10 @@ esac
 for rc in ~/.bash_init ~/.bash_aliases; do
 	[[ -f "$rc" ]] && source "$rc"
 done
+
+# zoxide initializes last, deliberately. Its doctor warns when anything runs
+# after init, because a later `cd` alias or PROMPT_COMMAND edit silently
+# disables the directory hook — and ~/.bash_aliases sets `alias cd="z"`.
+if command -v zoxide >/dev/null 2>&1; then
+	eval "$(zoxide init bash)"
+fi

@@ -16,6 +16,13 @@
 # repo, in packages/apt-ubuntu.txt) and on macOS from the App Store app;
 # Homebrew's `tailscale` formula would install a second daemon beside either.
 
+# --- third-party taps -------------------------------------------------------
+# `trusted: true` records trust but does not create the tap, so declare both:
+# a fresh machine has neither, and an untapped tap cannot be recovered from the
+# entries below alone.
+tap "jundot/omlx"
+tap "nikitabobko/tap"
+
 # --- CLI utilities: same package on both platforms ---------------------------
 brew "bash-completion@2"
 brew "bat"
@@ -48,8 +55,12 @@ if OS.mac?
   brew "hf"
   brew "imagemagick"
   brew "jq"
-  brew "jundot/omlx/omlx"
+  brew "jundot/omlx/omlx", trusted: true
   brew "lima-additional-guestagents"
+  # Declared directly: llvm arrived only as a stale dependency of ghc, so cleanup
+  # removed it and took clangd with it, while dot_bash_exports.tmpl still points
+  # LDFLAGS/CPPFLAGS at /opt/homebrew/opt/llvm.
+  brew "llvm"
   brew "neovim"
   brew "p7zip"
   brew "pandoc"
@@ -74,7 +85,7 @@ if OS.mac?
   # manifest entry names it. A bare `cask "aerospace"` left nikitabobko/tap
   # looking orphaned, so cleanup scheduled the tap for untapping and then failed
   # loading the cask whose source it was removing.
-  cask "nikitabobko/tap/aerospace"
+  cask "nikitabobko/tap/aerospace", trusted: true
   cask "betterdisplay"
   cask "calibre"
   cask "discord"
