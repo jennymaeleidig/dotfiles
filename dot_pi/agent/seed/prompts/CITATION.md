@@ -3,8 +3,12 @@
 Policies for external code incorporated into a project. New, original
 code is CC0-1.0 (SPDX `CC0-1.0`) and needs no citation.
 
+Every block taken from an external source — code, config, or a doc snippet — cites: creator, title, a resolvable source (URL, DOI, or repo plus version), and license.
+
 Two layers apply to every borrow: a citation block above the code
 (humans read) and a `CITATION.cff` in the project root (tools parse).
+
+The access date to use: `date +%Y-%m-%d`.
 
 ## Code Citation Policy (human-readable block)
 

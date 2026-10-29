@@ -9,9 +9,7 @@
     "read",
     "grep",
     "find",
-    "write",
-    "edit",
-    "bash",
+    "ls",
     "codemode"
   ],
   "doubleEscapeAction": "tree",
@@ -41,12 +39,12 @@
     "npm:@pi-lab/webfetch",
     "npm:pi-tool-manager",
     "npm:pi-context-view",
-    "npm:pi-skill-shiori",
     "npm:pi-compact-transcript",
-    "npm:@juicesharp/rpiv-todo",
-    "npm:@sting8k/pi-vcc",
     "npm:@zigai/pi-mention-skill",
-    "npm:pi-auto-compact"
+    "npm:cc-safety-net",
+    "npm:@narumitw/pi-usage",
+    "npm:@narumitw/pi-lsp",
+    "npm:@narumitw/pi-btw"
   ],
   "piVim": {
     "modeColors": {
@@ -80,54 +78,26 @@
             "sizeBytes": 2325615934
           },
           {
-            "id": "LFM2.5-8B-A1B-OptiQ-4bit",
-            "name": "LFM2.5-8B-A1B-OptiQ-4bit",
-            "contextWindow": 128000,
-            "maxTokens": 32768,
-            "reasoning": false,
-            "input": [
-              "text"
-            ],
-            "loaded": true,
-            "sizeBytes": 5728040583
-          },
-          {
-            "id": "Qwen3.5-9B-MLX-4bit",
-            "name": "Qwen3.5-9B-MLX-4bit",
+            "id": "Qwen3.8-9B-mlx-4Bit",
+            "name": "Qwen3.8-9B-mlx-4Bit",
             "contextWindow": 262144,
             "maxTokens": 32768,
             "reasoning": true,
             "input": [
-              "text",
-              "image"
+              "text"
             ],
             "loaded": false,
-            "sizeBytes": 6247732125
-          },
-          {
-            "id": "gemma-4-E4B-it-MLX-4bit",
-            "name": "gemma-4-E4B-it-MLX-4bit",
-            "contextWindow": 131072,
-            "maxTokens": 32768,
-            "reasoning": false,
-            "input": [
-              "text",
-              "image"
-            ],
-            "loaded": false,
-            "sizeBytes": 7170765522
+            "sizeBytes": 5290069221
           }
         ]
       }
     ]
   },
   "enabledModels": [
-    "localllm-omlx/Qwen3.5-9B-MLX-4bit",
     "localllm-omlx/GLM-OCR-bf16",
-    "localllm-omlx/LFM2.5-8B-A1B-OptiQ-4bit",
-    "localllm-omlx/gemma-4-E4B-it-MLX-4bit",
-    "neuralwatt/qwen-3.8-27b"
+    "localllm-omlx/Qwen3.8-9B-mlx-4Bit",
+    "opencode-go/deepseek-v4.1-flash"
   ],
-  "defaultProvider": "neuralwatt",
-  "defaultModel": "qwen-3.8-27b"
+  "defaultProvider": "opencode-go",
+  "defaultModel": "deepseek-v4.1-flash"
 }

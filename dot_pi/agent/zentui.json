@@ -150,7 +150,10 @@
             "ignoreSubmodules": false
           },
           "extensionStatuses": {
-            "defaultPlacement": "off"
+            "defaultPlacement": "off",
+            "placements": {
+              "usage": "right"
+            }
           }
         }
       },
@@ -193,7 +196,8 @@
     "extensionStatuses": {
       "visibility": {
         "perm": "show",
-        "sandbox": "hide"
+        "sandbox": "hide",
+        "usage": "show"
       }
     }
   }
