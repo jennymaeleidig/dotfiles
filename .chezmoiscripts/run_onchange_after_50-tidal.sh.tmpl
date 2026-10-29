@@ -1,0 +1,25 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -euo pipefail
+
+# Tidal Cycles: brew provides GHC and cabal, SuperCollider synthesises, and the
+# `tidal` library itself is a cabal global package that no manifest can express
+# (~/.cabal/store is its only record). This script IS its manifest: changing
+# TIDAL_VERSION changes the rendered hash and re-runs it.
+TIDAL_VERSION="1.10"
+
+if ! command -v ghc-pkg >/dev/null 2>&1; then
+	echo "==> GHC not found; skipping Tidal" >&2
+	exit 1
+fi
+
+if ghc-pkg list --simple-output tidal 2>/dev/null | grep -q "tidal-${TIDAL_VERSION}"; then
+	echo "==> tidal ${TIDAL_VERSION} already installed"
+	exit 0
+fi
+
+# --lib registers the package so GHCi can `import Sound.Tidal.Context`, which
+# is how Tidal code is evaluated.
+cabal update
+cabal install --lib "tidal-${TIDAL_VERSION}"
+{{- end -}}

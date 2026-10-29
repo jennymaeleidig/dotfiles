@@ -1,21 +1,37 @@
 # bash completion
+{{ if eq .chezmoi.os "darwin" -}}
 [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+{{ else -}}
+[[ -r "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh" ]] && . "/home/linuxbrew/.linuxbrew/etc/profile.d/bash_completion.sh"
+{{ end -}}
 
-# Load Angular CLI autocompletion.
-source <(ng completion script)
+# Load Angular CLI autocompletion. ng is not in the package manifest any more
+# (mise provides per-project versions), so this only fires where it exists.
+if command -v ng >/dev/null 2>&1; then
+	source <(ng completion script)
+fi
 
 #mise
-eval "$(mise activate bash)"
+if command -v mise >/dev/null 2>&1; then
+	eval "$(mise activate bash)"
+fi
 
-#haskell
-source ${HOME}/.ghcup/env
+{{ if eq .chezmoi.os "darwin" -}}
+#haskell -- ghcup left the package manifest, so this file disappears at cleanup;
+# brew's ghc owns the binaries and puts them on PATH via `brew shellenv`.
+[[ -f ${HOME}/.ghcup/env ]] && source ${HOME}/.ghcup/env
+{{ end -}}
 
 # oh my bash
 
 # Path to your oh-my-bash installation.
 export OSH="$HOME/.oh-my-bash"
 
+{{ if eq .chezmoi.os "darwin" -}}
 OMB_USE_SUDO=true
+{{ else -}}
+OMB_USE_SUDO=false
+{{ end -}}
 
 completions=(
   git
@@ -25,9 +41,7 @@ completions=(
   gem
   gh
   go
-  gradle
   makefile
-  maven
   npm
   pip3
   uv
@@ -54,4 +68,8 @@ plugins=(
   sudo
 )
 
-source "$OSH"/oh-my-bash.sh
+# Guarded: on a fresh host the external may not have materialized yet, and an
+# unguarded source here aborts the whole rc chain.
+if [[ -f "$OSH/oh-my-bash.sh" ]]; then
+  source "$OSH"/oh-my-bash.sh
+fi

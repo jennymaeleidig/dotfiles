@@ -1,7 +1,9 @@
 # User configuration
 
+{{ if eq .chezmoi.os "darwin" -}}
 # remove switch to zsh warning
 export BASH_SILENCE_DEPRECATION_WARNING=1
+{{ end -}}
 
 #vscode as default editor
 export EDITOR="code"
@@ -11,6 +13,7 @@ export VISUAL="code"
 #bat
 export BAT_THEME="Monokai Pro"
 
+{{ if eq .chezmoi.os "darwin" -}}
 # mac ports
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 
@@ -25,18 +28,16 @@ export FLEX_HOME="$HOME/Documents/Adobe/Flash/apache-flex-4.16.1-air-51.1.3.12/a
 #expose docker to colima
 export DOCKER_HOST="unix://$HOME/.colima/docker.sock"
 
-#clangd
+#clangd -- brew's llvm arrives as a dependency of ghc, which is macOS-only.
 export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
 
-#unity
-UNITY_NOPROXY=localhost,127.0.0.1
+#supercollider
+export PATH="/Applications/SuperCollider.app/Contents/MacOS:$PATH"
+{{ end -}}
 
 # disable context-mode idle MCP bridge shutdown (#854)
 export CONTEXT_MODE_BRIDGE_IDLE_MS=0
-
-#supercollider
-export PATH="/Applications/SuperCollider.app/Contents/MacOS:$PATH"
 
 #csharp
 export PATH="$HOME/.dotnet/tools:$PATH"

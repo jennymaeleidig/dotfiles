@@ -5,3 +5,12 @@
 type = "file"
 # https://github.com/Kirlovon/monokai-ghostty
 url = "https://raw.githubusercontent.com/Kirlovon/monokai-ghostty/main/Monokai%20Pro"
+
+# oh-my-bash, sourced by ~/.bash_init. It was a bare `git clone` outside chezmoi,
+# so a fresh Linux host sourced a path that did not exist. Its custom/ directory
+# holds only the stock example files, so nothing user-owned is at risk; anything
+# added there later stays untracked and survives the periodic pull.
+[".oh-my-bash"]
+type = "git-repo"
+url = "https://github.com/ohmybash/oh-my-bash.git"
+refreshPeriod = "168h"

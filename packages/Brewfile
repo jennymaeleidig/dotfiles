@@ -1,0 +1,113 @@
+# Package manifest for both hosts, consumed by
+# .chezmoiscripts/run_onchange_before_10-brew-bundle.sh.tmpl, which hashes this
+# file: an edit here re-runs `brew bundle` on the next apply.
+#
+# Ownership, do not cross the lines:
+#   mise   -> every language runtime and language tool (node, python, go, bun,
+#             dotnet, pnpm, rust, uv, ruff, prettier, zoxide, typescript)
+#   apt    -> the Linux system layer (packages/apt-ubuntu.txt)
+#   brew   -> CLI utilities, plus casks and macOS-only formulae
+#
+# Casks need no OS guard: Homebrew's Linux bundle skipper drops any cask whose
+# source does not declare linux support. Formulae have no such skipper, so
+# anything apt owns on Linux is fenced with `if OS.mac?`.
+#
+# Tailscale is deliberately absent. On Linux it comes from apt (the official
+# repo, in packages/apt-ubuntu.txt) and on macOS from the App Store app;
+# Homebrew's `tailscale` formula would install a second daemon beside either.
+
+# --- CLI utilities: same package on both platforms ---------------------------
+brew "bash-completion@2"
+brew "bat"
+brew "chezmoi"
+brew "eza"
+brew "fd"
+brew "fzf"
+brew "gh"
+brew "herdr"
+brew "mise"
+brew "starship"
+brew "tlrc"
+
+# --- macOS-only formulae -----------------------------------------------------
+if OS.mac?
+  # Haskell / Tidal Cycles. GHC lives here rather than in mise: cabal needs a
+  # real GHC prefix, and ghcup itself is deliberately absent because it and
+  # brew's ghc fight over the same paths.
+  brew "cabal-install"
+  brew "ghc"
+
+  brew "cabextract"
+  brew "ccache"
+  brew "cmake"
+  brew "czkawka"
+  brew "duti"
+  # Declared directly: ffmpeg used to arrive only as a dependency of a formula
+  # that is no longer in this manifest, and yt-dlp needs it to mux.
+  brew "ffmpeg"
+  brew "hf"
+  brew "imagemagick"
+  brew "jq"
+  brew "jundot/omlx/omlx"
+  brew "lima-additional-guestagents"
+  brew "neovim"
+  brew "p7zip"
+  brew "pandoc"
+  brew "pipx"
+  brew "ripgrep"
+  brew "tree"
+  brew "universal-ctags"
+  brew "wget"
+  brew "yt-dlp"
+
+  # Containers: CLI only. Colima provides the Linux VM on macOS; on Linux
+  # dockerd is native and comes from apt.
+  brew "colima"
+  brew "docker"
+  brew "docker-buildx"
+  brew "docker-compose"
+end
+
+# --- casks -------------------------------------------------------------------
+if OS.mac?
+  # Fully qualified: `brew bundle cleanup` only counts a tap as referenced when a
+  # manifest entry names it. A bare `cask "aerospace"` left nikitabobko/tap
+  # looking orphaned, so cleanup scheduled the tap for untapping and then failed
+  # loading the cask whose source it was removing.
+  cask "nikitabobko/tap/aerospace"
+  cask "betterdisplay"
+  cask "calibre"
+  cask "discord"
+  cask "font-commit-mono-nerd-font"
+  cask "ghostty"
+  cask "grandperspective"
+  cask "jdownloader"
+  cask "karabiner-elements"
+  cask "middle"
+  cask "music-decoy"
+  cask "obs"
+  cask "obsidian"
+  cask "qbittorrent"
+  cask "raycast"
+  cask "steam"
+  cask "superwhisper"
+  cask "visual-studio-code"
+  cask "vorssaint"
+  cask "zen"
+  cask "zotero"
+
+  # Adopted from a manual install, in place, with
+  # `brew install --cask --adopt <token>`. Not a batch install: adopt one at a
+  # time, quit the app first, and confirm licences survive.
+  cask "lulu"
+  cask "midi-monitor"
+  cask "onedrive"
+  cask "onyx"
+end
+
+# Only the font installs through Homebrew on Linux: it is the one cask whose
+# source declares arm64_linux. Ghostty (snap), VS Code (.deb repo) and Zen
+# (flatpak) are installed outside brew bundle, so nothing double-installs.
+if OS.linux?
+  cask "font-commit-mono-nerd-font"
+end

@@ -1,0 +1,41 @@
+# Ubuntu 24.04 arm64, UTM guest. One package per line; '#' comments allowed.
+# Consumed by .chezmoiscripts/run_onchange_before_20-apt-packages.sh.tmpl.
+# Ownership: apt owns the system layer. Runtimes are mise's, CLI utilities are
+# Homebrew's (packages/Brewfile).
+
+# --- base prerequisites (Homebrew on Linux needs these before anything else) --
+build-essential
+procps
+curl
+file
+git
+ca-certificates
+unzip
+xz-utils
+zstd
+
+# --- CLI utilities that are apt-owned on this host ---------------------------
+jq
+ripgrep
+tree
+universal-ctags
+wget
+p7zip-full
+neovim
+
+# --- containers (dockerd is native on Linux; Colima is macOS-only) -----------
+docker-ce
+docker-ce-cli
+containerd.io
+docker-buildx-plugin
+docker-compose-plugin
+
+# --- networking --------------------------------------------------------------
+tailscale
+
+# --- editor (Microsoft arm64 repo, added by the apt script) ------------------
+code
+
+# --- UTM guest support: clipboard sharing, time sync, clean shutdown ---------
+spice-vdagent
+qemu-guest-agent

@@ -1,0 +1,19 @@
+#!/bin/bash
+set -euo pipefail
+
+# pi is distributed as a pnpm global, so it cannot live in a package manifest.
+# The version is pinned because dot_pi/ configuration is coupled to it; bumping
+# the string below changes this script's rendered hash and re-runs it.
+PI_VERSION="1.4.0"
+
+if ! command -v pnpm >/dev/null 2>&1; then
+	echo "==> pnpm not found; mise has not activated — skipping pi" >&2
+	exit 1
+fi
+
+if command -v pi >/dev/null 2>&1; then
+	echo "==> pi already installed; leaving it alone"
+	exit 0
+fi
+
+pnpm add -g "@earendil-works/pi-coding-agent@${PI_VERSION}"

@@ -7,24 +7,38 @@
 # because it would swallow applied markdown under dot_pi/agent/.
 
 README.md
-**/README.md
+\*\*/README.md
+
+# Root rules file: source-only, never a host file. Every _nested_ AGENTS.md is
+
+# source-only too, except the agent domain one, which deploys to
+
+# ~/.pi/agent/AGENTS.md — excludes take priority over includes.
+
 AGENTS.md
-**/AGENTS.md
+\*\*/AGENTS.md
+!.pi/agent/AGENTS.md
 docs/
-tools/
+tools/ 
 .scratch/
 
 # Agent domain docs: /domain-modeling creates these lazily. Source-only, never
+
 # a host file. The pi-context glossary sits under the deployed dot_pi/ dir, so
-# it is listed explicitly (a blanket *.md is forbidden - it would swallow
+
+# it is listed explicitly (a blanket \*.md is forbidden - it would swallow
+
 # applied markdown under dot_pi/agent/).
+
 GLOSSARY.md
 **/GLOSSARY.md
 GLOSSARY-MAP.md
 **/GLOSSARY-MAP.md
 
 # A project's own rules file. Each project creates its own at its root, where
+
 # pi-warden resolves it; the source copy here is the reference, never a host file.
+
 warden-local-rules.md
 
 # Runtime state (target side) — pi package trees materialized imperatively on
@@ -56,3 +70,17 @@ warden-local-rules.md
 # Runtime state (source side) — files the tools may drop in the source directory, never reach a host
 
 .vscode/
+
+# Package manifests: source-only, consumed by .chezmoiscripts. Both lines are
+# required — the directory pattern ignores the directory target, the glob its
+# contents; `packages/` alone leaves every child as a managed target.
+packages/
+packages/**
+
+{{ if ne .chezmoi.os "darwin" }}
+# macOS-only targets: a Linux guest has one window and no Colima, so neither
+# config has meaning there. Patterns match the TARGET path, not dot_*.
+.aerospace.toml
+.colima/
+.colima/**
+{{ end }}

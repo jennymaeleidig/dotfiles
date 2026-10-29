@@ -1,0 +1,31 @@
+{{- if eq .chezmoi.os "linux" -}}
+#!/bin/bash
+set -euo pipefail
+
+# No manifest hash: this is a presence check, not a state sync. It runs until
+# Homebrew exists, then no-ops on every later apply.
+if command -v brew >/dev/null 2>&1; then
+	echo "==> Homebrew already present"
+	exit 0
+fi
+
+# An unattended apply must never hang on a sudo prompt.
+if ! sudo -n true 2>/dev/null; then
+	echo "==> sudo needs a password: run 'sudo -v', then re-run chezmoi apply" >&2
+	exit 1
+fi
+
+apt() { sudo env DEBIAN_FRONTEND=noninteractive apt-get "$@"; }
+
+apt update
+apt install -y --no-install-recommends \
+	build-essential procps curl file git ca-certificates
+
+# NONINTERACTIVE=1 skips the RETURN prompt and the analytics question, so this
+# is safe inside `chezmoi apply`.
+NONINTERACTIVE=1 /bin/bash -c \
+	"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+brew --version
+{{- end -}}

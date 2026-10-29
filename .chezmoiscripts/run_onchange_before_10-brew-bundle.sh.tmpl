@@ -1,0 +1,39 @@
+#!/bin/bash
+set -euo pipefail
+
+# Hash of the manifest as rendered into this script: editing packages/Brewfile
+# changes this line, which is what re-fires run_onchange_. `include` is literal
+# (no template execution), so a Ruby Brewfile is safe here.
+# brewfile-hash: {{ include "packages/Brewfile" | sha256sum }}
+
+if ! command -v brew >/dev/null 2>&1; then
+	echo "==> brew not found; 00-bootstrap did not complete — skipping" >&2
+	exit 1
+fi
+
+case "$(uname -s)" in
+Darwin) eval "$(/opt/homebrew/bin/brew shellenv)" ;;
+Linux) eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" ;;
+esac
+
+BREWFILE="{{ joinPath .chezmoi.sourceDir "packages/Brewfile" }}"
+
+# `check` exits 0 when the only unmet entries are ones this platform skips
+# (macOS-only casks on Linux), so it is a valid guard on both hosts.
+if brew bundle check --file="$BREWFILE" >/dev/null 2>&1; then
+	echo "==> Brewfile already satisfied"
+	exit 0
+fi
+
+# One flaky cask should not abort the whole apply. Three attempts, then fail
+# loudly rather than reporting a half-provisioned host as success.
+attempt=1
+until brew bundle install --file="$BREWFILE" --no-upgrade; do
+	if [ "$attempt" -ge 3 ]; then
+		echo "==> brew bundle failed after $attempt attempts" >&2
+		exit 1
+	fi
+	attempt=$((attempt + 1))
+	echo "==> brew bundle failed; retrying in 10s (attempt $attempt of 3)" >&2
+	sleep 10
+done

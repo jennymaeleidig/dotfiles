@@ -1,9 +1,15 @@
 # aliases
+{{ if eq .chezmoi.os "darwin" -}}
 alias pico8="/Applications/PICO-8.app/Contents/MacOS/pico8; exit"
+{{ end -}}
 alias hg="history | grep"
 alias cat="bat --paging=never"
 alias grep="rg"
 alias ls="eza"
 alias cd="z"
 alias cdi="zi"
-alias tsvmd="csvmd --delimiter=$'\t'"
+# csvmd backs tsvmd, but timrogers/tap/csvmd was dropped from the package
+# manifest: the alias now exists only where the binary already does.
+if command -v csvmd >/dev/null 2>&1; then
+	alias tsvmd="csvmd --delimiter=$'\t'"
+fi
