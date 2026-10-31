@@ -4,5 +4,4 @@
 app.zen_browser.zen
 md.obsidian.Obsidian
 org.zotero.Zotero
-com.obsproject.Studio
 org.qbittorrent.qBittorrent
