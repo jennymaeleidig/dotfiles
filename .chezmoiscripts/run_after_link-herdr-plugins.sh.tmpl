@@ -27,9 +27,9 @@ fi
 
 # The plugin registry lives behind herdr's server, and a headless apply has none:
 # `herdr plugin link` fails with server_not_running instead of recording anything.
-# `herdr status`, not the socket path, so this stays correct wherever the socket
-# lives. Deferred loudly, and retried by the next apply.
-if ! herdr status >/dev/null 2>&1; then
+# The probe is a plugin command, not `herdr status`: status exits 0 without a
+# server, so it never detected the case this guards against.
+if ! herdr plugin list >/dev/null 2>&1; then
 	echo '==> herdr server not running; start `herdr` once, then re-run: chezmoi apply' >&2
 	exit 0
 fi
