@@ -8,7 +8,7 @@
 
 README.md
 **/README.md
-
+bootstrap.sh
 # Root rules file: source-only, never a host file. Every _nested_ AGENTS.md is
 
 # source-only too, except the agent domain one, which deploys to
