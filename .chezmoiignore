@@ -1,20 +1,14 @@
 # Source-only artifacts never reach a host.
-
 #
-
 # One explicit path or pattern per line; a blanket `*.md` rule is forbidden
-
 # because it would swallow applied markdown under dot_pi/agent/.
-
 README.md
 **/README.md
 bootstrap.sh
+
 # Root rules file: source-only, never a host file. Every _nested_ AGENTS.md is
-
 # source-only too, except the agent domain one, which deploys to
-
 # ~/.pi/agent/AGENTS.md — excludes take priority over includes.
-
 AGENTS.md
 **/AGENTS.md
 !.pi/agent/AGENTS.md
@@ -23,46 +17,31 @@ tools/
 .scratch/
 
 # Agent domain docs: /domain-modeling creates these lazily. Source-only, never
-
 # a host file. The pi-context glossary sits under the deployed dot_pi/ dir, so
-
 # it is listed explicitly (a blanket \*.md is forbidden - it would swallow
-
 # applied markdown under dot_pi/agent/).
-
 GLOSSARY.md
 **/GLOSSARY.md
 GLOSSARY-MAP.md
 **/GLOSSARY-MAP.md
 
 # Runtime state (target side) — pi package trees materialized imperatively on
-
-# startup, left in place by Apply.
-
 .pi/agent/npm/
 .pi/agent/git/
 .pi/cache/
 
 # Skills (~/.pi/agent/skills, ~/.agents/skills) are runtime state with no Source
-
 # counterpart, so they need no ignore entry: Apply prunes the ones
-
 # .chezmoiremove lists, and pi materializes package skills on startup.
-
 # Runtime state (target side) — written by the herdr integration into an
-
 # extensions dir that has no Source counterpart.
-
 .pi/agent/extensions/herdr-agent-state.ts
 
 # Python bytecode (target side) — created when a vendored plugin script is run
-
 # or compiled on the host; never Source state.
-
 **/__pycache__/
 
 # Runtime state (source side) — files the tools may drop in the source directory, never reach a host
-
 .vscode/
 
 # Package manifests: source-only, consumed by .chezmoiscripts. Both lines are
