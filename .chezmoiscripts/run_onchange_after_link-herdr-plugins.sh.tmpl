@@ -12,6 +12,14 @@ set -euo pipefail
 #
 cd "$HOME"
 
+# herdr arrives from packages/Brewfile, so it is on PATH only once brew's bin is,
+# and no script inherits shellenv from 00-bootstrap. Without this the check below
+# skips the whole script on Linux while reporting success.
+case "$(uname -s)" in
+Darwin) eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || true)" ;;
+Linux) eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv 2>/dev/null || true)" ;;
+esac
+
 if ! command -v herdr >/dev/null 2>&1; then
 	echo "==> herdr not installed; skipping plugin link"
 	exit 0

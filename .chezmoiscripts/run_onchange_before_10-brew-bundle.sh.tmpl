@@ -6,15 +6,20 @@ set -euo pipefail
 # (no template execution), so a Ruby Brewfile is safe here.
 # brewfile-hash: {{ include "packages/Brewfile" | sha256sum }}
 
-if ! command -v brew >/dev/null 2>&1; then
-	echo "==> brew not found; 00-bootstrap did not complete — skipping" >&2
+# A script inherits no environment from the ones before it: `eval`ing shellenv
+# inside 00-bootstrap does nothing here. Resolve brew by path, then put it on
+# PATH, before anything tests for it.
+case "$(uname -s)" in
+Darwin) BREW=/opt/homebrew/bin/brew ;;
+Linux) BREW=/home/linuxbrew/.linuxbrew/bin/brew ;;
+esac
+
+if [ ! -x "$BREW" ]; then
+	echo "==> $BREW not found; 00-bootstrap did not complete — skipping" >&2
 	exit 1
 fi
 
-case "$(uname -s)" in
-Darwin) eval "$(/opt/homebrew/bin/brew shellenv)" ;;
-Linux) eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" ;;
-esac
+eval "$("$BREW" shellenv)"
 
 BREWFILE="{{ joinPath .chezmoi.sourceDir "packages/Brewfile" }}"
 
