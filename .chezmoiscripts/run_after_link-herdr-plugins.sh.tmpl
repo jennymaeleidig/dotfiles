@@ -4,8 +4,8 @@ set -euo pipefail
 # Registers locally-vendored herdr plugins with herdr. Plugin source lives in
 # dot_local/share/herdr/<id> (Source state); `herdr plugin link` records the
 # path in runtime state (~/.config/herdr/plugins.json), which Apply leaves
-# alone. Editing this script changes its content hash and reruns it (onchange
-# mechanism).
+# alone. A plain `run_after_` script, not `run_onchange_`: every apply re-checks,
+# so a host provisioned without a server converges the first time one is running.
 #
 # Install is deferred to the user: this script runs only on `chezmoi apply`,
 # links source already present on the host, and is a no-op without herdr.
@@ -22,6 +22,15 @@ esac
 
 if ! command -v herdr >/dev/null 2>&1; then
 	echo "==> herdr not installed; skipping plugin link"
+	exit 0
+fi
+
+# The plugin registry lives behind herdr's server, and a headless apply has none:
+# `herdr plugin link` fails with server_not_running instead of recording anything.
+# `herdr status`, not the socket path, so this stays correct wherever the socket
+# lives. Deferred loudly, and retried by the next apply.
+if ! herdr status >/dev/null 2>&1; then
+	echo '==> herdr server not running; start `herdr` once, then re-run: chezmoi apply' >&2
 	exit 0
 fi
 
