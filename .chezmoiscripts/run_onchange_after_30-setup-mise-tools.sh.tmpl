@@ -12,6 +12,11 @@ Darwin) eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || true)" ;;
 Linux) eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv 2>/dev/null || true)" ;;
 esac
 
+# This must run in the after_ phase: it reads ~/.config/mise/config.toml, which
+# chezmoi writes during the target-state pass. As a plain run_onchange_ its target
+# name (`.chezmoiscripts/…`) sorted before `.config/…`, so on a fresh host
+# `mise install` ran with no config present, installed nothing, and still
+# reported success.
 if ! command -v mise >/dev/null 2>&1; then
 	echo "==> mise not found; brew bundle has not installed it — skipping" >&2
 	exit 1
