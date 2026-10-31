@@ -30,6 +30,15 @@ neovim
 flatpak
 snapd
 
+# --- guest 3D ----------------------------------------------------------------
+# UTM advertises virgl through virtio-gpu-gl, and GTK4 needs an EGL context from
+# it. Without Mesa's virgl driver the guest has no device to create one on, which
+# is Ghostty's "failed to create EGL context" - a guest-driver gap, not a setting.
+libgl1-mesa-dri
+mesa-utils
+mesa-utils-bin
+mesa-vulkan-drivers
+
 # --- containers (dockerd is native on Linux; Colima is macOS-only) -----------
 docker-ce
 docker-ce-cli
