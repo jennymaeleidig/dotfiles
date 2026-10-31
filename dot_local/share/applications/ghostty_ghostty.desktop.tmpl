@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+Name=Ghostty
+GenericName=Terminal Emulator
+Comment=A fast, feature-rich, cross-platform terminal emulator
+Terminal=false
+Categories=System;TerminalEmulator;
+Keywords=terminal;console;shell;
+StartupNotify=true
+# Keep Icon and StartupWMClass exactly as the snap declares them - copy both from
+# /var/lib/snapd/desktop/applications/ghostty_ghostty.desktop. The WM class in
+# particular must match or the dock shows a second, iconless window.
+Icon=com.mitchellh.ghostty
+StartupWMClass=com.mitchellh.ghostty
+# %h is not expanded in Exec, so the home path comes from template data. Routing
+# through the wrapper keeps LIBGL_ALWAYS_SOFTWARE in one place, shared by the dock
+# launch and the CLI.
+Exec={{ .chezmoi.homeDir }}/.local/bin/ghostty
