@@ -20,8 +20,14 @@
 # `trusted: true` records trust but does not create the tap, so declare both:
 # a fresh machine has neither, and an untapped tap cannot be recovered from the
 # entries below alone.
-tap "jundot/omlx"
-tap "nikitabobko/tap"
+#
+# Both taps serve only macOS formulae and casks, so both are fenced. A tap that
+# cannot be cloned fails `brew bundle` outright, unlike a cask whose source does
+# not declare linux support, which is skipped.
+if OS.mac?
+  tap "jundot/omlx"
+  tap "nikitabobko/tap"
+end
 
 # --- CLI utilities: same package on both platforms ---------------------------
 brew "bash-completion@2"
