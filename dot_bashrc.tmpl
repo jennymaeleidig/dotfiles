@@ -25,9 +25,12 @@ export PNPM_HOME="$HOME/Library/pnpm"
 {{ else -}}
 export PNPM_HOME="$HOME/.local/share/pnpm"
 {{ end -}}
+# pnpm 12 puts global binaries in $PNPM_HOME/bin and keeps $PNPM_HOME itself for
+# its store, so both go on PATH: the bin subdirectory for what pnpm installs now,
+# and PNPM_HOME for shims earlier pnpm versions wrote there.
 case ":$PATH:" in
-*":$PNPM_HOME:"*) ;;
-*) export PATH="$PNPM_HOME:$PATH" ;;
+*":$PNPM_HOME/bin:"*) ;;
+*) export PATH="$PNPM_HOME/bin:$PNPM_HOME:$PATH" ;;
 esac
 
 # Exports, loaded for non-interactive shells too: pi and the tools it starts read
