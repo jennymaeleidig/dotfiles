@@ -2,6 +2,3 @@
 # .chezmoiscripts/run_onchange_before_25-linux-gui-apps.sh.tmpl.
 # Verify an id with: flatpak search <name>
 app.zen_browser.zen
-md.obsidian.Obsidian
-org.zotero.Zotero
-org.qbittorrent.qBittorrent
