@@ -1,0 +1,7 @@
+#!/bin/bash
+# Ghostty asks EGL for a modern core-profile context; the UTM guest's virgl
+# advertises 2.1-compat/GLES-3.0, so context creation returns BadMatch and the
+# surface never initializes. Mesa's llvmpipe covers what it needs. Scoped to this
+# one app - the rest of the desktop is fine on virgl - so it is a wrapper rather
+# than LIBGL_ALWAYS_SOFTWARE in environment.d.
+exec env LIBGL_ALWAYS_SOFTWARE=1 /snap/bin/ghostty "$@"

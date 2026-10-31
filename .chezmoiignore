@@ -57,3 +57,8 @@ packages/**
 .colima/
 .colima/**
 {{ end }}
+
+{{ if ne .chezmoi.os "linux" }}
+# Linux-only: the snap's GL fallback wrapper.
+.local/bin/ghostty
+{{ end }}
