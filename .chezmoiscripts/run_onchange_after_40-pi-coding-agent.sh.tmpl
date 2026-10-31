@@ -13,6 +13,15 @@ Darwin) eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || true)" ;;
 Linux) eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv 2>/dev/null || true)" ;;
 esac
 
+# pnpm 12 refuses `add -g` unless its global bin directory is already on PATH,
+# and it derives that directory from PNPM_HOME. Mirror dot_bashrc's value so the
+# executable lands where an interactive shell already looks for it.
+case "$(uname -s)" in
+Darwin) export PNPM_HOME="$HOME/Library/pnpm" ;;
+Linux) export PNPM_HOME="$HOME/.local/share/pnpm" ;;
+esac
+export PATH="$PNPM_HOME/bin:$PNPM_HOME:$PATH"
+
 # `mise activate` installs a prompt hook, and a script never draws a prompt, so
 # it puts no shims on PATH here. `mise exec` resolves the tool from the global
 # config instead, which needs nothing on PATH.
