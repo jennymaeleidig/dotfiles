@@ -1,0 +1,56 @@
+{{- if eq .chezmoi.os "linux" -}}
+#!/bin/bash
+set -euo pipefail
+
+# Manifests as rendered into this script: editing either file changes its line,
+# which is what re-fires run_onchange_.
+# flatpak-hash: {{ include "packages/flatpak-linux.txt" | sha256sum }}
+# snap-hash: {{ include "packages/snap-linux.txt" | sha256sum }}
+
+# before_, not after_: this reads only Source manifests and needs no applied
+# state. It runs after 20-apt, so flatpak and snapd are already installed and the
+# sudo timestamp is still warm.
+
+FLATPAK_MANIFEST="{{ joinPath .chezmoi.sourceDir "packages/flatpak-linux.txt" }}"
+SNAP_MANIFEST="{{ joinPath .chezmoi.sourceDir "packages/snap-linux.txt" }}"
+
+mapfile -t FLATPAKS < <(grep -vE '^[[:space:]]*(#|$)' "$FLATPAK_MANIFEST")
+mapfile -t SNAPS < <(grep -vE '^[[:space:]]*(#|$)' "$SNAP_MANIFEST")
+
+if [ "${#FLATPAKS[@]}" -gt 0 ]; then
+	if ! command -v flatpak >/dev/null 2>&1; then
+		echo "==> flatpak not installed; 20-apt did not complete — skipping" >&2
+		exit 1
+	fi
+	flatpak remote-add --if-not-exists flathub \
+		https://dl.flathub.org/repo/flathub.flatpakrepo
+
+	INSTALLED="$(flatpak list --app --columns=application || true)"
+	MISSING=()
+	for app in "${FLATPAKS[@]}"; do
+		case "$INSTALLED" in
+		*"$app"*) ;;
+		*) MISSING+=("$app") ;;
+		esac
+	done
+	if [ "${#MISSING[@]}" -gt 0 ]; then
+		flatpak install --noninteractive --assumeyes flathub "${MISSING[@]}"
+	else
+		echo "==> flatpak apps already satisfied"
+	fi
+fi
+
+if [ "${#SNAPS[@]}" -gt 0 ]; then
+	if ! command -v snap >/dev/null 2>&1; then
+		echo "==> snap not installed; 20-apt did not complete — skipping" >&2
+		exit 1
+	fi
+	for app in "${SNAPS[@]}"; do
+		if snap list "$app" >/dev/null 2>&1; then
+			continue
+		fi
+		sudo snap install "$app"
+	done
+	echo "==> snap apps satisfied"
+fi
+{{- end -}}

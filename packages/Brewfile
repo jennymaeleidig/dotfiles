@@ -39,6 +39,7 @@ brew "fzf"
 brew "gh"
 brew "herdr"
 brew "mise"
+brew "shellcheck"
 brew "starship"
 brew "tlrc"
 

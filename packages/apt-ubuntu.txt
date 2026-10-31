@@ -23,6 +23,13 @@ wget
 p7zip-full
 neovim
 
+# --- GUI app runtimes ---------------------------------------------------------
+# The Linux counterparts of the Brewfile's casks arrive as snaps and flatpaks.
+# apt owns the runtimes; the app ids live in packages/flatpak-linux.txt and
+# packages/snap-linux.txt, consumed by 25-linux-gui-apps.
+flatpak
+snapd
+
 # --- containers (dockerd is native on Linux; Colima is macOS-only) -----------
 docker-ce
 docker-ce-cli

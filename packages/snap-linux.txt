@@ -1,0 +1,4 @@
+# Snaps, one name per line; '#' comments allowed. Consumed by
+# .chezmoiscripts/run_onchange_before_25-linux-gui-apps.sh.tmpl.
+# Verify a name with: snap find <name>
+ghostty

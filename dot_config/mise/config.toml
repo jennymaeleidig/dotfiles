@@ -1,7 +1,7 @@
 [tools]
 dotnet = "latest"
 node = "latest"
-pnpm = "latest"
+pnpm = "12"
 prettier = "latest"
 "npm:typescript-language-server" = "latest"
 "npm:typescript" = "latest"
