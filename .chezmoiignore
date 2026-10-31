@@ -61,4 +61,5 @@ packages/**
 {{ if ne .chezmoi.os "linux" }}
 # Linux-only: the snap's GL fallback wrapper.
 .local/bin/ghostty
+.local/share/applications/ghostty_ghostty.desktop
 {{ end }}
