@@ -15,7 +15,6 @@ FLATPAK_MANIFEST="{{ joinPath .chezmoi.sourceDir "packages/flatpak-linux.txt" }}
 SNAP_MANIFEST="{{ joinPath .chezmoi.sourceDir "packages/snap-linux.txt" }}"
 
 mapfile -t FLATPAKS < <(grep -vE '^[[:space:]]*(#|$)' "$FLATPAK_MANIFEST")
-mapfile -t SNAPS < <(grep -vE '^[[:space:]]*(#|$)' "$SNAP_MANIFEST")
 
 if [ "${#FLATPAKS[@]}" -gt 0 ]; then
 	if ! command -v flatpak >/dev/null 2>&1; then
@@ -40,17 +39,22 @@ if [ "${#FLATPAKS[@]}" -gt 0 ]; then
 	fi
 fi
 
-if [ "${#SNAPS[@]}" -gt 0 ]; then
+# One entry per line: `name [flags...]`. Flags are per app, not global: classic
+# confinement is a decision the publisher declares, so `ghostty` gets --classic
+# while other snaps stay confined.
+if grep -qE '^[[:space:]]*[^#[:space:]]' "$SNAP_MANIFEST"; then
 	if ! command -v snap >/dev/null 2>&1; then
 		echo "==> snap not installed; 20-apt did not complete — skipping" >&2
 		exit 1
 	fi
-	for app in "${SNAPS[@]}"; do
-		if snap list "$app" >/dev/null 2>&1; then
+	while read -r -a entry; do
+		name="${entry[0]}"
+		flags=("${entry[@]:1}")
+		if snap list "$name" >/dev/null 2>&1; then
 			continue
 		fi
-		sudo snap install "$app"
-	done
+		sudo snap install "$name" "${flags[@]}"
+	done < <(grep -vE '^[[:space:]]*(#|$)' "$SNAP_MANIFEST")
 	echo "==> snap apps satisfied"
 fi
 {{- end -}}

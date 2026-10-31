@@ -1,4 +1,6 @@
 # Snaps, one name per line; '#' comments allowed. Consumed by
 # .chezmoiscripts/run_onchange_before_25-linux-gui-apps.sh.tmpl.
+# Optional flags follow the name. Classic confinement is declared per snap by
+# its publisher, so the script passes flags through rather than assuming them.
 # Verify a name with: snap find <name>
-ghostty
+ghostty --classic
