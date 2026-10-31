@@ -12,18 +12,24 @@ case "$(uname -s)" in
 Darwin) eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || true)" ;;
 Linux) eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv 2>/dev/null || true)" ;;
 esac
-if command -v mise >/dev/null 2>&1; then
-	eval "$(mise activate bash)"
-fi
 
-if ! command -v pnpm >/dev/null 2>&1; then
-	echo "==> pnpm not found; mise has not installed it — skipping pi" >&2
+# `mise activate` installs a prompt hook, and a script never draws a prompt, so
+# it puts no shims on PATH here. `mise exec` resolves the tool from the global
+# config instead, which needs nothing on PATH.
+if ! command -v mise >/dev/null 2>&1; then
+	echo "==> mise not found; 10-brew-bundle has not installed it — skipping pi" >&2
 	exit 1
 fi
 
-if command -v pi >/dev/null 2>&1; then
+if ! mise which pnpm >/dev/null 2>&1; then
+	echo "==> pnpm not found; mise install has not provided it — skipping pi" >&2
+	exit 1
+fi
+
+PNPM_BIN_DIR="$(mise exec -- pnpm bin -g 2>/dev/null || true)"
+if [ -x "$PNPM_BIN_DIR/pi" ]; then
 	echo "==> pi already installed; leaving it alone"
 	exit 0
 fi
 
-pnpm add -g "@earendil-works/pi-coding-agent@${PI_VERSION}"
+mise exec -- pnpm add -g "@earendil-works/pi-coding-agent@${PI_VERSION}"
