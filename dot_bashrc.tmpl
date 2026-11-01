@@ -1,23 +1,35 @@
 #organized according to: https://sava.rocks/blog/how-i-organize-my-bashrc-with-imports
 
+# Every prepend below is guarded: gnome-session copies the session PATH back into
+# the systemd user environment, so an unguarded prepend compounds once per login.
+
 # mise shims - ensure available for non-interactive shells
-export PATH="$HOME/.local/share/mise/shims:$PATH"
+case ":$PATH:" in
+*":$HOME/.local/share/mise/shims:"*) ;;
+*) export PATH="$HOME/.local/share/mise/shims:$PATH" ;;
+esac
 
 # brew
 {{ if eq .chezmoi.os "darwin" -}}
-if [[ -x /opt/homebrew/bin/brew ]]; then
+if [[ -x /opt/homebrew/bin/brew ]] && [[ ":$PATH:" != *":/opt/homebrew/bin:"* ]]; then
 	eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 # Intel Homebrew and vendored binaries still land here on macOS.
-export PATH=/usr/local/bin:$PATH
+case ":$PATH:" in
+*":/usr/local/bin:"*) ;;
+*) export PATH=/usr/local/bin:$PATH ;;
+esac
 {{ else -}}
-if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]] && [[ ":$PATH:" != *":/home/linuxbrew/.linuxbrew/bin:"* ]]; then
 	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 {{ end -}}
 
 # local binaries
-export PATH="$HOME/.local/bin:$PATH"
+case ":$PATH:" in
+*":$HOME/.local/bin:"*) ;;
+*) export PATH="$HOME/.local/bin:$PATH" ;;
+esac
 
 # pnpm
 {{ if eq .chezmoi.os "darwin" -}}

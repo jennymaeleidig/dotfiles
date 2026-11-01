@@ -15,11 +15,17 @@ export BAT_THEME="Monokai Pro"
 
 {{ if eq .chezmoi.os "darwin" -}}
 # mac ports
-export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+case ":$PATH:" in
+*":/opt/local/bin:"*) ;;
+*) export PATH="/opt/local/bin:/opt/local/sbin:$PATH" ;;
+esac
 
 # playdate
 export PLAYDATE_SDK_PATH="$HOME/Developer/PlaydateSDK"
-export PATH="$HOME/Developer/PlaydateSDK/bin:$PATH"
+case ":$PATH:" in
+*":$HOME/Developer/PlaydateSDK/bin:"*) ;;
+*) export PATH="$HOME/Developer/PlaydateSDK/bin:$PATH" ;;
+esac
 
 #flash player
 export FLEX_HOME="$HOME/Documents/Adobe/Flash/apache-flex-4.16.1-air-51.1.3.12/apache-flex-sdk-4.16.1-bin"
@@ -33,14 +39,20 @@ export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
 
 #supercollider
-export PATH="/Applications/SuperCollider.app/Contents/MacOS:$PATH"
+case ":$PATH:" in
+*":/Applications/SuperCollider.app/Contents/MacOS:"*) ;;
+*) export PATH="/Applications/SuperCollider.app/Contents/MacOS:$PATH" ;;
+esac
 {{ end -}}
 
 # disable context-mode idle MCP bridge shutdown (#854)
 export CONTEXT_MODE_BRIDGE_IDLE_MS=0
 
 #csharp
-export PATH="$HOME/.dotnet/tools:$PATH"
+case ":$PATH:" in
+*":$HOME/.dotnet/tools:"*) ;;
+*) export PATH="$HOME/.dotnet/tools:$PATH" ;;
+esac
 
 #pi
 export FFF_ENABLE_HOME_SCAN=0
