@@ -1,0 +1,59 @@
+#!/bin/bash
+set -euo pipefail
+
+# Puts brew's bash in /etc/shells and makes it the login shell. The binary is
+# installed by packages/Brewfile in the before_ phase; this cannot be a before_
+# script for that reason, and it reads nothing chezmoi writes, so after_20 (in
+# front of 30-setup-mise-tools) is the right slot.
+#
+# Nothing is symlinked over /bin/bash: SIP protects /bin, and the two versions
+# are meant to coexist. bash 3.2 remains reachable as /bin/bash for scripts that
+# hard-code it.
+#
+# No `brew shellenv` here: the two paths used below are absolute, so there is no
+# environment to acquire first.
+if [ "$(uname -s)" != Darwin ]; then
+	echo "==> not macOS; apt's bash is already 5.x"
+	exit 0
+fi
+
+BREW_BASH=/opt/homebrew/bin/bash
+
+if [ ! -x "$BREW_BASH" ]; then
+	echo "==> $BREW_BASH not found; brew bundle has not installed bash" >&2
+	exit 1
+fi
+
+USER_NAME="$(id -un)"
+CURRENT_SHELL="$(dscl . -read "/Users/$USER_NAME" UserShell 2>/dev/null | awk '{print $2}')"
+LISTED=0
+if grep -qxF "$BREW_BASH" /etc/shells; then
+	LISTED=1
+fi
+
+# A converged host must not fail an apply because sudo's timestamp lapsed: ask
+# only when something is actually left to do.
+if [ "$LISTED" -eq 1 ] && [ "$CURRENT_SHELL" = "$BREW_BASH" ]; then
+	echo "==> login shell already $BREW_BASH"
+	exit 0
+fi
+
+# An unattended apply must never hang on a sudo prompt.
+if ! sudo -n true 2>/dev/null; then
+	echo "==> sudo needs a password: run 'sudo -v', then re-run chezmoi apply" >&2
+	exit 1
+fi
+
+# chsh refuses a shell that is not listed here, whatever the user database says.
+if [ "$LISTED" -eq 0 ]; then
+	echo "$BREW_BASH" | sudo tee -a /etc/shells >/dev/null
+	echo "==> whitelisted $BREW_BASH in /etc/shells"
+fi
+
+# The login shell lives in the user record, not in a dotfile, so it is the one
+# piece of state chezmoi cannot converge by writing a target. sudo's chsh does
+# not prompt, which is what keeps the apply unattended.
+if [ "$CURRENT_SHELL" != "$BREW_BASH" ]; then
+	sudo chsh -s "$BREW_BASH" "$USER_NAME"
+	echo "==> login shell: $CURRENT_SHELL -> $BREW_BASH"
+fi

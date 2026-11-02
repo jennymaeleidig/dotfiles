@@ -1,35 +1,46 @@
 #organized according to: https://sava.rocks/blog/how-i-organize-my-bashrc-with-imports
 
-# Every prepend below is guarded: gnome-session copies the session PATH back into
-# the systemd user environment, so an unguarded prepend compounds once per login.
+# Every prepend goes through prepend_path: move the directory to the front, then
+# drop the copies left behind. The guards replaced here asked "is this already on
+# PATH?", and that is not the question. launchd starts the session with a PATH
+# that already carries these directories near the end, so each guard
+# short-circuited and left /bin ahead of /opt/homebrew/bin — `bash` and every
+# `#!/usr/bin/env bash` kept resolving to Apple's 3.2 shell. Collapsing
+# duplicates also stops the gnome-session PATH copy-back from compounding on
+# Linux, and makes a second source of this file a no-op.
+prepend_path() {
+	local out= dir IFS=:
+	for dir in "$@" $PATH; do
+		[ -z "$dir" ] && continue
+		case ":$out:" in
+		*":$dir:"*) ;;
+		*) out=${out:+$out:}$dir ;;
+		esac
+	done
+	PATH=$out
+	export PATH
+}
 
 # mise shims - ensure available for non-interactive shells
-case ":$PATH:" in
-*":$HOME/.local/share/mise/shims:"*) ;;
-*) export PATH="$HOME/.local/share/mise/shims:$PATH" ;;
-esac
+prepend_path "$HOME/.local/share/mise/shims"
 
 # brew
 {{ if eq .chezmoi.os "darwin" -}}
-if [[ -x /opt/homebrew/bin/brew ]] && [[ ":$PATH:" != *":/opt/homebrew/bin:"* ]]; then
+if [[ -x /opt/homebrew/bin/brew ]]; then
 	eval "$(/opt/homebrew/bin/brew shellenv)"
+	prepend_path /opt/homebrew/bin /opt/homebrew/sbin
 fi
 # Intel Homebrew and vendored binaries still land here on macOS.
-case ":$PATH:" in
-*":/usr/local/bin:"*) ;;
-*) export PATH=/usr/local/bin:$PATH ;;
-esac
+prepend_path /usr/local/bin
 {{ else -}}
-if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]] && [[ ":$PATH:" != *":/home/linuxbrew/.linuxbrew/bin:"* ]]; then
+if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
 	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+	prepend_path /home/linuxbrew/.linuxbrew/bin /home/linuxbrew/.linuxbrew/sbin
 fi
 {{ end -}}
 
 # local binaries
-case ":$PATH:" in
-*":$HOME/.local/bin:"*) ;;
-*) export PATH="$HOME/.local/bin:$PATH" ;;
-esac
+prepend_path "$HOME/.local/bin"
 
 # pnpm
 {{ if eq .chezmoi.os "darwin" -}}
@@ -40,10 +51,7 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 # pnpm 12 puts global binaries in $PNPM_HOME/bin and keeps $PNPM_HOME itself for
 # its store, so both go on PATH: the bin subdirectory for what pnpm installs now,
 # and PNPM_HOME for shims earlier pnpm versions wrote there.
-case ":$PATH:" in
-*":$PNPM_HOME/bin:"*) ;;
-*) export PATH="$PNPM_HOME/bin:$PNPM_HOME:$PATH" ;;
-esac
+prepend_path "$PNPM_HOME/bin" "$PNPM_HOME"
 
 # Exports, loaded for non-interactive shells too: pi and the tools it starts read
 # secrets and toolchain paths from the environment, and they never reach the

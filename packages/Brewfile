@@ -45,6 +45,11 @@ brew "tlrc"
 
 # --- macOS-only formulae -----------------------------------------------------
 if OS.mac?
+  # macOS ships bash 3.2.57 from 2007 and keeps it at /bin/bash under SIP.
+  # Installed side by side rather than replacing it: brew's prefix already
+  # precedes /bin in dot_bashrc's PATH, so `bash` and `#!/usr/bin/env bash`
+  # pick this one up, and only the login shell needs changing (below).
+  brew "bash"
   # Haskell / Tidal Cycles. GHC lives here rather than in mise: cabal needs a
   # real GHC prefix, and ghcup itself is deliberately absent because it and
   # brew's ghc fight over the same paths.
@@ -72,6 +77,7 @@ if OS.mac?
   brew "p7zip"
   brew "pandoc"
   brew "pipx"
+  brew "omlahore/tap/removemacai", trusted: true
   brew "ripgrep"
   brew "tree"
   brew "universal-ctags"
