@@ -6,6 +6,8 @@ set -euo pipefail
 # path in runtime state (~/.config/herdr/plugins.json), which Apply leaves
 # alone. A plain `run_after_` script, not `run_onchange_`: every apply re-checks,
 # so a host provisioned without a server converges the first time one is running.
+# Re-checking is not re-linking: when the registry already matches the desired
+# set, the script exits without touching it (see the stamp below).
 #
 # Install is deferred to the user: this script runs only on `chezmoi apply`,
 # links source already present on the host, and is a no-op without herdr.
@@ -51,16 +53,26 @@ OPTIONAL_PLUGINS=(
 	"tinysubagent-panes|$HOME/.pi/agent/git/github.com/tinypi-extension/tinysubagent/herdr-plugin"
 )
 
+# The id|source set this host last linked, one per line. Target-side runtime
+# state, and unmanaged by construction: nothing in Source names this path, so it
+# needs no .chezmoiignore entry and no .chezmoiremove one either. XDG_STATE_HOME
+# is unset on both hosts today, hence the fallback.
+STAMP="${XDG_STATE_HOME:-$HOME/.local/state}/chezmoi/herdr-plugins.linked"
+
 # Read the registry once, into a variable. Piping `herdr plugin list` into
 # `grep -q` looks equivalent and is not: grep exits at the first match, the
 # producer dies of SIGPIPE, and under `set -o pipefail` the pipeline reports
 # 141, so the unlink below is silently skipped.
 INSTALLED="$(herdr plugin list 2>/dev/null || true)"
 
-# Registry entries are listed as `- <id> (<name>) enabled [source]`, so the
-# trailing space anchors the id without matching a prefix of a longer one.
+# The id has to be bounded on both sides, or a longer id matches as a prefix of
+# this one. herdr answers in JSON — `plugin link` prints a JSON envelope even
+# without --json — so the id appears as a string value and the quotes do that
+# work. The `- <id> (` rendering stays as a fallback, in case upstream renders
+# text again.
 registered() {
 	case "$INSTALLED" in
+	*"\"$1\""*) return 0 ;;
 	*"- $1 "*) return 0 ;;
 	*) return 1 ;;
 	esac
@@ -81,6 +93,11 @@ link_plugin() {
 	echo "==> linked herdr plugin: $plugin_id -> $plugin_src"
 }
 
+# The desired set, resolved before anything is linked so the skip check below
+# sees exactly what the loops act on. A vendored source missing here fails the
+# apply; an optional one simply contributes nothing.
+DESIRED=""
+LINKED=()
 for entry in "${PLUGINS[@]}"; do
 	PLUGIN_ID="${entry%%|*}"
 	PLUGIN_SRC="${entry#*|}"
@@ -90,7 +107,8 @@ for entry in "${PLUGINS[@]}"; do
 		exit 1
 	fi
 
-	link_plugin "$PLUGIN_ID" "$PLUGIN_SRC"
+	DESIRED+="$entry"$'\n'
+	LINKED+=("$entry")
 done
 
 for entry in "${OPTIONAL_PLUGINS[@]}"; do
@@ -98,12 +116,60 @@ for entry in "${OPTIONAL_PLUGINS[@]}"; do
 	PLUGIN_SRC="${entry#*|}"
 
 	if [ -f "$PLUGIN_SRC/herdr-plugin.toml" ]; then
-		link_plugin "$PLUGIN_ID" "$PLUGIN_SRC"
-	elif registered "$PLUGIN_ID"; then
-		# The clone is gone (package uninstalled, or the repo moved owner
-		# again): unlink, or herdr keeps reporting the dangling path as
-		# "manifest unavailable".
+		DESIRED+="$entry"$'\n'
+		LINKED+=("$entry")
+	fi
+done
+
+all_registered() {
+	for entry in "${LINKED[@]}"; do
+		registered "${entry%%|*}" || return 1
+	done
+	return 0
+}
+
+# Exit before herdr is touched on an already-converged host. Unlinking and
+# re-linking on every apply rewrites the registry and makes herdr reload the
+# plugins each run, which is real work for no change. Both halves of the test
+# earn their place: the stamp catches a moved source path, which the registry
+# cannot report; the registration check catches a plugin unlinked outside
+# chezmoi after the stamp was written.
+# `$(cat …)` drops trailing newlines while DESIRED still carries its own, so the
+# comparison is against DESIRED with that newline removed; only the file keeps it.
+CURRENT="$(cat "$STAMP" 2>/dev/null || true)"
+if [ "$CURRENT" = "${DESIRED%$'\n'}" ] && all_registered; then
+	exit 0
+fi
+
+# One line naming the half of the test that failed, so a relink during an
+# otherwise silent apply is never a mystery.
+if [ "$CURRENT" != "${DESIRED%$'\n'}" ]; then
+	echo "==> herdr plugin set changed since the last link"
+else
+	echo "==> herdr lost a plugin registration; re-linking" >&2
+fi
+
+for entry in "${LINKED[@]}"; do
+	PLUGIN_ID="${entry%%|*}"
+	PLUGIN_SRC="${entry#*|}"
+	link_plugin "$PLUGIN_ID" "$PLUGIN_SRC"
+done
+
+# A present optional plugin was handled above; what remains is the clone that has
+# gone away (package uninstalled, or the repo moved owner again). Unlink it, or
+# herdr keeps reporting the dangling path as "manifest unavailable".
+for entry in "${OPTIONAL_PLUGINS[@]}"; do
+	PLUGIN_ID="${entry%%|*}"
+	PLUGIN_SRC="${entry#*|}"
+
+	if [ ! -f "$PLUGIN_SRC/herdr-plugin.toml" ] && registered "$PLUGIN_ID"; then
 		herdr plugin unlink "$PLUGIN_ID"
 		echo "==> unlinked stale herdr plugin: $PLUGIN_ID (source gone: $PLUGIN_SRC)" >&2
 	fi
 done
+
+# Written last, and only on the path where every link succeeded: `set -e` kills a
+# failing apply before this line, so the next apply retries instead of trusting a
+# half-linked host.
+mkdir -p "${STAMP%/*}"
+printf '%s' "$DESIRED" >"$STAMP"

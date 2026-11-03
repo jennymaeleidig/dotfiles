@@ -31,8 +31,9 @@ GLOSSARY-MAP.md
 .pi/cache/
 
 # Skills (~/.pi/agent/skills, ~/.agents/skills) are runtime state with no Source
-# counterpart, so they need no ignore entry: Apply prunes the ones
-# .chezmoiremove lists, and pi materializes package skills on startup.
+# counterpart, so they need no ignore entry: Apply removes only targets that
+# Source declares (plus .chezmoiremove entries), and pi materializes package
+# skills there on startup.
 # Runtime state (target side) — written by the herdr integration into an
 # extensions dir that has no Source counterpart.
 .pi/agent/extensions/herdr-agent-state.ts
