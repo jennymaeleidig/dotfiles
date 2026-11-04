@@ -14,10 +14,12 @@ export VISUAL="code"
 export BAT_THEME="Monokai Pro"
 
 {{ if eq .chezmoi.os "darwin" -}}
-# mac ports
+# mac ports — appended, not prepended. brew owns the tools this repo installs,
+# and MacPorts ships its own bash at /opt/local/bin/bash, which would shadow
+# /opt/homebrew/bin/bash if it came first.
 case ":$PATH:" in
 *":/opt/local/bin:"*) ;;
-*) export PATH="/opt/local/bin:/opt/local/sbin:$PATH" ;;
+*) export PATH="$PATH:/opt/local/bin:/opt/local/sbin" ;;
 esac
 
 # playdate

@@ -1,31 +1,41 @@
 {
+  "autoRename": {
+    "namingModel": "",
+    "namingThinking": "off",
+    "namingStyle": "natural",
+    "namingContextDepth": "full-conversation",
+    "initialRenameTrigger": "first-agent-settled",
+    "reRenameEveryNTurns": 1,
+    "replaceExistingName": "always",
+    "respectExternalRenames": true,
+    "showNamingGreeting": false,
+    "showNamingCost": false,
+    "sessionNameMaxLength": 48,
+    "surfaces": {
+      "renamePiSession": true,
+      "renameHerdrPane": true,
+      "renameHerdrTab": true,
+      "renameTmuxWindow": false,
+      "renameZellijPane": false,
+      "renameZellijTab": false
+    }
+  },
   "collapseChangelog": true,
   "compaction": {
     "enabled": true
   },
   "defaultProjectTrust": "always",
   "defaultThinkingLevel": "low",
-  "defaultTools": [
-    "read",
-    "grep",
-    "find",
-    "ls",
-    "codemode"
-  ],
+  "defaultTools": ["read", "grep", "find", "ls", "codemode"],
   "doubleEscapeAction": "tree",
-  "editorPaddingX": 0,
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "1.4.0",
+  "lastChangelogVersion": "1.5.0",
   "markdown": {
     "mermaid": "final"
   },
-  "outputPad": 0,
   "packages": [
-    "npm:pi-vim",
     "npm:@ff-labs/pi-fff",
-    "npm:pi-markdown-preview",
-    "npm:pi-zentui",
     "npm:@bigboss2063/pi-clip",
     "npm:pi-extmgr",
     "npm:@krfantasy/pi-monokai-pro",
@@ -34,23 +44,21 @@
     "npm:pi-x-ide",
     "npm:pi-localllm-provider",
     "npm:@upstash/context7-pi",
-    "npm:@pi-archimedes/session-name",
-    "npm:@aliou/pi-neuralwatt",
     "npm:@pi-lab/webfetch",
-    "npm:pi-tool-manager",
     "npm:pi-context-view",
-    "npm:pi-compact-transcript",
-    "npm:@zigai/pi-mention-skill",
-    "npm:cc-safety-net",
-    "npm:@narumitw/pi-usage",
     "npm:@narumitw/pi-lsp",
-    "npm:@narumitw/pi-btw"
+    "npm:@narumitw/pi-btw",
+    "npm:@narumitw/pi-usage",
+    "npm:@zigai/pi-tree",
+    "npm:@tangentyh/pi-auto-rename",
+    "npm:pi-compact-transcript",
+    "npm:pi-markdown-preview",
+    "npm:pi-slash-anywhere",
+    "npm:pi-vim-editor",
+    "git:github.com/jennymaeleidig/pi-vim-status",
+    "npm:pi-zentui",
+    "npm:cc-safety-net"
   ],
-  "piVim": {
-    "modeColors": {
-      "insert": "text"
-    }
-  },
   "quietStartup": true,
   "showHardwareCursor": true,
   "theme": "Monokai Pro (CE)",
@@ -70,10 +78,7 @@
             "contextWindow": 131072,
             "maxTokens": 32768,
             "reasoning": false,
-            "input": [
-              "text",
-              "image"
-            ],
+            "input": ["text", "image"],
             "loaded": false,
             "sizeBytes": 2325615934
           },
@@ -83,9 +88,7 @@
             "contextWindow": 262144,
             "maxTokens": 32768,
             "reasoning": true,
-            "input": [
-              "text"
-            ],
+            "input": ["text"],
             "loaded": false,
             "sizeBytes": 5290069221
           }
@@ -93,11 +96,18 @@
       }
     ]
   },
-  "enabledModels": [
-    "localllm-omlx/GLM-OCR-bf16",
-    "localllm-omlx/Qwen3.8-9B-mlx-4Bit",
-    "opencode-go/deepseek-v4.1-flash"
-  ],
+  "enabledModels": ["opencode-go/deepseek-v4.1-flash"],
   "defaultProvider": "opencode-go",
-  "defaultModel": "deepseek-v4.1-flash"
+  "defaultModel": "deepseek-v4.1-flash",
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:pi-extmgr\",\"scope\":\"user\"}": "0.4.2",
+    "{\"source\":\"npm:pi-workspace-history\",\"scope\":\"user\"}": "0.5.2",
+    "{\"source\":\"npm:pi-x-ide\",\"scope\":\"user\"}": "1.20.1",
+    "{\"source\":\"npm:@tangentyh/pi-auto-rename\",\"scope\":\"user\"}": "0.3.0"
+  },
+  "outputPad": 0,
+  "vimEditor": {
+    "indicator": "none",
+    "cursorShape": true
+  }
 }

@@ -1,0 +1,6 @@
+{
+  "$schema": "https://raw.githubusercontent.com/zigai/pi-extensions/refs/heads/master/extensions/pi-tree/config.schema.json",
+  "treeTimestampMode": "absolute",
+  "treeSelectedPreview": true,
+  "treePreviewFullHeight": true
+}

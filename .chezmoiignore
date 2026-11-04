@@ -4,6 +4,11 @@
 # because it would swallow applied markdown under dot_pi/agent/.
 README.md
 **/README.md
+
+# The pi domain map, source-only. `**/README.md` above already matches it; the
+# line keeps the intent beside the deployed tree, where every .md under
+# agent/ does reach a host.
+.pi/README.md
 bootstrap.sh
 
 # Root rules file: source-only, never a host file. Every _nested_ AGENTS.md is

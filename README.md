@@ -44,6 +44,14 @@ routes the dock entry through the same wrapper.
   deferring work will never run again. Defer with a plain `run_` instead.
 - Never set rendering variables session-wide on this guest. It has already cost
   a login loop.
+- PATH edits prepend then deduplicate (`prepend_path` in `dot_bashrc.tmpl`),
+  never "skip if already present": launchd hands the session a PATH that already
+  holds brew's bin near the end, and a presence check leaves `/bin` ahead of it.
+- On macOS the login shell is `/opt/homebrew/bin/bash`, whitelisted in
+  `/etc/shells` and set with `sudo chsh` by
+  `.chezmoiscripts/run_onchange_after_20-macos-bash.sh.tmpl`. `/bin/bash` stays
+  Apple's 3.2 under SIP: nothing symlinks over it, and `.chezmoiscripts/*` keep
+  `#!/bin/bash` deliberately.
 - Retina and 3D acceleration stay as UTM has them; the guest works with software
   GL for the one program that needs it.
 
@@ -52,6 +60,7 @@ routes the dock entry through the same wrapper.
 ```sh
 chezmoi status
 brew bundle check --file="$HOME/.local/share/chezmoi/packages/Brewfile"
+bash --version                    # macOS: 5.x from /opt/homebrew/bin, never 3.2
 command -v pi && herdr plugin list
 systemctl --user show-environment | command grep -i libgl || echo clean
 ```

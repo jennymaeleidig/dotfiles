@@ -13,3 +13,11 @@ references:
     url: https://github.com/monokai-pro/opencode
     license: MIT
     notes: "Palette hex values reused as the Monokai Pro (CE) theme in dot_config/herdr/config.toml (accessed 2026-09-08)."
+  - type: generic
+    title: "@krfantasy/pi-monokai-pro — Monokai Pro (CE) theme for the pi coding agent"
+    authors:
+      - name: krfantasy
+    url: https://github.com/krfantasy/pi-monokai-pro
+    version: 0.2.0
+    license: MIT
+    notes: "Vendored as dot_pi/agent/themes/monokai-pro.json, deployed to ~/.pi/agent/themes/monokai-pro.json (accessed 2026-11-03). Modified: theme name shortened to monokai-pro for hot reload, accent set to orange in place of cyan."

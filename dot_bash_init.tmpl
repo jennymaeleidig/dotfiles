@@ -27,12 +27,6 @@ fi
 # Path to your oh-my-bash installation.
 export OSH="$HOME/.oh-my-bash"
 
-{{ if eq .chezmoi.os "darwin" -}}
-OMB_USE_SUDO=true
-{{ else -}}
-OMB_USE_SUDO=false
-{{ end -}}
-
 completions=(
   git
   ssh

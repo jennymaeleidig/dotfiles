@@ -1,5 +1,28 @@
 {
   "mcpServers": {
+    "github": {
+      "enabled": true,
+      "url": "https://api.githubcopilot.com/mcp/",
+      "exposure": "codemode",
+      "headers": {
+        "Authorization": "!echo Bearer $(gh auth token)",
+        "X-MCP-Readonly": "1",
+        "X-MCP-Toolsets": "repos"
+      },
+      "toolExposure": {
+        "search_code": "codemode",
+        "search_repositories": "codemode",
+        "search_commits": "codemode",
+        "get_file_contents": "codemode",
+        "get_repository_tree": "codemode",
+        "list_commits": "codemode",
+        "get_commit": "codemode",
+        "list_branches": "codemode",
+        "*": "hidden"
+      },
+      "timeout": 120,
+      "description": "GitHub read-only code exploration: search code and repositories, read files and repo trees, walk commits and branches."
+    },
     "arxiv": {
       "enabled": false,
       "command": "uvx",
