@@ -69,3 +69,5 @@ packages/**
 .local/bin/ghostty
 .local/share/applications/ghostty_ghostty.desktop
 {{ end }}
+
+warden-local-rules.md

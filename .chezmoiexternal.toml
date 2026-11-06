@@ -5,6 +5,10 @@
 type = "file"
 # https://github.com/Kirlovon/monokai-ghostty
 url = "https://raw.githubusercontent.com/Kirlovon/monokai-ghostty/main/Monokai%20Pro"
+# Pinned: theme-sync derives herdr's [theme.custom] + sidebar colors from this
+# file, so an unnoticed upstream palette change would repaint herdr on new
+# hosts only. Bump this hash deliberately when adopting an upstream change.
+checksum.sha256 = "b0ba8bcae0e19b98141777c6f9c5892934197d74ae2659e5f094ce25c470d7d8"
 
 # oh-my-bash, sourced by ~/.bash_init. It was a bare `git clone` outside chezmoi,
 # so a fresh Linux host sourced a path that did not exist. Its custom/ directory
