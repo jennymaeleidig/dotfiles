@@ -35,9 +35,7 @@
     "mermaid": "final"
   },
   "packages": [
-{{- if eq .chezmoi.hostname "macbook-air" }}
-    "{{ joinPath .chezmoi.homeDir "Documents/projects/pi-extensions/pi-ide-status" }}",
-{{- end }}
+    "git:github.com/jennymaeleidig/pi-ide-status",
     "npm:@ff-labs/pi-fff",
     "npm:pi-extmgr",
     "npm:pi-workspace-history",
