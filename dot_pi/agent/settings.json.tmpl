@@ -35,6 +35,9 @@
     "mermaid": "final"
   },
   "packages": [
+{{- if eq .chezmoi.hostname "macbook-air" }}
+    "{{ joinPath .chezmoi.homeDir "Documents/projects/pi-extensions/pi-ide-status" }}",
+{{- end }}
     "npm:@ff-labs/pi-fff",
     "npm:pi-extmgr",
     "npm:pi-workspace-history",
@@ -54,9 +57,6 @@
     "npm:pi-vim-editor",
     "git:github.com/jennymaeleidig/pi-vim-status",
     "npm:pi-zentui",
-{{- if eq .chezmoi.hostname "macbook-air" }}
-    "{{ joinPath .chezmoi.homeDir "Documents/projects/pi-extensions/pi-ide-status" }}",
-{{- end }}
     "npm:cc-safety-net",
     "npm:pi-typesafe",
     "npm:pi-warden",
