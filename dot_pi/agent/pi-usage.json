@@ -1,8 +1,0 @@
-{
-  "statuslineDisplay": {
-    "template": "{windows}",
-    "window": "{window} {value}",
-    "countdown": "{window} {value}",
-    "separator": " · "
-  }
-}

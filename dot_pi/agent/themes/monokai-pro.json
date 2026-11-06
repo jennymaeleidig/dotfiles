@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/src/modes/interactive/theme/theme-schema.json",
+  "$schema": "https://pi.dev/schemas/theme.schema.json",
   "name": "monokai-pro",
   "vars": {
     "bg2": "#19181A",
@@ -25,7 +25,7 @@
     "borderMuted": "bgRaised",
     "success": "green",
     "error": "pink",
-    "warning": "cyan",
+    "warning": "dim4",
     "muted": "dim2",
     "dim": "dim3",
     "text": "fg",

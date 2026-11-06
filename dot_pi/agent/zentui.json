@@ -6,14 +6,46 @@
       "styles": {
         "minimalist": {
           "variables": {
-            "vim": "pi-vim-status:vim"
+            "vim": "pi-vim-status:vim",
+            "ide": "pi-ide-status:ide"
           },
           "formats": {
             "bottomLeft": "$cwd$join_sep($git_branch)",
-            "bottomRight": "$vim"
-          }
+            "bottomRight": "$ide $vim"
+          },
+          "pathDisplay": "compact",
+          "contextFormat": "percent-total",
+          "contextGauge": false,
+          "showSessionName": false,
+          "showTimer": false,
+          "showCost": true,
+          "showCacheHit": false,
+          "showGit": true,
+          "contextThresholds": {
+            "warning": 70,
+            "error": 90
+          },
+          "separator": "dash"
+        },
+        "opencode": {
+          "metadataFormat": "$model  $provider(  $thinking)(  $fast_mode)(  $codex_quota)",
+          "completionMenu": "palette"
+        },
+        "opencode-copy-friendly": {
+          "metadataFormat": "$model  $provider(  $thinking)(  $fast_mode)(  $codex_quota)",
+          "completionMenu": "palette"
+        },
+        "accent-rail": {
+          "rail": "▎",
+          "asciiRail": "|",
+          "transparent": false
         }
-      }
+      },
+      "codexQuota": false,
+      "colorSource": "terminal",
+      "borderColorMode": "static",
+      "modelLabel": "id",
+      "viewportIndicators": true
     },
     "footer": {
       "style": "hidden",
@@ -93,7 +125,7 @@
       }
     },
     "thinkingSteps": {
-      "enabled": true,
+      "enabled": false,
       "mode": "tree"
     },
     "toolDisplay": {
@@ -136,35 +168,29 @@
       "textIntervalMs": 60,
       "textAnimation": "disabled",
       "placement": "border",
-      "colorSource": "terminal",
+      "colorSource": "theme",
       "messages": {
-        "custom": false,
+        "custom": true,
         "values": [
-          "Sautéing…",
-          "Cooking…",
-          "Ionizing…",
-          "Zigzagging…",
-          "Razzle-dazzling…",
-          "Photosynthesizing…",
-          "Nucleating…",
-          "Brewing…",
-          "Combobulating…",
-          "Boogieing…",
-          "Befuddling…",
-          "Alchemizing…",
-          "Conjuring…",
-          "Baking…",
-          "Simmering…",
-          "Blanching…"
+          "Vectorizing"
         ]
       },
       "segments": {
         "tokenRate": true,
-        "tool": true,
-        "elapsed": true,
-        "thought": true,
+        "tool": false,
+        "elapsed": false,
+        "thought": false,
         "tokens": true
-      }
+      },
+      "colors": {}
+    },
+    "selectorBorders": {
+      "enabled": true,
+      "style": "zentui",
+      "colorSource": "terminal"
     }
+  },
+  "icons": {
+    "mode": "auto"
   }
 }

@@ -27,7 +27,7 @@
   "defaultProjectTrust": "always",
   "defaultThinkingLevel": "low",
   "defaultTools": ["read", "grep", "find", "ls", "codemode"],
-  "doubleEscapeAction": "tree",
+  "doubleEscapeAction": "none",
   "enableInstallTelemetry": false,
   "hideThinkingBlock": true,
   "lastChangelogVersion": "1.5.0",
@@ -36,9 +36,7 @@
   },
   "packages": [
     "npm:@ff-labs/pi-fff",
-    "npm:@bigboss2063/pi-clip",
     "npm:pi-extmgr",
-    "npm:@krfantasy/pi-monokai-pro",
     "npm:pi-workspace-history",
     "git:github.com/tinypi-extension/tinysubagent",
     "npm:pi-x-ide",
@@ -53,15 +51,24 @@
     "npm:@tangentyh/pi-auto-rename",
     "npm:pi-compact-transcript",
     "npm:pi-markdown-preview",
-    "npm:pi-slash-anywhere",
     "npm:pi-vim-editor",
     "git:github.com/jennymaeleidig/pi-vim-status",
     "npm:pi-zentui",
-    "npm:cc-safety-net"
+{{- if eq .chezmoi.hostname "macbook-air" }}
+    "{{ joinPath .chezmoi.homeDir "Documents/projects/pi-extensions/pi-ide-status" }}",
+{{- end }}
+    "npm:cc-safety-net",
+    "npm:pi-typesafe",
+    "npm:pi-warden",
+    "npm:pi-tbox",
+    "git:github.com/jennymaeleidig/pi-copy-paste"
   ],
   "quietStartup": true,
   "showHardwareCursor": true,
-  "theme": "Monokai Pro (CE)",
+  "theme": "monokai-pro",
+  "toolsetDefaults": {
+    "toolset-state:tbox.tool@npm:pi-warden": { "enabled": false }
+  },
   "tuiMode": "fullscreen",
   "localllm": {
     "servers": [
@@ -103,11 +110,23 @@
     "{\"source\":\"npm:pi-extmgr\",\"scope\":\"user\"}": "0.4.2",
     "{\"source\":\"npm:pi-workspace-history\",\"scope\":\"user\"}": "0.5.2",
     "{\"source\":\"npm:pi-x-ide\",\"scope\":\"user\"}": "1.20.1",
-    "{\"source\":\"npm:@tangentyh/pi-auto-rename\",\"scope\":\"user\"}": "0.3.0"
+    "{\"source\":\"npm:@tangentyh/pi-auto-rename\",\"scope\":\"user\"}": "0.3.0",
+    "{\"source\":\"npm:@narumitw/pi-lsp\",\"scope\":\"user\"}": "0.49.12",
+    "{\"source\":\"git:github.com/jennymaeleidig/pi-vim-status\",\"scope\":\"user\"}": "0.1.2",
+    "{\"source\":\"npm:pi-context-view\",\"scope\":\"user\"}": "0.8.3",
+    "{\"source\":\"npm:@narumitw/pi-btw\",\"scope\":\"user\"}": "0.63.5",
+    "{\"source\":\"npm:@narumitw/pi-usage\",\"scope\":\"user\"}": "0.69.2",
+    "{\"source\":\"npm:pi-warden\",\"scope\":\"user\"}": "2.7.0",
+    "{\"source\":\"git:github.com/jennymaeleidig/pi-copy-paste\",\"scope\":\"user\"}": "1.0.0"
   },
   "outputPad": 0,
   "vimEditor": {
     "indicator": "none",
-    "cursorShape": true
+    "cursorShape": {
+      "insert": "blinking-bar",
+      "normal": "blinking-block",
+      "visual": "steady-block",
+      "replace": "blinking-underline"
+    }
   }
 }
