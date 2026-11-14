@@ -5,7 +5,6 @@
     "namingStyle": "natural",
     "namingContextDepth": "full-conversation",
     "initialRenameTrigger": "first-agent-settled",
-    "reRenameEveryNTurns": 1,
     "replaceExistingName": "always",
     "respectExternalRenames": true,
     "showNamingGreeting": false,
@@ -26,46 +25,56 @@
   },
   "defaultProjectTrust": "always",
   "defaultThinkingLevel": "low",
-  "defaultTools": ["read", "grep", "find", "ls", "codemode"],
+  "defaultTools": [
+    "read",
+    "bash",
+    "edit",
+    "write",
+    "codemode"
+  ],
   "doubleEscapeAction": "none",
   "enableInstallTelemetry": false,
-  "hideThinkingBlock": true,
-  "lastChangelogVersion": "1.5.0",
+  "hideThinkingBlock": false,
+  "lastChangelogVersion": "1.5.2",
   "markdown": {
     "mermaid": "final"
   },
   "packages": [
     "git:github.com/jennymaeleidig/pi-ide-status",
-    "npm:@ff-labs/pi-fff",
     "npm:pi-extmgr",
-    "npm:pi-workspace-history",
     "git:github.com/tinypi-extension/tinysubagent",
     "npm:pi-x-ide",
     "npm:pi-localllm-provider",
     "npm:@upstash/context7-pi",
     "npm:@pi-lab/webfetch",
-    "npm:pi-context-view",
-    "npm:@narumitw/pi-lsp",
-    "npm:@narumitw/pi-btw",
     "npm:@narumitw/pi-usage",
-    "npm:@zigai/pi-tree",
+    "npm:pi-workspace-history",
     "npm:@tangentyh/pi-auto-rename",
-    "npm:pi-compact-transcript",
     "npm:pi-markdown-preview",
     "npm:pi-vim-editor",
     "git:github.com/jennymaeleidig/pi-vim-status",
+    "git:github.com/jennymaeleidig/pi-mention",
     "npm:pi-zentui",
-    "npm:cc-safety-net",
     "npm:pi-typesafe",
     "npm:pi-warden",
     "npm:pi-tbox",
-    "git:github.com/jennymaeleidig/pi-copy-paste"
+    "npm:@bigboss2063/pi-clip",
+    "npm:pi-date-tail",
+    "npm:pi-context-view",
+    "npm:@zigai/pi-tree",
+    "git:github.com/jennymaeleidig/pi-lens-status",
+    "npm:pi-lens"
   ],
   "quietStartup": true,
   "showHardwareCursor": true,
   "theme": "monokai-pro",
   "toolsetDefaults": {
-    "toolset-state:tbox.tool@npm:pi-warden": { "enabled": false }
+    "toolset-state:tbox.tool@npm:pi-warden": {
+      "enabled": false
+    },
+    "toolset-state:tbox.tool@npm:pi-typesafe": {
+      "enabled": false
+    }
   },
   "tuiMode": "fullscreen",
   "localllm": {
@@ -83,7 +92,10 @@
             "contextWindow": 131072,
             "maxTokens": 32768,
             "reasoning": false,
-            "input": ["text", "image"],
+            "input": [
+              "text",
+              "image"
+            ],
             "loaded": false,
             "sizeBytes": 2325615934
           },
@@ -93,7 +105,9 @@
             "contextWindow": 262144,
             "maxTokens": 32768,
             "reasoning": true,
-            "input": ["text"],
+            "input": [
+              "text"
+            ],
             "loaded": false,
             "sizeBytes": 5290069221
           }
@@ -101,7 +115,9 @@
       }
     ]
   },
-  "enabledModels": ["opencode-go/deepseek-v4.1-flash"],
+  "enabledModels": [
+    "opencode-go/deepseek-v4.1-flash"
+  ],
   "defaultProvider": "opencode-go",
   "defaultModel": "deepseek-v4.1-flash",
   "extensionChangelogVersions": {
@@ -111,11 +127,14 @@
     "{\"source\":\"npm:@tangentyh/pi-auto-rename\",\"scope\":\"user\"}": "0.3.0",
     "{\"source\":\"npm:@narumitw/pi-lsp\",\"scope\":\"user\"}": "0.49.12",
     "{\"source\":\"git:github.com/jennymaeleidig/pi-vim-status\",\"scope\":\"user\"}": "0.1.2",
-    "{\"source\":\"npm:pi-context-view\",\"scope\":\"user\"}": "0.8.3",
+    "{\"source\":\"npm:pi-context-view\",\"scope\":\"user\"}": "0.8.4",
     "{\"source\":\"npm:@narumitw/pi-btw\",\"scope\":\"user\"}": "0.63.5",
-    "{\"source\":\"npm:@narumitw/pi-usage\",\"scope\":\"user\"}": "0.69.2",
-    "{\"source\":\"npm:pi-warden\",\"scope\":\"user\"}": "2.7.0",
-    "{\"source\":\"git:github.com/jennymaeleidig/pi-copy-paste\",\"scope\":\"user\"}": "1.0.0"
+    "{\"source\":\"npm:@narumitw/pi-usage\",\"scope\":\"user\"}": "0.69.3",
+    "{\"source\":\"npm:pi-warden\",\"scope\":\"user\"}": "2.8.0",
+    "{\"source\":\"git:github.com/jennymaeleidig/pi-copy-paste\",\"scope\":\"user\"}": "1.0.0",
+    "{\"source\":\"git:github.com/jennymaeleidig/pi-ide-status\",\"scope\":\"user\"}": "0.0.0",
+    "{\"source\":\"npm:pi-date-tail\",\"scope\":\"user\"}": "1.1.1",
+    "{\"source\":\"npm:pi-lens\",\"scope\":\"user\"}": "4.4.12"
   },
   "outputPad": 0,
   "vimEditor": {
@@ -126,5 +145,8 @@
       "visual": "steady-block",
       "replace": "blinking-underline"
     }
-  }
+  },
+  "enableSkillCommands": true,
+  "treeFilterMode": "no-tools",
+  "fullscreenExitOutput": "resume-hint"
 }

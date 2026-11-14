@@ -7,11 +7,13 @@
         "minimalist": {
           "variables": {
             "vim": "pi-vim-status:vim",
-            "ide": "pi-ide-status:ide"
+            "ide": "pi-ide-status:ide",
+            "lens": "pi-lens-status:lsp",
+            "issues": "pi-lens-status:issues"
           },
           "formats": {
             "bottomLeft": "$cwd$join_sep($git_branch)",
-            "bottomRight": "$ide $vim"
+            "bottomRight": "$ide$join_sep$lens$join_sep$issues$join_sep$vim"
           },
           "pathDisplay": "compact",
           "contextFormat": "percent-total",
@@ -36,7 +38,7 @@
           "completionMenu": "palette"
         },
         "accent-rail": {
-          "rail": "▎",
+          "rail": "\u258e",
           "asciiRail": "|",
           "transparent": false
         }
@@ -125,11 +127,11 @@
       }
     },
     "thinkingSteps": {
-      "enabled": false,
+      "enabled": true,
       "mode": "tree"
     },
     "toolDisplay": {
-      "enabled": false,
+      "enabled": true,
       "style": "opencode",
       "registerToolOverrides": {
         "read": true,
@@ -140,7 +142,9 @@
         "find": true,
         "ls": true
       },
-      "builtinRendererOverrides": {},
+      "builtinRendererOverrides": {
+        "bash": true
+      },
       "compatibleToolSources": {},
       "customToolOverrides": {},
       "readOutputMode": "hidden",
@@ -161,7 +165,7 @@
     "workingLine": {
       "enabled": true,
       "turnSummary": false,
-      "turnSummaryFormat": "Turn took $turn_duration$join_sep(thought for $thought_duration)$join_sep(↑$input_tokens ↓$output_tokens)$join_sep$token_rate",
+      "turnSummaryFormat": "Turn took $turn_duration$join_sep(thought for $thought_duration)$join_sep(\u2191$input_tokens \u2193$output_tokens)$join_sep$token_rate",
       "spinner": "braille",
       "spinnerIntervalMs": 100,
       "animateSpinnerColor": false,
@@ -178,8 +182,8 @@
       "segments": {
         "tokenRate": true,
         "tool": false,
-        "elapsed": false,
-        "thought": false,
+        "elapsed": true,
+        "thought": true,
         "tokens": true
       },
       "colors": {}

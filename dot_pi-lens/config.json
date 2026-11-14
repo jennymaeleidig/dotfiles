@@ -1,0 +1,30 @@
+{
+  "tools": {
+    "effective_config": {
+      "enabled": false
+    },
+    "read_symbol": {
+      "enabled": false
+    },
+    "project_report": {
+      "enabled": false
+    },
+    "ast_grep_outline": {
+      "enabled": false
+    },
+    "ast_grep_replace": {
+      "enabled": false
+    },
+    "lens_diagnostic_mark": {
+      "enabled": false
+    }
+  },
+  "widget": {
+    "visible": false
+  },
+  "ui": {
+    "compactWidget": true,
+    "compactLspStatus": true,
+    "issuesStatus": true
+  }
+}
