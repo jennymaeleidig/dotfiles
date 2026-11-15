@@ -51,7 +51,7 @@ if [ ! -f /etc/apt/sources.list.d/tailscale.list ]; then
 		| sudo tee /etc/apt/sources.list.d/tailscale.list >/dev/null
 fi
 
-# Visual Studio Code (Microsoft arm64 repo).
+# Visual Studio Code (Microsoft multi-arch repo).
 if [ ! -f /usr/share/keyrings/microsoft.gpg ]; then
 	curl -fsSL https://packages.microsoft.com/keys/microsoft.asc \
 		| sudo gpg --dearmor --yes -o /usr/share/keyrings/microsoft.gpg

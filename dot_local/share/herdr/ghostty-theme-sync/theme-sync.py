@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 #
-# Vendored from themuuln/herdr-ghostty-theme-sync (MIT), with two changes:
+# Vendored from themuuln/herdr-ghostty-theme-sync (MIT), with local changes:
 #   1. read Ghostty's current config path — the file moved from `config` to
 #      `config.ghostty` (the old name is still read as a fallback)
 #   2. call the sibling refresh.sh instead of a PATH-installed wrapper
@@ -10,7 +10,6 @@
 # The [theme.custom] palette -> token mapping (compute()) and darken() are
 # ported from qintmb/herdr-theme-picker's bin/map.sh (MIT, Copyright (c) 2026
 # qintmb): https://github.com/qintmb/herdr-theme-picker
-# Citation: see CITATION.cff
 """herdr-theme-sync — derive herdr's theme + sidebar colors from the active Ghostty theme.
 
 Reads the active `theme = ...` from Ghostty's config (config.ghostty, falling

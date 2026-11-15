@@ -18,7 +18,7 @@ esac
 # `mise install` ran with no config present, installed nothing, and still
 # reported success.
 if ! command -v mise >/dev/null 2>&1; then
-	echo "==> mise not found; brew bundle has not installed it — skipping" >&2
+	echo "==> mise not found; brew bundle has not installed it — aborting the apply" >&2
 	exit 1
 fi
 

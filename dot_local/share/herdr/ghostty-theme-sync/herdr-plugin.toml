@@ -1,9 +1,9 @@
 # Vendored plugin: derives herdr's [theme.custom] + sidebar colors from the
 # active Ghostty theme, and re-pushes ephemeral sidebar tokens after restarts.
-# Code adapted from themuuln/herdr-ghostty-theme-sync (MIT) — see CITATION.cff.
+# Code adapted from themuuln/herdr-ghostty-theme-sync (MIT).
 #
 # Source state lives here; `herdr plugin link ~/.local/share/herdr/ghostty-theme-sync`
-# registers it (run by .chezmoiscripts/run_onchange_link-herdr-plugins.sh.tmpl).
+# registers it (run by .chezmoiscripts/run_after_link-herdr-plugins.sh.tmpl).
 
 id = "herdr-theme-sync"
 name = "Ghostty Theme Sync"

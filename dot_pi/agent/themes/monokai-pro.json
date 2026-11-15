@@ -25,7 +25,7 @@
     "borderMuted": "bgRaised",
     "success": "green",
     "error": "pink",
-    "warning": "dim4",
+    "warning": "yellow",
     "muted": "dim2",
     "dim": "dim3",
     "text": "fg",

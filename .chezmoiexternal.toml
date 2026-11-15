@@ -1,5 +1,5 @@
 # Theme dependencies
-# Themes are kept as dependencies (chezmoi externals), not vendored copies.
+# The Ghostty theme is kept as a dependency (a chezmoi external), not a vendored copy.
 
 [".config/ghostty/themes/Monokai Pro"]
 type = "file"

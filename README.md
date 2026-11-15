@@ -14,8 +14,9 @@ git clone https://github.com/jennymaeleidig/dotfiles ~/.local/share/chezmoi
 ```
 
 `bootstrap.sh` caches sudo, installs chezmoi to an unmanaged
-`~/.cache/chezmoi-bootstrap`, applies, and deletes that copy only after a
-successful apply. Re-running it resumes a failed apply.
+`~/.cache/chezmoi-bootstrap`, applies, and deletes that copy before the apply
+when a chezmoi is already on PATH, and otherwise only after a successful apply.
+Re-running it resumes a failed apply.
 
 Then, once, as the user:
 

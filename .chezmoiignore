@@ -5,10 +5,6 @@
 README.md
 **/README.md
 
-# The pi domain map, source-only. `**/README.md` above already matches it; the
-# line keeps the intent beside the deployed tree, where every .md under
-# agent/ does reach a host.
-.pi/README.md
 bootstrap.sh
 
 # Root rules file: source-only, never a host file. Every _nested_ AGENTS.md is
@@ -35,10 +31,6 @@ GLOSSARY-MAP.md
 .pi/agent/git/
 .pi/cache/
 
-# Skills (~/.pi/agent/skills, ~/.agents/skills) are runtime state with no Source
-# counterpart, so they need no ignore entry: Apply removes only targets that
-# Source declares (plus .chezmoiremove entries), and pi materializes package
-# skills there on startup.
 # Runtime state (target side) — written by the herdr integration into an
 # extensions dir that has no Source counterpart.
 .pi/agent/extensions/herdr-agent-state.ts
@@ -50,11 +42,9 @@ GLOSSARY-MAP.md
 # Runtime state (source side) — files the tools may drop in the source directory, never reach a host
 .vscode/
 
-# Package manifests: source-only, consumed by .chezmoiscripts. Both lines are
-# required — the directory pattern ignores the directory target, the glob its
-# contents; `packages/` alone leaves every child as a managed target.
+# Package manifests: source-only, consumed by .chezmoiscripts. The directory
+# pattern ignores the directory and everything under it.
 packages/
-packages/**
 
 {{ if ne .chezmoi.os "darwin" }}
 # macOS-only targets: a Linux guest has one window and no Colima, so neither

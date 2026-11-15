@@ -18,7 +18,7 @@ mapfile -t FLATPAKS < <(grep -vE '^[[:space:]]*(#|$)' "$FLATPAK_MANIFEST")
 
 if [ "${#FLATPAKS[@]}" -gt 0 ]; then
 	if ! command -v flatpak >/dev/null 2>&1; then
-		echo "==> flatpak not installed; 20-apt did not complete — skipping" >&2
+		echo "==> flatpak not installed; 20-apt did not complete — aborting the apply" >&2
 		exit 1
 	fi
 	flatpak remote-add --if-not-exists flathub \
@@ -44,7 +44,7 @@ fi
 # while other snaps stay confined.
 if grep -qE '^[[:space:]]*[^#[:space:]]' "$SNAP_MANIFEST"; then
 	if ! command -v snap >/dev/null 2>&1; then
-		echo "==> snap not installed; 20-apt did not complete — skipping" >&2
+		echo "==> snap not installed; 20-apt did not complete — aborting the apply" >&2
 		exit 1
 	fi
 	while read -r -a entry; do

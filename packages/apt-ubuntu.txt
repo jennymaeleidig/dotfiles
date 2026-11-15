@@ -1,4 +1,4 @@
-# Ubuntu 24.04 arm64, UTM guest. One package per line; '#' comments allowed.
+# Ubuntu 26.04 arm64, UTM guest. One package per line; '#' comments allowed.
 # Consumed by .chezmoiscripts/run_onchange_before_20-apt-packages.sh.tmpl.
 # Ownership: apt owns the system layer. Runtimes are mise's, CLI utilities are
 # Homebrew's (packages/Brewfile).

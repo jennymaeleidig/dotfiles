@@ -3,7 +3,7 @@
 #
 # Vendored from themuuln/herdr-ghostty-theme-sync (MIT); the only change is the
 # metadata source label. Upstream:
-# https://github.com/themuuln/herdr-ghostty-theme-sync — see CITATION.cff.
+# https://github.com/themuuln/herdr-ghostty-theme-sync
 #
 # refresh.sh — re-push herdr sidebar tokens from the live snapshot.
 #

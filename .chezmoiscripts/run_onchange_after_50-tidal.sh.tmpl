@@ -12,7 +12,7 @@ TIDAL_VERSION="1.10"
 eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || true)"
 
 if ! command -v ghc-pkg >/dev/null 2>&1; then
-	echo "==> GHC not found; skipping Tidal" >&2
+	echo "==> GHC not found; aborting the apply" >&2
 	exit 1
 fi
 

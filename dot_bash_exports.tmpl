@@ -36,7 +36,7 @@ export FLEX_HOME="$HOME/Documents/Adobe/Flash/apache-flex-4.16.1-air-51.1.3.12/a
 #expose docker to colima
 export DOCKER_HOST="unix://$HOME/.colima/docker.sock"
 
-#clangd -- brew's llvm arrives as a dependency of ghc, which is macOS-only.
+#clangd -- llvm is declared directly in packages/Brewfile (macOS).
 export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
 

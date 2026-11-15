@@ -271,6 +271,15 @@
       "pluginName": "mattpocock-skills",
       "installedAt": "2026-10-23T00:12:52.070Z",
       "updatedAt": "2026-10-23T00:12:52.070Z"
+    },
+    "no-ai-slop": {
+      "source": "petergyang/no-ai-slop",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/petergyang/no-ai-slop.git",
+      "skillPath": "skills/no-ai-slop/SKILL.md",
+      "skillFolderHash": "3d8be37cd59f6601cbc33676ecaf5b42865daf63",
+      "installedAt": "2026-11-15T02:01:19.426Z",
+      "updatedAt": "2026-11-15T02:01:19.426Z"
     }
   },
   "dismissed": {

@@ -3,10 +3,43 @@
 {
   "typesafe": true,
   "typesafeBackend": {{ if $endpoint }}{{ dict "label" .judge.label "host" .judge.host "path" .judge.path "keyEnv" .judge.keyEnv "defaultModel" .judge.model | toJson }}{{ else }}"{{ .judge.provider }}"{{ end }},
+  {{- if false -}}
+    FUTURE WORK — two things deliberately not on yet, both user-file-only keys.
+
+    1. action.floor = "evidence" (the upstream default). Built-in pattern hits
+       become evidence strings for Jev instead of level-setters, so nothing is
+       deterministic: rm -rf / over a dangerous target, git reset --hard, and
+       printenv $TOKEN ride as floorHits and only hold when Jev scores
+       irreversible >= 0.9 (0.5..0.9 warns). Calibrated to drop false holds at
+       the cost of the mechanical floor. Today we run "level"; switching is a
+       one-line change here and nothing else.
+
+    2. action.pathRules with action "block" — the structured credential guard.
+       Matches the write/edit `path` field exactly and only fires when the file
+       exists, unlike a command regex that fires on any mention. `tools: ["*"]`
+       also reaches bash. Paste-ready:
+
+       "pathRules": [
+         { "id": "credential-files",
+           "paths": ["**/.env", "**/.env.*", "~/.ssh/id_*", "~/.aws/credentials",
+                     "~/.kube/config", "**/*.pem", "**/*.p12", "**/*.pfx"],
+           "access": "none", "tools": ["*"], "action": "block",
+           "message": "Credential files are off-limits — ask the user." }
+       ]
+
+       Caveat from the docs: access "none" on tools ["*"] also fires on a mere
+       mention (grep naming .env), which is why the sensitive-path built-in
+       exists separately. Note it needs `read` in action.tools to cover reads,
+       and that costs a Jev request per read.
+
+    Everything in this block is skipped by `if false` and renders nothing into
+    config.json; it lives here so the next change is a paste, not a decision.
+  {{- end }}
   "action": {
-    "enabled": false,
-    "tools": [],
-    "ask": { "enabled": false },
+    "enabled": true,
+    "tools": ["bash", "write", "edit"],
+    "ask": { "enabled": true },
+    "floor": "level",
     "traceSample": 0,
     "feedbackLog": false
   },
@@ -19,16 +52,16 @@
     "fallback": false,
     "skip": [".scratch/**", "docs/agents/**", "CONTEXT-MAP.md"],
     "threshold": 0.7,
-    "softThreshold": 0
+    "softThreshold": 0.5
   },
   "rulesAtTurnStart": {
     "enabled": true
   },
   "stuck": { "enabled": false },
-  "done": { "enabled": false },
+  "done": { "enabled": true, "nudge": true },
   "cause": { "enabled": false },
-  "slop": { "enabled": false, "prose": { "enabled": false } },
-  "security": { "enabled": false },
+  "slop": { "enabled": true, "prose": { "enabled": false } },
+  "security": { "enabled": true },
   "context": { "enabled": false, "largeOutput": { "enabled": false }, "filter": { "enabled": false } },
   "runaway": { "enabled": false },
   "subagent": { "enabled": false },

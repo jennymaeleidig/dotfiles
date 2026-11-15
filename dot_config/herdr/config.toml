@@ -1,8 +1,8 @@
 # Herdr app config
 #
 # Theme is generated from the active Ghostty theme by the vendored
-# herdr-theme-sync plugin (prefix+t, or `herdr plugin action invoke
-# herdr-theme-sync sync`): it rewrites [theme.custom] and every sidebar fg below
+# herdr-theme-sync plugin (prefix+t, or `herdr plugin action invoke sync
+# --plugin herdr-theme-sync`): it rewrites [theme.custom] and every sidebar fg below
 # from Ghostty's palette, validates with `herdr config check`, then reloads.
 # Panes themselves are colored by the host terminal (ghostty theme
 # "Monokai Pro"). Because sync

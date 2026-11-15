@@ -1,0 +1,3 @@
+interface:
+  display_name: "Writing Warden Rules"
+  short_description: "Write judgeable pi-warden rules"

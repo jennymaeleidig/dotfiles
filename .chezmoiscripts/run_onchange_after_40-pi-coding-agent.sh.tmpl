@@ -7,7 +7,7 @@ set -euo pipefail
 PI_VERSION="1.4.0"
 
 # Neither brew's bin nor mise's shims are guaranteed here, for the reason given
-# in run_onchange_setup-mise-tools.
+# in run_onchange_after_30-setup-mise-tools.sh.tmpl.
 case "$(uname -s)" in
 Darwin) eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || true)" ;;
 Linux) eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv 2>/dev/null || true)" ;;
@@ -26,12 +26,12 @@ export PATH="$PNPM_HOME/bin:$PNPM_HOME:$PATH"
 # it puts no shims on PATH here. `mise exec` resolves the tool from the global
 # config instead, which needs nothing on PATH.
 if ! command -v mise >/dev/null 2>&1; then
-	echo "==> mise not found; 10-brew-bundle has not installed it — skipping pi" >&2
+	echo "==> mise not found; 10-brew-bundle has not installed it — aborting the apply" >&2
 	exit 1
 fi
 
 if ! mise which pnpm >/dev/null 2>&1; then
-	echo "==> pnpm not found; mise install has not provided it — skipping pi" >&2
+	echo "==> pnpm not found; mise install has not provided it — aborting the apply" >&2
 	exit 1
 fi
 

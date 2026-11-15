@@ -2,7 +2,7 @@
 set -euo pipefail
 #
 # Registers locally-vendored herdr plugins with herdr. Plugin source lives in
-# dot_local/share/herdr/<id> (Source state); `herdr plugin link` records the
+# dot_local/share/herdr/<directory> (Source state); `herdr plugin link` records the
 # path in runtime state (~/.config/herdr/plugins.json), which Apply leaves
 # alone. A plain `run_after_` script, not `run_onchange_`: every apply re-checks,
 # so a host provisioned without a server converges the first time one is running.
@@ -37,8 +37,8 @@ if ! herdr plugin list >/dev/null 2>&1; then
 fi
 
 # id|source path — one entry per vendored plugin. The two are named separately
-# because a directory need not match its plugin id (ghostty-theme-sync is
-# upstream's directory, herdr-theme-sync is upstream's id).
+# because a directory need not match its plugin id (the ghostty-theme-sync
+# directory holds the plugin id herdr-theme-sync).
 PLUGINS=(
 	"herdr-theme-sync|$HOME/.local/share/herdr/ghostty-theme-sync"
 )
