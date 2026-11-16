@@ -3,6 +3,9 @@
     "editor": {
       "enabled": true,
       "style": "minimalist",
+      "customValueColors": {
+        "pi-lens-status:lsp": ""
+      },
       "styles": {
         "minimalist": {
           "variables": {
