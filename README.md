@@ -36,6 +36,11 @@ gh auth setup-git
 ```
 
 - Tailscale comes from the App Store, deliberately not from `packages/Brewfile`.
+- qBittorrent is not in `packages/Brewfile` either: every qBittorrent cask is
+  disabled upstream because the app does not pass Gatekeeper. Install it from
+  qbittorrent.org, then clear the quarantine attribute before first launch
+  (`xattr -dr com.apple.quarantine /Applications/qBittorrent.app`). Do not
+  disable Gatekeeper itself. `transmission` is the cask that still installs.
 - `mkdir -p ~/.secrets && ${EDITOR:-nano} ~/.secrets/systemone.env` with
   `TYPESAFE_API_KEY`; pi's `typesafe` provider and pi-warden both read it.
 - `pi` signs in and materializes its packages.

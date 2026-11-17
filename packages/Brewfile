@@ -117,7 +117,9 @@ if OS.mac?
   cask "music-decoy"
   cask "obs"
   cask "obsidian"
-  cask "qbittorrent"
+  # qBittorrent is absent deliberately: homebrew-cask disabled it and every
+  # qBittorrent variant on 2026-09-01 because the app does not pass the macOS
+  # Gatekeeper check. Install it from qbittorrent.org instead; see README.
   cask "raycast"
   cask "steam"
   cask "superwhisper"
