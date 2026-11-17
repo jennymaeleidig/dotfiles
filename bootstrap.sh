@@ -21,6 +21,15 @@ SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # directory would take the only retry tool with it.
 BOOTSTRAP_BIN="$HOME/.cache/chezmoi-bootstrap"
 
+# Homebrew's installer refuses to run without the Command Line Tools, and the
+# apply reaches it before anything else can report the real problem. This is a
+# GUI dialog on a fresh Mac, so it cannot be automated; fail before the sudo
+# prompt instead of mid-apply.
+if [ "$(uname -s)" = Darwin ] && ! xcode-select -p >/dev/null 2>&1; then
+	echo "==> Xcode Command Line Tools are missing: run 'xcode-select --install', wait for it to finish, then re-run this script" >&2
+	exit 1
+fi
+
 # 00-bootstrap and 20-apt both abort on an uncached sudo timestamp, and the
 # Homebrew install between them outlives sudo's 15-minute timeout. Ask here,
 # before the long phase, instead of leaving the user to learn it from a
