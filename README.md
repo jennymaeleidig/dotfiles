@@ -6,6 +6,46 @@ running as a UTM guest. Package ownership is stated at the top of
 `brew` owns CLI utilities, and `packages/flatpak-linux.txt` +
 `packages/snap-linux.txt` own Linux GUI apps.
 
+## Fresh macOS host
+
+The one thing the repo cannot install for you is Xcode's Command Line Tools:
+`xcode-select --install` is a GUI dialog. Everything else, Homebrew included,
+comes from the first apply.
+
+```sh
+xcode-select --install            # wait for the dialog to finish
+git clone https://github.com/jennymaeleidig/dotfiles ~/.local/share/chezmoi
+~/.local/share/chezmoi/bootstrap.sh
+```
+
+`bootstrap.sh` exits early when the tools are missing, caches sudo, and applies.
+`run_onchange_before_00-bootstrap-homebrew.sh.tmpl` installs Homebrew to
+`/opt/homebrew` when it is absent, so `10-brew-bundle` has a prefix to use.
+Re-running `bootstrap.sh` resumes a failed apply.
+
+Expect `brew bundle` to stay interactive on macOS: casks prompt for passwords
+and open installers, and `mise install` plus Tidal's `cabal install` take a
+while. Open a new terminal afterwards; `after_20` changes the login shell to
+`/opt/homebrew/bin/bash`.
+
+Then, once, as the user:
+
+```sh
+gh auth login                     # also gives git HTTPS credentials
+gh auth setup-git
+```
+
+- Tailscale comes from the App Store, deliberately not from `packages/Brewfile`.
+- `mkdir -p ~/.secrets && ${EDITOR:-nano} ~/.secrets/systemone.env` with
+  `TYPESAFE_API_KEY`; pi's `typesafe` provider and pi-warden both read it.
+- `pi` signs in and materializes its packages.
+- Start `herdr` once, then `chezmoi apply` again to link the vendored plugins.
+- Grant what casks cannot: Aerospace (Accessibility), Karabiner (Input
+  Monitoring and the System Extension, then log out), LuLu (network extension),
+  superwhisper (microphone), OBS (screen recording).
+- Import `tools/raycast/*.rayconfig` and `tools/vorssant/Vorssaint Settings.plist`
+  through those apps; they are exports, not applied targets.
+
 ## Fresh Ubuntu guest
 
 ```sh
