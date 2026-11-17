@@ -1,0 +1,34 @@
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+
+/**
+ * Serve pi's `typesafe` classifier models from the judge in `.chezmoidata.toml`
+ * instead of the built-in api.typesafe.ai list.
+ *
+ * `typesafe` is the provider whose classifier dispatch speaks the System One
+ * protocol, so re-registering it keeps that transport and swaps destination and
+ * model. Its `baseUrl` is the judge's host plus its path without the trailing
+ * `/systemone`: the transport appends that segment.
+ *
+ * Only rendered when `[judge].provider = "typesafe"`. A provider pi already ships
+ * with the right models and host — `opencode` for jev-1.13-free — needs no
+ * registration, so this file is an inert no-op there.
+ */
+export default function judgeClassifier(pi: ExtensionAPI) {
+{{- if eq .judge.provider "typesafe" }}
+  pi.registerProvider("typesafe", {
+    baseUrl: "{{ trimSuffix "/" .judge.host }}{{ trimSuffix "/systemone" .judge.path }}",
+    apiKey: "${{ .judge.keyEnv }}",
+    models: [
+      {
+        type: "classifier",
+        id: "{{ .judge.model }}",
+        name: "{{ .judge.label }} {{ .judge.model }}",
+        api: "typesafe-system-one",
+        input: ["text"],
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+        contextWindow: 262144,
+      },
+    ],
+  });
+{{- end }}
+}

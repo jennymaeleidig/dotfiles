@@ -1,8 +1,8 @@
 {{- $registry := list "typesafe" "openrouter" "commandcode" "liquid" "subq" "nace" -}}
-{{- $endpoint := not (has .judge.provider $registry) -}}
+{{- $endpoint := not (has .judge.backend $registry) -}}
 {
   "typesafe": true,
-  "typesafeBackend": {{ if $endpoint }}{{ dict "label" .judge.label "host" .judge.host "path" .judge.path "keyEnv" .judge.keyEnv "defaultModel" .judge.model | toJson }}{{ else }}"{{ .judge.provider }}"{{ end }},
+  "typesafeBackend": {{ if $endpoint }}{{ dict "label" .judge.label "host" .judge.host "path" .judge.path "keyEnv" .judge.keyEnv "defaultModel" .judge.model | toJson }}{{ else }}"{{ .judge.backend }}"{{ end }},
   {{- if false -}}
     FUTURE WORK — two things deliberately not on yet, both user-file-only keys.
 

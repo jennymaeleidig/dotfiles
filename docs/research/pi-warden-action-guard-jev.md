@@ -131,10 +131,16 @@ Plus the session-wide keys that gate Jev, from the same table:
 - `typesafeBackend` — `"typesafe"` (default) → `https://api.typesafe.ai`, model `jev-latest`
   (`pi-typesafe/dist/backends.js:92`, sent as `~typesafe/jev-latest`). Alternatives: `openrouter`, `commandcode`,
   `liquid`, `subq`, `nace`, or an endpoint object that serves the same decisions protocol.
+  This repo uses an endpoint object for OpenCode's free Jev: `https://opencode.ai` +
+  `/inference/systemone/v1/systemone`, model `jev-1.13-free`, key `OPENCODE_API_KEY`. pi-typesafe has no
+  `opencode` registry backend, so the object is required even though pi's model registry ships that model.
 - `mode` — `steer` | `confirm` | `advise`, default `steer`, user file only (`PI_WARDEN_MODE` overrides).
 - `timeoutMs` 5000 per request, `maxRequests` 500 per session (shared with compaction and the other guards).
+  The repo keeps the default now that the judge is hosted again. The oMLX path it replaced needed 20000: its
+  `DecisionEngine` serialises SystemOne requests behind one `asyncio.Lock`, so a ~1.6k-token request took ~1.8 s
+  alone and each queued one added ~2 s (six concurrent → ~13 s, measured 2026-11-17).
 - `judge.cooldownMs` 60000 / `judge.failuresBeforeCooldown` 3 — a failing backend goes quiet rather than costing a
-  timeout per call.
+  timeout per call. Default here too; the oMLX path used 30000 / 5.
 
 Env vars that matter ([configuration.md § Environment](https://raw.githubusercontent.com/DevMortimer/pi-warden/main/docs/configuration.md)):
 `PI_WARDEN_ENABLED=1` (headless consent), `PI_WARDEN_MODE`, `PI_WARDEN_HOST_PATHS` (dirs outside the project the agent
@@ -142,7 +148,7 @@ may write without the outside-project hold/warn), `PI_WARDEN_SCRATCH_PATHS` (roo
 holds), `PI_WARDEN_DB`, `PI_WARDEN_TRACE_DIR`, `PI_WARDEN_STEER_STATS`, `PI_WARDEN_INDEX_DIR`. The key itself is
 `TYPESAFE_API_KEY` (default backend) or the `keyEnv` of an endpoint object.
 
-### Is Jev a local model? No.
+### Is Jev a local model? No
 
 - Jev is **TypeSafe's hosted System One model** (`jev-latest`): "it returns calibrated probabilities to fixed questions
   in about a quarter of a second, for a fraction of a cent" ([guards.md:123](https://raw.githubusercontent.com/DevMortimer/pi-warden/main/docs/guards.md)).
@@ -152,9 +158,18 @@ holds), `PI_WARDEN_DB`, `PI_WARDEN_TRACE_DIR`, `PI_WARDEN_STEER_STATS`, `PI_WARD
   speaks the same protocol**: `{ label, host, path, keyEnv, defaultModel? }`, host must be `https:` except loopback
   (`http:` allowed only for localhost/127.0.0.0/8/[::1]) — `pi-typesafe/dist/backends.js:136`. The protocol is
   `POST <host>/v1/systemone` carrying Noul/Choice/Score questions (`pi-typesafe/dist/schema.js`,
-  `dist/client.js:11`). The oMLX server in this repo's `localllm` block is OpenAI *chat completions* (`/v1`), not that
-  protocol, so it cannot serve as a judge as-is. A truly local judge would need a System One-compatible gateway in
-  front of a local model; pi-warden does not ship one.
+  `dist/client.js:11`).
+- **oMLX does serve that protocol.** This repo's `localllm` block points at an oMLX server whose chat surface is
+  OpenAI `/v1`; the same runtime also answers `POST /v1/systemone` from its `DecisionEngine`, and `GET /v1/models`
+  labels the entry `"model_type": "decision"`. A decision model id must be loaded (`d3-mini-oQ8e` here) and is the
+  only accepted value for `model`: oMLX answers `404 Model '<id>' not found` for anything else, including
+  `jev-latest`. Measured on this host, 2026-11-17 (100 input tokens, `noul` 0.9972). This was the repo's judge
+  until the same day, as an endpoint object naming `http://localhost:8000`, `/v1/systemone`, and that model id;
+  it stays the local option.
+- pi-warden reads the endpoint object itself, so it needs no model registry entry. tinysubagent's
+  `classifierModel` does, and pi's `models.json` cannot declare classifier models, so the local judge
+  re-registers pi's `typesafe` provider (the one provider whose classifier dispatch speaks System One)
+  with oMLX's `baseUrl` and the decision model id — `dot_pi/agent/extensions/judge-classifier.ts.tmpl` here.
 - No local LLM server is needed for the Action guard itself — only for Jev-off ("pattern floor only") do you need
   nothing at all.
 
@@ -217,7 +232,8 @@ That is the whole requirement. `failOpen`, `irreversible`, `floor` etc. are iner
 Required vs optional:
 
 - **Required:** `action.enabled: true`, a non-empty `action.tools`, and consent + a key for the backend
-  (`typesafe: true` here already, plus `TYPESAFE_API_KEY` in pi's environment or `/typesafe login`).
+  (`typesafe: true` here already, plus `OPENCODE_API_KEY` in pi's environment — warden's `keyEnv` names it; the
+  built-in TypeSafe backend would read `TYPESAFE_API_KEY` or `/typesafe login`).
 - **Required if you want today's deliberate minimisation kept:** `ask.enabled: true` — the current template has
   `false`, which means *every* guarded call is sent to Jev, including every `write`/`edit`, roughly double the requests
   of the default. `traceSample: 0` (keep 0: no second sampled request, no earlier messages leaving the machine),
@@ -250,9 +266,16 @@ tools (`warden_recall`, `warden_loops`, `warden_remember`) available; the action
   `PI_WARDEN_HOST_PATHS=$HOME` exempts the outside-project rule (nothing else) if that noise is unwelcome — but it also
   exempts genuinely dangerous home writes from that one check.
 - **Latency:** one request before the tool call, ~250 ms claimed, `timeoutMs` 5000, `failOpen: true` (a failed request
-  allows the call with a warning). The ask gate halves request count; a held call in `steer` mode costs the agent a
-  full re-plan turn. Judged calls run before the tool, so a slow/unreachable backend adds latency until the cooldown
-  trips after 3 failures (60 s quiet).
+  allows the call with a warning). The oMLX judge it previously used did not parallelise: one SystemOne request at a
+  time, ~1.8 s for a 1.6k-token decision, +~2 s per queued request, which is where the 20000 timeout came from.
+  A slow/unreachable backend adds latency until the cooldown trips after 3 failures (60 s quiet). The ask gate halves
+  request count; a held call in `steer` mode costs the agent a full re-plan turn.
+- **Rules cost scales with rule count on a serialising judge.** Each rule is one Choice question over the whole
+  state, and oMLX re-encoded that state per question. Measured 2026-11-17 on a 4.7 KB write (2,067 tokens for one
+  rule): 1 rule 2.3 s, 4 rules 10.8 s, 10 rules 29.8 s, 31 rules 95 s; the audit's 4 concurrent requests
+  (`rules-audit.js:16`) took 3.0/6.1/9.2/12.3 s at one rule. Hosted Jev evaluates the questions of one request in
+  parallel (`opencode.ai/docs/console/models`), so this scaling belongs to the local judge, not to the count itself.
+  `rules.maxRequests` only raises the 31-rule cap per request.
 - **Cost:** `pi-typesafe` prices TypeSafe at `DEFAULT_USD_PER_MTOK = 0.042` (`dist/usage.js:8`) → a ~1.3k-token acting
   request is ~$0.00006. The real limit is `maxRequests: 500` per session, shared with the rules guard and compaction;
   with `ask.enabled: false` a long session can exhaust it.
@@ -285,7 +308,7 @@ tools (`warden_recall`, `warden_loops`, `warden_remember`) available; the action
    `warden_*` tools.
 4. Optionally add one `commandRules` entry for whatever you want held even when the task asks for it (e.g.
    `npm publish`, `git push --force`), since evidence mode downgrades those to warns.
-5. Commit it: it is user config, carries no secret (the key is `TYPESAFE_API_KEY` in the unmanaged
+5. Commit it: it is user config, carries no secret (the key is `OPENCODE_API_KEY` in the unmanaged
    `~/.secrets/systemone.env`), and `chezmoi apply` is not caught by the warden's own config-write hold. Then start a
    fresh pi session and check `/warden status` — it prints `guarding bash, write, edit (…actions…)`, the mode, and
    whether TypeSafe judgments are consented, and `/warden trace` shows per-call `jev: irreversible nn%` lines.

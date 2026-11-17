@@ -79,18 +79,21 @@ export INCISE_PROFILE=auto
 # `direnv exec {cwd} bash -c '...' --` (`{cwd}` is substituted by tinysubagent).
 export PI_HERDR_LAUNCH_PREFIX="bash -c 'set -a; [ -f \"\$HOME/.secrets/systemone.env\" ] && . \"\$HOME/.secrets/systemone.env\"; set +a; exec \"\$@\"' --"
 
-# pi judges, one credential for every consumer. Today the judge is TypeSafe's
-# Jev, `POST https://api.typesafe.ai/v1/systemone`, model `jev-latest`, set once
-# in .chezmoidata.toml.
+# pi judges, one credential for every consumer. Today the judge is OpenCode's
+# free Jev, `POST https://opencode.ai/inference/systemone/v1/systemone`, model
+# `jev-1.13-free`, set once in .chezmoidata.toml. pi ships
+# `opencode/jev-1.13-free` as a classifier model, and pi-warden reaches the same
+# host through an endpoint object.
 #
-#   TYPESAFE_API_KEY  pi's `typesafe` classifier provider (tinysubagent's
-#                     `classifierModel` for profile routing and the child report
-#                     check) and pi-warden's built-in judgment backend. The value
-#                     comes from https://console.typesafe.ai/keys and lives in the
-#                     unmanaged systemone.env below; no file means no export.
+#   OPENCODE_API_KEY  pi's `opencode` provider (tinysubagent's `classifierModel`
+#                     for profile routing and the child report check) and
+#                     pi-warden's judgment endpoint. Get it from
+#                     https://opencode.ai/console and put it in the unmanaged
+#                     systemone.env below; no file means no export.
 #
-# A local System One endpoint exports its own `keyEnv` here instead; the key
-# names in .chezmoidata.toml and this file must match. That variable must not be
+# A local System One endpoint exports its own `keyEnv` here instead (the oMLX
+# path used `OMLX_SYSTEMONE_KEY`, oMLX's `auth.api_key`); the key names in
+# .chezmoidata.toml and this file must match. That variable must not be
 # TYPESAFE_API_KEY: pi-typesafe refuses an endpoint object that names the TypeSafe
 # key, which only ever goes to api.typesafe.ai.
 #

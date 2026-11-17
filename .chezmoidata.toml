@@ -1,24 +1,36 @@
 # One judge, rendered into every consumer. `dot_pi/agent/tinysubagent.jsonc.tmpl`
 # takes `<provider>/<model>` for pi's model registry; `dot_pi/agent/pi-warden/config.json.tmpl`
-# takes the backend name or an endpoint object built from the same fields.
+# takes the backend name or an endpoint object built from the same fields;
+# `dot_pi/agent/extensions/judge-classifier.ts.tmpl` re-registers the pi provider
+# only when `provider = "typesafe"`, so a custom host can be reached through it.
 #
-# `provider = "typesafe"` renders warden's built-in backend and needs no host: the
-# key comes from TYPESAFE_API_KEY in the unmanaged ~/.secrets/systemone.env, which
-# pi's `typesafe` classifier provider and pi-warden both read.
+# `provider` names the pi provider the classifier is reached through. `backend`
+# names what pi-warden talks to: a registry backend, or anything else, which
+# renders an endpoint object from `label`/`host`/`path`/`keyEnv`/`model`.
 #
-# A local System One endpoint changes only this block: set `provider` to the pi
-# provider that serves the classifier, `model` to its model id, and fill
-# `label`/`host`/`path`/`keyEnv` for warden.
+# The other judge this repo has run is TypeSafe's hosted Jev:
+# `provider = "typesafe"`, `backend = "typesafe"`, `model = "jev-latest"`,
+# `host = "https://api.typesafe.ai"`, key `TYPESAFE_API_KEY` from the unmanaged
+# ~/.secrets/systemone.env.
 #
-# `keyEnv` must name a variable other than TYPESAFE_API_KEY: pi-typesafe refuses
-# an endpoint object whose keyEnv is TYPESAFE_API_KEY, because that key is only
-# ever sent to api.typesafe.ai. Any nonempty value satisfies it, so a loopback
-# endpoint can use a placeholder. The variable itself is exported from the same
-# ~/.secrets/systemone.env file as TYPESAFE_API_KEY.
+# Any other System One endpoint changes only this block: set `backend` to a name
+# outside the registry, fill `label`/`host`/`path`/`keyEnv`, and keep `provider`
+# at the pi provider whose classifier dispatch speaks the endpoint's protocol.
+# `host` is the origin only, and `path` is the System One route on that origin.
+# `keyEnv` must name a variable other than TYPESAFE_API_KEY when `backend` is an
+# endpoint: pi-typesafe refuses an endpoint object whose keyEnv is
+# TYPESAFE_API_KEY, because that key is only ever sent to api.typesafe.ai. Any
+# nonempty value satisfies it. The variable itself is exported from
+# ~/.secrets/systemone.env.
+#
+# The judge is OpenCode's free Jev: pi ships `opencode/jev-1.13-free` as a
+# classifier model, and pi-warden gets the same model through an endpoint object
+# because pi-typesafe has no `opencode` registry backend.
 [judge]
-provider = "typesafe"
-model = "jev-latest"
-label = "Jev"
-host = "https://api.typesafe.ai"
-path = "/v1/systemone"
-keyEnv = "WARDEN_JUDGE_KEY"
+provider = "opencode"
+backend = "opencode"
+model = "jev-1.13-free"
+label = "OpenCode"
+host = "https://opencode.ai"
+path = "/inference/systemone/v1/systemone"
+keyEnv = "OPENCODE_API_KEY"

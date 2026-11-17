@@ -42,7 +42,8 @@ gh auth setup-git
   (`xattr -dr com.apple.quarantine /Applications/qBittorrent.app`). Do not
   disable Gatekeeper itself. `transmission` is the cask that still installs.
 - `mkdir -p ~/.secrets && ${EDITOR:-nano} ~/.secrets/systemone.env` with
-  `TYPESAFE_API_KEY`; pi's `typesafe` provider and pi-warden both read it.
+  `OPENCODE_API_KEY` from https://opencode.ai/console; pi's `opencode` provider
+  and pi-warden's judge endpoint both read it.
 - `pi` signs in and materializes its packages.
 - Start `herdr` once, then `chezmoi apply` again to link the vendored plugins.
 - Grant what casks cannot: Aerospace (Accessibility), Karabiner (Input
@@ -70,7 +71,7 @@ sudo usermod -aG docker "$USER"    # takes effect at next login
 sudo tailscale up
 gh auth login
 pi                                 # signs in, materializes its packages
-mkdir -p ~/.secrets && ${EDITOR:-nano} ~/.secrets/systemone.env  # TYPESAFE_API_KEY
+mkdir -p ~/.secrets && ${EDITOR:-nano} ~/.secrets/systemone.env  # OPENCODE_API_KEY
 chezmoi apply                      # links the tinysubagent herdr plugin
 ```
 
