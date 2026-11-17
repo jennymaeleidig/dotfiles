@@ -25,7 +25,10 @@
 # cannot be cloned fails `brew bundle` outright, unlike a cask whose source does
 # not declare linux support, which is skipped.
 if OS.mac?
-  tap "jundot/omlx"
+  # The repository is jundot/omlx, not the jundot/homebrew-omlx the bare name
+  # implies, so without the URL a fresh host asks git for credentials for a
+  # repository that does not exist. This is the remote the tap is already on.
+  tap "jundot/omlx", "https://github.com/jundot/omlx"
   tap "nikitabobko/tap"
 end
 
