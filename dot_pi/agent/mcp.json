@@ -62,6 +62,21 @@
       "exposure": "codemode",
       "timeout": 120,
       "description": "Kagi search and research through the user's subscription: web search, quick answers, summarize (pass subscriber:true), news feeds, smallweb, translate, and assistant reads."
+    },
+    "playwright": {
+      "enabled": false,
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp",
+        "--browser",
+        "chromium",
+        "--caps",
+        "pdf,vision",
+        "--allow-unrestricted-file-access"
+      ],
+      "exposure": "codemode",
+      "description": "Drive a local Chromium to load the built site, click through pages, take screenshots, and print PDFs."
     }
   }
 }
