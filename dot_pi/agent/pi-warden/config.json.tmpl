@@ -3,6 +3,7 @@
 {
   "typesafe": true,
   "typesafeBackend": {{ if $endpoint }}{{ dict "label" .judge.label "host" .judge.host "path" .judge.path "keyEnv" .judge.keyEnv "defaultModel" .judge.model | toJson }}{{ else }}"{{ .judge.backend }}"{{ end }},
+  "mode": "confirm",
   {{- if false -}}
     FUTURE WORK — two things deliberately not on yet, both user-file-only keys.
 
@@ -53,7 +54,7 @@
     "skip": [".scratch/**", "docs/agents/**", "CONTEXT-MAP.md"],
     "threshold": 0.7,
     "softThreshold": 0.5,
-    "auditExtensions": ["md", "css"]
+    "auditExtensions": ["md", "css", "html", "json"]
   },
   "rulesAtTurnStart": {
     "enabled": true

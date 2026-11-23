@@ -5,8 +5,8 @@ set -euo pipefail
 # Homebrew exists, then no-ops on every later apply.
 #
 # Both hosts install Homebrew here, so 10-brew-bundle can assume the prefix it
-# resolves. The Command Line Tools are the human step on macOS (a GUI dialog);
-# Homebrew itself is not.
+# resolves. The Command Line Tools that the macOS installer needs come from
+# 05-macos-prerequisites, which runs before this script.
 case "$(uname -s)" in
 Darwin) BREW=/opt/homebrew/bin/brew ;;
 Linux) BREW=/home/linuxbrew/.linuxbrew/bin/brew ;;
@@ -28,13 +28,6 @@ if ! sudo -n true 2>/dev/null; then
 fi
 
 if [ "$(uname -s)" = Darwin ]; then
-	# Homebrew's installer needs the Command Line Tools. Nothing here can install
-	# them: `xcode-select --install` is a GUI dialog.
-	if ! xcode-select -p >/dev/null 2>&1; then
-		echo "==> Xcode Command Line Tools are missing: run 'xcode-select --install', then re-run chezmoi apply" >&2
-		exit 1
-	fi
-
 	# NONINTERACTIVE=1 skips the RETURN prompt and the analytics question, so this
 	# is safe inside `chezmoi apply`.
 	NONINTERACTIVE=1 /bin/bash -c \

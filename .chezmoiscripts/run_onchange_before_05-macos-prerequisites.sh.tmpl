@@ -1,0 +1,14 @@
+#!/bin/bash
+set -euo pipefail
+
+# macOS prerequisites converge here: the Xcode Command Line Tools and Rosetta 2.
+# No manifest hash: both are presence checks that no-op once satisfied. This
+# sorts before 00-bootstrap-homebrew, whose installer needs the tools.
+#
+# bootstrap.sh runs the same helper before the first apply; this is for a host
+# that predates it, or one that applies without bootstrap.sh.
+if [ "$(uname -s)" != Darwin ]; then
+	exit 0
+fi
+
+"{{ .chezmoi.sourceDir }}/packages/macos-prerequisites.sh"

@@ -80,9 +80,9 @@ export INCISE_PROFILE=auto
 export PI_HERDR_LAUNCH_PREFIX="bash -c 'set -a; [ -f \"\$HOME/.secrets/systemone.env\" ] && . \"\$HOME/.secrets/systemone.env\"; set +a; exec \"\$@\"' --"
 
 # pi judges, one credential for every consumer. Today the judge is OpenCode's
-# free Jev, `POST https://opencode.ai/inference/systemone/v1/systemone`, model
-# `jev-1.13-free`, set once in .chezmoidata.toml. pi ships
-# `opencode/jev-1.13-free` as a classifier model, and pi-warden reaches the same
+# Jev, `POST https://opencode.ai/inference/systemone/v1/systemone`, model
+# `jev-1.13`, set once in .chezmoidata.toml. pi ships
+# `opencode/jev-1.13` as a classifier model, and pi-warden reaches the same
 # host through an endpoint object.
 #
 #   OPENCODE_API_KEY  pi's `opencode` provider (tinysubagent's `classifierModel`

@@ -1,0 +1,91 @@
+#!/bin/bash
+set -euo pipefail
+
+# Blocks Adobe telemetry and activation endpoints in /etc/hosts. The records are
+# a checksum-pinned chezmoi external (.chezmoiexternal.toml), so updating the
+# list means bumping that hash in a commit, not fetching here.
+#
+# Plain run_after_: a converged host pays a compare and nothing else, and a host
+# where someone deleted the block gets it back. After, because the external is
+# part of the target-state pass and this reads it.
+#
+# Only the section between the markers is owned. Everything else in /etc/hosts
+# is preserved byte for byte.
+HOSTS=/etc/hosts
+LIST="$HOME/.local/share/adobe-blocklist/hosts"
+START='## ADOBE_BLOCKLIST_START ##'
+END='## ADOBE_BLOCKLIST_END ##'
+
+if [ ! -f "$LIST" ]; then
+	echo "==> $LIST not found: chezmoi has not applied the external" >&2
+	exit 1
+fi
+
+# The upstream file is a Windows sample hosts file: only the 0.0.0.0/127.0.0.1
+# records carry data, and its header and comments are not ours to copy.
+records=$(awk '/^[[:space:]]*(0\.0\.0\.0|127\.0\.0\.1)[[:space:]]+[^#[:space:]]/ { print $1, $2 }' "$LIST" | sort -u)
+count=$(printf '%s\n' "$records" | grep -c . || true)
+if [ "$count" -eq 0 ]; then
+	echo "==> no records in $LIST: has the upstream format changed?" >&2
+	exit 1
+fi
+
+# A single missing end marker would make the strip below delete the rest of the
+# file, so refuse an unbalanced file instead of repairing it blind.
+read -r starts ends <<<"$(awk -v start="$START" -v end="$END" '
+	$0 == start { starts++ }
+	$0 == end { ends++ }
+	END { print starts + 0, ends + 0 }
+' "$HOSTS")"
+if [ "$starts" -ne "$ends" ] || [ "$starts" -gt 1 ]; then
+	echo "==> $HOSTS has $starts start marker(s) and $ends end marker(s): fix the block by hand" >&2
+	exit 1
+fi
+
+tmp=$(mktemp)
+trap 'rm -f "$tmp"' EXIT
+
+# Drops the old block and normalizes the trailing blank lines, so rewriting is
+# byte-stable rather than growing a blank line per apply.
+awk -v start="$START" -v end="$END" '
+	$0 == start { inblock = 1; next }
+	inblock && $0 == end { inblock = 0; next }
+	inblock { next }
+	{ buf[++n] = $0 }
+	END {
+		while (n > 0 && buf[n] == "") n--
+		for (i = 1; i <= n; i++) print buf[i]
+	}
+' "$HOSTS" >"$tmp"
+
+{
+	printf '\n%s\n' "$START"
+	printf '%s\n' "$records"
+	printf '%s\n' "$END"
+} >>"$tmp"
+
+if cmp -s "$tmp" "$HOSTS"; then
+	echo "==> Adobe blocklist already present in $HOSTS"
+	exit 0
+fi
+
+# An unattended apply must never hang on a sudo prompt.
+if ! sudo -n true 2>/dev/null; then
+	echo "==> sudo needs a password: run 'sudo -v', then re-run chezmoi apply" >&2
+	exit 1
+fi
+
+# tee keeps the destination inode, permissions, and ownership.
+sudo tee "$HOSTS" >/dev/null <"$tmp"
+
+# Reload the resolver so the new records take effect without a reboot.
+if [ "$(uname -s)" = Darwin ]; then
+	sudo dscacheutil -flushcache
+	sudo killall -HUP mDNSResponder
+elif command -v resolvectl >/dev/null 2>&1; then
+	sudo resolvectl flush-caches
+elif command -v systemd-resolve >/dev/null 2>&1; then
+	sudo systemd-resolve --flush-caches
+fi
+
+echo "==> blocked $count Adobe domains in $HOSTS"

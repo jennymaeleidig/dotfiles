@@ -10,6 +10,15 @@ url = "https://raw.githubusercontent.com/Kirlovon/monokai-ghostty/main/Monokai%2
 # hosts only. Bump this hash deliberately when adopting an upstream change.
 checksum.sha256 = "b0ba8bcae0e19b98141777c6f9c5892934197d74ae2659e5f094ce25c470d7d8"
 
+# Adobe telemetry and activation endpoints, applied to /etc/hosts by
+# run_after_60-adobe-hosts.sh.tmpl. Pinned by checksum so an upstream edit cannot
+# silently change what a fresh host blocks; bump the hash deliberately.
+[".local/share/adobe-blocklist/hosts"]
+type = "file"
+# https://github.com/Ruddernation-Designs/Adobe-URL-Block-List
+url = "https://raw.githubusercontent.com/Ruddernation-Designs/Adobe-URL-Block-List/master/hosts"
+checksum.sha256 = "3c64183b4380385aa3c07f1da743a94db0642e172a1c49ce80aebb2a5ac59709"
+
 # oh-my-bash, sourced by ~/.bash_init. It was a bare `git clone` outside chezmoi,
 # so a fresh Linux host sourced a path that did not exist. Its custom/ directory
 # holds only the stock example files, so nothing user-owned is at risk; anything

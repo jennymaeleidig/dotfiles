@@ -1,5 +1,5 @@
 ---
-name: warden-scope-setup
+name: setup-warden-scope
 description: Set which files pi-warden judges in one repository — extra source extensions, excluded and skipped paths, and per-rule path scopes. Use when a warden audit misses a language, selects nothing, samples vendored or generated code, a rule fires outside its area, or a new repository needs its file scope set from scratch.
 ---
 

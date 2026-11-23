@@ -8,20 +8,34 @@ running as a UTM guest. Package ownership is stated at the top of
 
 ## Fresh macOS host
 
-The one thing the repo cannot install for you is Xcode's Command Line Tools:
-`xcode-select --install` is a GUI dialog. Everything else, Homebrew included,
-comes from the first apply.
+Nothing has to be installed by hand: the first apply brings up the Xcode
+Command Line Tools, Rosetta 2, and Homebrew.
 
 ```sh
-xcode-select --install            # wait for the dialog to finish
 git clone https://github.com/jennymaeleidig/dotfiles ~/.local/share/chezmoi
 ~/.local/share/chezmoi/bootstrap.sh
 ```
 
-`bootstrap.sh` exits early when the tools are missing, caches sudo, and applies.
-`run_onchange_before_00-bootstrap-homebrew.sh.tmpl` installs Homebrew to
-`/opt/homebrew` when it is absent, so `10-brew-bundle` has a prefix to use.
-Re-running `bootstrap.sh` resumes a failed apply.
+`bootstrap.sh` caches sudo, runs `packages/macos-prerequisites.sh`, and applies.
+That helper installs the Command Line Tools through `softwareupdate`, not the
+`xcode-select --install` GUI dialog, plus Rosetta 2 on Apple silicon. It is also
+`run_onchange_before_05-macos-prerequisites.sh.tmpl`, so an older host converges
+on the next apply. `run_onchange_before_00-bootstrap-homebrew.sh.tmpl` installs
+Homebrew to `/opt/homebrew` when it is absent, so `10-brew-bundle` has a prefix
+to use. Re-running `bootstrap.sh` resumes a failed apply.
+
+`run_onchange_after_25-macos-default-editor.sh.tmpl` then makes Visual Studio
+Code the Finder handler for text and source files with `duti`; the shell and git
+editors were already `code` (`dot_bash_exports.tmpl`, `dot_gitconfig`).
+
+`run_after_60-adobe-hosts.sh.tmpl` also writes a marked Adobe telemetry block
+into `/etc/hosts` on both hosts. The records come from
+`~/.local/share/adobe-blocklist/hosts`, a checksum-pinned chezmoi external
+(`.chezmoiexternal.toml`); an upstream update is adopted by bumping that hash.
+The list blocks sign-in and licensing endpoints as well as telemetry, so opt out
+before running it on a host that uses Creative Cloud: delete the
+`run_after_60-adobe-hosts.sh.tmpl` script and the external entry. Deleting only
+the block from `/etc/hosts` lasts until the next apply.
 
 Expect `brew bundle` to stay interactive on macOS: casks prompt for passwords
 and open installers, and `mise install` plus Tidal's `cabal install` take a
@@ -35,7 +49,12 @@ gh auth login                     # also gives git HTTPS credentials
 gh auth setup-git
 ```
 
-- Tailscale comes from the App Store, deliberately not from `packages/Brewfile`.
+- Tailscale on macOS is the `tailscale-app` cask, deliberately not the App
+  Store build and not the `tailscale` brew formula: each of the three ships a
+  daemon, and two daemons share one state directory. The app supervises its own
+  privileged daemon and bundles the CLI, so the first run is: approve the system
+  extension when macOS asks, then log in. There is no `brew services` step. On
+  Linux the same daemon comes from apt instead.
 - qBittorrent is not in `packages/Brewfile` either: every qBittorrent cask is
   disabled upstream because the app does not pass Gatekeeper. Install it from
   qbittorrent.org, then clear the quarantine attribute before first launch

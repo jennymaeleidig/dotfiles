@@ -12,18 +12,24 @@
 # source does not declare linux support. Formulae have no such skipper, so
 # anything apt owns on Linux is fenced with `if OS.mac?`.
 #
-# Tailscale is deliberately absent. On Linux it comes from apt (the official
-# repo, in packages/apt-ubuntu.txt) and on macOS from the App Store app;
-# Homebrew's `tailscale` formula would install a second daemon beside either.
+# Tailscale is the tailscale-app cask on macOS: the app ships and supervises
+# its own privileged daemon. On Linux the daemon comes from apt (the official
+# repo, in packages/apt-ubuntu.txt). The brew formula and the App Store build
+# each ship a daemon too, and any two of the three share one state directory,
+# so never install another beside the cask.
 
 # --- third-party taps -------------------------------------------------------
 # `trusted: true` records trust but does not create the tap, so declare both:
 # a fresh machine has neither, and an untapped tap cannot be recovered from the
 # entries below alone.
 #
-# Both taps serve only macOS formulae and casks, so both are fenced. A tap that
-# cannot be cloned fails `brew bundle` outright, unlike a cask whose source does
-# not declare linux support, which is skipped.
+# This tap serves both platforms, so it is not fenced with the macOS-only taps
+# below. dot_pi/agent/mcp.json runs `kagi mcp`, which fails to spawn without it.
+tap "Microck/kagi", "https://github.com/Microck/homebrew-kagi"
+
+# Both remaining taps serve only macOS formulae and casks, so both are fenced.
+# A tap that cannot be cloned fails `brew bundle` outright, unlike a cask whose
+# source does not declare linux support, which is skipped.
 if OS.mac?
   # The repository is jundot/omlx, not the jundot/homebrew-omlx the bare name
   # implies, so without the URL a fresh host asks git for credentials for a
@@ -44,6 +50,7 @@ brew "gh"
 # fails every checkout that carries LFS attributes instead of degrading.
 brew "git-lfs"
 brew "herdr"
+brew "kagi", trusted: true
 brew "mise"
 brew "shellcheck"
 brew "starship"
@@ -105,16 +112,15 @@ if OS.mac?
   # looking orphaned, so cleanup scheduled the tap for untapping and then failed
   # loading the cask whose source it was removing.
   cask "nikitabobko/tap/aerospace", trusted: true
+  cask "beeper"
   cask "betterdisplay"
   cask "calibre"
-  cask "discord"
   cask "font-commit-mono-nerd-font"
   cask "ghostty"
   cask "grandperspective"
   cask "jdownloader"
   cask "karabiner-elements"
   cask "middle"
-  cask "music-decoy"
   cask "obs"
   cask "obsidian"
   # qBittorrent is absent deliberately: homebrew-cask disabled it and every
@@ -123,6 +129,8 @@ if OS.mac?
   cask "raycast"
   cask "steam"
   cask "superwhisper"
+  # App plus CLI; see the platform note at the top of this file.
+  cask "tailscale-app"
   cask "visual-studio-code"
   cask "vorssaint"
   cask "zen"

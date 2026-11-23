@@ -1,5 +1,5 @@
 ---
-name: lsp-setup
+name: setup-pi-lens
 description: Set up and verify language servers (LSP) for a repository. Use when initializing LSP, when a language has no diagnostics or navigation, when adding a language, or when a server resolves the wrong project root.
 ---
 

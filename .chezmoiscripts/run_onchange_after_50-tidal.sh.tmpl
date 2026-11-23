@@ -5,8 +5,10 @@ set -euo pipefail
 # Tidal Cycles: brew provides GHC and cabal, SuperCollider synthesises, and the
 # `tidal` library itself is a cabal global package that no manifest can express
 # (~/.cabal/store is its only record). This script IS its manifest: changing
-# TIDAL_VERSION changes the rendered hash and re-runs it.
-TIDAL_VERSION="1.10"
+# TIDAL_VERSION changes the rendered hash and re-runs it. Pin an exact release:
+# `"tidal-1.10"` is the version 1.10, which Hackage does not publish, and cabal
+# rejects every 1.10.x release while reporting it as a conflict.
+TIDAL_VERSION="1.10.3"
 
 # ghc-pkg and cabal both live in brew's bin, which scripts do not inherit.
 eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || true)"
@@ -16,13 +18,14 @@ if ! command -v ghc-pkg >/dev/null 2>&1; then
 	exit 1
 fi
 
-if ghc-pkg list --simple-output tidal 2>/dev/null | grep -q "tidal-${TIDAL_VERSION}"; then
+if ghc -e 'putStrLn (Data.Version.showVersion Paths_tidal.version)' 2>/dev/null | grep -qx "${TIDAL_VERSION}"; then
 	echo "==> tidal ${TIDAL_VERSION} already installed"
 	exit 0
 fi
 
-# --lib registers the package so GHCi can `import Sound.Tidal.Context`, which
-# is how Tidal code is evaluated.
+# --lib registers the package in GHC's default environment file, which is what
+# GHCi reads for `import Sound.Tidal.Context`; ghc-pkg reads package databases
+# instead, so the `ghc -e` guard above asks the environment GHCi will use.
 cabal update
 cabal install --lib "tidal-${TIDAL_VERSION}"
 {{- end -}}

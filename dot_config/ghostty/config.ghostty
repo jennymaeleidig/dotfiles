@@ -1,6 +1,8 @@
 # Palette: external in .chezmoiexternal.toml (Kirlovon/monokai-ghostty).
 # herdr-theme-sync reads this line to derive the herdr theme — keep it.
 theme = "Monokai Pro"
+background-opacity = 0.75
+background-blur = true
 
 # Font
 font-family = "CommitMonoNF"
@@ -9,6 +11,7 @@ font-size = 14
 # Quick terminal (ctrl+`): centered, unanimated. Defaults are top / 0.2s.
 keybind = global:ctrl+backquote=toggle_quick_terminal
 quick-terminal-position = center
+quick-terminal-size = 100%,100%
 quick-terminal-animation-duration = 0
 
 # Keep the block cursor; shell integration otherwise forces a bar at the prompt.

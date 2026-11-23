@@ -61,3 +61,6 @@ packages/
 {{ end }}
 
 warden-local-rules.md
+# Placeholder so the Adobe blocklist external has a parent directory to land
+# in; the file itself is not a target.
+.local/share/adobe-blocklist/.gitkeep

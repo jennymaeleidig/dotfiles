@@ -35,6 +35,8 @@
       "enabled": false,
       "command": "uvx",
       "args": [
+        "--python",
+        "3.12",
         "--from",
         "zotero-mcp-server[semantic,pdf]",
         "zotero-mcp",

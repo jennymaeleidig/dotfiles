@@ -1,0 +1,72 @@
+#!/bin/bash
+set -euo pipefail
+
+# Makes VS Code the Finder handler for text and source files. The shell and git
+# editors already point at `code` (dot_bash_exports.tmpl, dot_gitconfig); this is
+# the double-click path.
+#
+# after_ because the cask installs in the before_ phase and duti resolves the
+# app through LaunchServices. run_onchange_ because duti writes a LaunchServices
+# preference that nothing in this repo reads back, so a plain run_ would rewrite
+# it on every apply.
+if [ "$(uname -s)" != Darwin ]; then
+	exit 0
+fi
+
+DUTI=/opt/homebrew/bin/duti
+APP="/Applications/Visual Studio Code.app"
+BUNDLE_ID=com.microsoft.VSCode
+LSREGISTER=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
+
+if [ ! -d "$APP" ]; then
+	echo "==> $APP not found: brew bundle has not installed visual-studio-code" >&2
+	exit 1
+fi
+
+if [ ! -x "$DUTI" ]; then
+	echo "==> $DUTI not found: brew bundle has not installed duti" >&2
+	exit 1
+fi
+
+# A freshly installed cask is not necessarily registered yet, and duti resolves
+# the bundle id before writing the preference.
+"$LSREGISTER" -f "$APP"
+
+# One UTI per type, then the extensions whose current handler is more specific
+# than the parent UTI. Failures are collected and reported, not fatal: duti
+# answers error -50 when LaunchServices has not finished registering the app,
+# yet the association still lands (checked with `duti -x <ext>` afterwards), and
+# which UTIs exist varies by macOS release. A hard failure here would block the
+# rest of the apply for a preference that resolves itself.
+failed=()
+set_default() {
+	# duti prints its own error for every association LaunchServices has not
+	# resolved yet; the collected list below is the only output worth keeping.
+	if ! "$DUTI" -s "$BUNDLE_ID" "$1" all 2>/dev/null; then
+		failed+=("$1")
+	fi
+}
+
+for uti in \
+	public.json \
+	public.plain-text \
+	public.python-script \
+	public.shell-script \
+	public.source-code \
+	public.text \
+	public.unix-executable \
+	public.data; do
+	set_default "$uti"
+done
+
+for ext in \
+	.c .cpp .cs .css .go .java .js .jsx .ts .tsx .lua .php .pl .py .rb .vue \
+	.sass .scss .less .cfg .conf .log .md .toml .txt .yaml .yml; do
+	set_default "$ext"
+done
+
+if [ "${#failed[@]}" -gt 0 ]; then
+	echo "==> duti reported no handler for: ${failed[*]}" >&2
+fi
+
+echo "==> Finder opens text and source files in Visual Studio Code"
