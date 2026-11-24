@@ -5,18 +5,18 @@ description: Set up and verify language servers (LSP) for a repository. Use when
 
 # LSP setup
 
-Take a repository from no LSP to **every source language verified by a probe, or recorded as `unsupported`**.
+Take a repository from no LSP to **every source language verified by a probe, or reported as
+`unsupported`**. This skill changes configuration only; it writes no repository document.
 
-The host adapter holds the configuration and probing mechanics. For pi-lens, read [hosts/pi-lens.md](hosts/pi-lens.md).
+Host mechanics: [hosts/pi-lens.md](hosts/pi-lens.md).
 
-A **probe** is a temporary file carrying one unambiguous error, queried through the host.
-**Attribution** is the finding naming the server that produced it: the tag is the server's
-diagnostic source (`[Pyright]`, `[Lua Diagnostics.]`), not its registry id. A finding from
-another tool is not attribution. Silence is never clean.
+A **probe** is one temporary file carrying one unambiguous error, queried through the host.
+**Attribution** is the finding tagged with the server that answered, not its registry id; a
+dispatch runner's tag is not attribution. Silence is never clean.
 
-Vocabulary used throughout: **bucket** (one language's tracked files), **root marker**
-(the file that anchors a server's project root), **project-local** (install owned by the
-repo, e.g. a devDependency), **unsupported** (terminal outcome: no server exists, or none can run here).
+Vocabulary: **bucket** (one language's tracked files), **root marker** (the file that anchors a
+server's project root), **project-local** (install owned by the repo), **unsupported** (no
+server definition covers the language).
 
 ## Process
 
@@ -35,21 +35,21 @@ Done: every tracked source file maps to a bucket; each excluded path is named wi
 ### 2. Map buckets to servers
 
 Use [servers.md](servers.md) and the host's server registry. Record the server id, binary or
-package, supported extensions, and root markers for each bucket. A language the registry
-defines but the matrix omits is supported: add a row, then continue.
+package, supported extensions, and root markers for each bucket. Add a missing matrix row and
+continue.
 
-Done: every bucket has a candidate server, or an explicit `unsupported` line naming why
-(no server in the ecosystem, or a server the host cannot launch).
+Done: every bucket has a candidate server, or an explicit `unsupported` line naming why.
 
 ### 3. Choose install ownership
 
-Default to **project-local**: a devDependency with a lockfile entry, so a fresh clone
-resolves the same server without depending on the user's PATH. Use a global or host-managed
-install only where the ecosystem makes project-local impossible; record that reason in the
-matrix row.
+Default to **project-local**: a devDependency with a lockfile entry, so a fresh clone resolves
+the same server. When the repo or user instructions name a runtime manager (mise, asdf, nix) as
+owner of runtimes and language servers, that manager owns them instead of a project-local
+package; step 5 makes it the launcher. The machine manifest tracks `latest`; a repo that needs
+reproducible versions pins them in its own manifest, which overrides the machine default.
 
-Done: every server has one declared owner, every non-project-local owner has its reason
-recorded, and step 7 records the version the verification ran against.
+Done: every server has one declared owner; every non-project-local owner states its reason in
+the commit message.
 
 ### 4. Anchor the root
 
@@ -58,36 +58,26 @@ Place the marker that anchors the server: `tsconfig.json` / `jsconfig.json`, `py
 subproject, not one at the top. Turn checking on deliberately: a `jsconfig.json` without
 `checkJs` diagnoses nothing.
 
-Done: each server resolves to the repo root or the intended subproject. A probe inside a
-nested package reports that package's own findings, and a server with no root for that package
-names the missing marker instead of passing silently.
+Done: every server resolves to the intended root; a missing marker is named, not silently passed.
 
 ### 5. Wire the host
 
-Write only settings that differ from the host default: ignore build and asset directories,
-disable scanners irrelevant to this repo, declare overrides and custom servers. Validate the
-file against the host schema and commit it.
+Write only what differs from the host default: ignore build and asset directories, disable
+irrelevant scanners, declare overrides and custom servers. Put an owner launcher override in the
+machine config (see [hosts/pi-lens.md](hosts/pi-lens.md)). Validate against the host schema and
+commit.
 
-Done: the host's selection record names each intended server and the reason it was selected,
-and none reports `spawn-failed`.
+Done: the host's selection record names each intended server and why; none reports `spawn-failed`.
 
 ### 6. Probe every supported bucket
 
-Use [probes.md](probes.md). For each bucket: write the probe file, query diagnostics through
-the host, confirm **attribution**, then delete the probe file.
+Use [probes.md](probes.md). For each bucket, write the probe, query diagnostics through the host,
+confirm attribution, then delete the probe. Report the verified and `unsupported` buckets, with
+reasons, in the run summary. Do not create `docs/agents/lsp.md` or add a language-servers section
+to `AGENTS.md`; the config files are the record.
 
-Done: every supported bucket produced a result naming the server that answered. Every
-`unsupported` bucket has its reason recorded.
-
-### 7. Record
-
-Update the one document that owns editor and tooling setup (`docs/agents/lsp.md`, or a
-section of `AGENTS.md`). Record the install command per language, the excluded path patterns,
-the verified buckets, the `unsupported` buckets with reasons, and how to re-probe after an
-upgrade. Do not restate values the config files already carry.
-
-Done: a fresh checkout can follow that document and reach the same verified state without
-this conversation; every config file it relies on is committed.
+Done: every supported bucket answers with attribution; every `unsupported` bucket is reported
+with its reason.
 
 ## After a failure
 
@@ -97,5 +87,5 @@ Read [troubleshooting.md](troubleshooting.md) before changing configuration. It 
 ## Adding a host
 
 Add `hosts/<name>.md`: config paths and schema, discovery order, how to read the selected-server
-state, the exact probe call, and how the host reports `unsupported`. Keep the seven steps above
+state, the exact probe call, and how the host reports `unsupported`. Keep the six steps above
 unchanged; only the mechanics differ.

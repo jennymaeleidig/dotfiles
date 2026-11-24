@@ -36,20 +36,16 @@ lsp_navigation { "operation": "documentSymbol", "path": "probe/p.css",
 ```
 
 `kinds` takes LSP SymbolKind names (`class`, `function`, …); omit it when you do not need a
-filter. Record the probe kind (`diagnostics` or `navigation`) in the setup document.
+filter.
 
 ## Reading the result
 
-- Attribution is the pass: a finding tagged with the server that answered — the tag is its
-  diagnostic source (`[Pyright]`, `[Lua Diagnostics.]`), not a bare count or a registry id.
-- A dispatch runner's finding, listed outside the host's primary LSP findings, is not
-  attribution even when it carries a shell tag.
-- `inconclusive` means the server stayed silent; it is neither clean nor a pass.
-- A finding that survives on a file the host ignores means explicit-path queries bypass
-  ignore rules — confirming the server is up, not that the file is in scope.
+- The tag names the diagnostic source (`[Pyright]`, `[Lua Diagnostics.]`), not a registry id. A
+  dispatch runner's finding is not attribution.
+- Explicit-path queries bypass ignore rules: a finding on an ignored file proves the server is
+  up, not that the file is in scope.
 
 ## Probe hygiene
 
-- Put probes under an ignored path (`tmp/`) so they never reach a commit.
-- A probe left behind becomes a fixture by accident; delete it in the same step that reads the result.
-- Re-run the probe after changing a root marker or server config; a warm server keeps the old root.
+- Put probes under an ignored path (`tmp/`) and delete each after reading its result.
+- Re-run after changing a root marker or server config; a warm server keeps the old root.

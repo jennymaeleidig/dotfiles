@@ -65,7 +65,6 @@ awk -v start="$START" -v end="$END" '
 } >>"$tmp"
 
 if cmp -s "$tmp" "$HOSTS"; then
-	echo "==> Adobe blocklist already present in $HOSTS"
 	exit 0
 fi
 

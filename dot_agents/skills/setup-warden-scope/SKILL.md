@@ -79,7 +79,7 @@ Done: every excluded or skipped bucket is matched by a pattern, every user exclu
 
 ### 5. Scope the rules
 
-Add a `paths:` line under the heading of each rule that fires outside its area, in the rules source: root `pi-warden.md`, else the effective `rules.files` list, else the first of `AGENTS.md`, `CLAUDE.md`, `README.md`, judged as one document.
+Add a `paths:` line under the heading of each rule that fires outside its area, in the rules source.
 
 ```markdown
 # No console output in library code
@@ -105,14 +105,3 @@ The dialog names how many files would leave the machine. Set `--max` above the j
 A path the walk cannot see is judged only by name: `/warden rules audit Makefile bin/deploy` still honours gitignore, `exclude`, `skip`, and the rule match. Confirm only when the user agrees to spend the requests.
 
 Done: the count reconciles as above, no config warning remains, and any `left out` line is explained.
-
-### 7. Record
-
-Update the one document in the repo that owns tooling setup (`docs/agents/warden.md`, or a section of `AGENTS.md`). Record the reasoning and the per-developer step the config cannot carry:
-
-- the extensions each developer must add to their own user file, since the repo cannot ship them
-- each excluded or skipped path with its reason
-- the extensionless files and the explicit audit command that reaches them
-- the verification commands
-
-Done: a fresh clone, plus the recorded per-developer step, reaches the same judged set without this conversation.

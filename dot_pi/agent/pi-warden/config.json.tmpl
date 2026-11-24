@@ -5,7 +5,7 @@
   "typesafeBackend": {{ if $endpoint }}{{ dict "label" .judge.label "host" .judge.host "path" .judge.path "keyEnv" .judge.keyEnv "defaultModel" .judge.model | toJson }}{{ else }}"{{ .judge.backend }}"{{ end }},
   "mode": "confirm",
   {{- if false -}}
-    FUTURE WORK — two things deliberately not on yet, both user-file-only keys.
+    FUTURE WORK — one thing deliberately not on yet, a user-file-only key.
 
     1. action.floor = "evidence" (the upstream default). Built-in pattern hits
        become evidence strings for Jev instead of level-setters, so nothing is
@@ -15,30 +15,33 @@
        the cost of the mechanical floor. Today we run "level"; switching is a
        one-line change here and nothing else.
 
-    2. action.pathRules with action "block" — the structured credential guard.
-       Matches the write/edit `path` field exactly and only fires when the file
-       exists, unlike a command regex that fires on any mention. `tools: ["*"]`
-       also reaches bash. Paste-ready:
-
-       "pathRules": [
-         { "id": "credential-files",
-           "paths": ["**/.env", "**/.env.*", "~/.ssh/id_*", "~/.aws/credentials",
-                     "~/.kube/config", "**/*.pem", "**/*.p12", "**/*.pfx"],
-           "access": "none", "tools": ["*"], "action": "block",
-           "message": "Credential files are off-limits — ask the user." }
-       ]
-
-       Caveat from the docs: access "none" on tools ["*"] also fires on a mere
-       mention (grep naming .env), which is why the sensitive-path built-in
-       exists separately. Note it needs `read` in action.tools to cover reads,
-       and that costs a Jev request per read.
-
     Everything in this block is skipped by `if false` and renders nothing into
     config.json; it lives here so the next change is a paste, not a decision.
   {{- end }}
   "action": {
     "enabled": true,
-    "tools": ["bash", "write", "edit"],
+    {{- /*
+      "read" is here only so pathRules can see the read tool: a path rule is
+      inert unless its surface is inspected. Reads of any other path therefore
+      reach the ask gate and cost a Jev request each.
+    */}}
+    "tools": ["bash", "write", "edit", "read"],
+    {{- /*
+      A deny path rule blocks before the judge runs, so a hit costs nothing.
+      tools ["*"] reaches both the file tools and shell commands; access
+      "none" means any touch, and on the command surface a mere mention counts.
+    */}}
+    "pathRules": [
+      {
+        "id": "good-luck-no-read",
+        "paths": ["~/Library/Mobile Documents/com~apple~CloudDocs/good-luck.txt", "**/good-luck.txt"],
+        "access": "none",
+        "tools": ["*"],
+        "action": "block",
+        "onlyIfExists": false,
+        "message": "good-luck.txt is off-limits by user policy — do not read, grep, copy, or touch it; ask the user."
+      }
+    ],
     "ask": { "enabled": true },
     "floor": "level",
     "traceSample": 0,
@@ -54,7 +57,7 @@
     "skip": [".scratch/**", "docs/agents/**", "CONTEXT-MAP.md"],
     "threshold": 0.7,
     "softThreshold": 0.5,
-    "auditExtensions": ["md", "css", "html", "json"]
+    "auditExtensions": ["md", "css", "html", "json", "ts", "tsx", "js", "mjs", "yaml", "toml", "sh"]
   },
   "rulesAtTurnStart": {
     "enabled": true

@@ -30,6 +30,7 @@ GLOSSARY-MAP.md
 .pi/agent/npm/
 .pi/agent/git/
 .pi/cache/
+.pi/mcp.json
 
 # Runtime state (target side) — written by the herdr integration into an
 # extensions dir that has no Source counterpart.

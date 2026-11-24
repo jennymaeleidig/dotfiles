@@ -11,3 +11,5 @@ __pycache__/
 *.pyc
 # pi runtime state when pi runs with its cwd inside this repo
 .pi/
+# Playwright MCP snapshot/screenshot output when a server runs with cwd in this repo
+.playwright-mcp/

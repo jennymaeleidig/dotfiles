@@ -66,6 +66,43 @@ JS/TS launch order: project `@effect/tsgo` when the nearest TypeScript is 7+, th
 `tsc --lsp` (TypeScript 7+), then `typescript-language-server`. The first two need project
 trust and never install anything.
 
+### Owner-managed launchers
+
+A project-local `node_modules/.bin` wins before PATH, so a runtime manager on PATH does not own
+a server by itself. Make the manager the launcher with a machine-config override. The id,
+extensions, and root markers stay; the override replaces the whole argv, its server arguments
+included:
+
+```jsonc
+{
+  "lsp": {
+    "serverOverrides": {
+      "toml": { "command": ["mise", "exec", "--", "taplo", "lsp", "stdio"] },
+      "marksman": { "command": ["mise", "exec", "--", "marksman", "server"] }
+    }
+  }
+}
+```
+
+The manager reads its project config from the server's cwd (the project root). The override
+bypasses pi-lens's discovery order entirely: the project's `node_modules/.bin`, `PATH` (except
+for `mise` itself), and the pi-lens managed install are not fallbacks. Mise precedence:
+
+1. nearest repo `mise.toml` / `mise.local.toml`
+2. global `~/.config/mise/config.toml`
+3. system mise config
+4. inherited `PATH` for a command mise does not manage
+
+Only overridden ids take this path; every other id keeps the discovery order above. Built-in
+ids and args: `toml` (`lsp stdio`), `marksman` (`server`), `bash` (`start`), and
+`yaml`/`json`/`css`/`html` (`--stdio`). Do not override `typescript`: the JS/TS strategy above
+chooses its launcher, and an override removes that choice.
+
+Put these in `~/.pi-lens/config.json`; a project override is only for a repo whose launcher or
+args differ from the machine default. Duplicating the machine default buys nothing: a trusted
+duplicate restates the machine value, and in an untrusted repo its launcher fields are dropped
+while the machine override still runs.
+
 ## Read the selected state
 
 | Question | Surface |
@@ -97,11 +134,12 @@ Read the outcome line, not the finding count:
 | `failed` | the server started but the check failed |
 | `too_large` | the file exceeds the host's per-file query limit; the server never saw it |
 
-A finding tagged with a dispatch runner (`[shellcheck]`, `[biome]`, `[tsc]`) is not LSP
-attribution.
+A finding tagged with a dispatch runner (`[shellcheck]`, `[biome]`) is not LSP attribution. A
+project `tsc --lsp` is an LSP launcher, so its findings are attribution even when tagged `[tsc]`.
 
 ## Restart rules
 
 A running server keeps its root and initialization options. After adding or changing a root
-marker, a custom server, or `initializationOptions`, restart the pi session before re-probing.
-Idle servers are evicted after 20 minutes without edits (60 seconds when the workspace is ephemeral), which is the only in-session reset.
+marker, a custom server, a `command` override, or `initializationOptions`, restart the pi
+session before re-probing. Idle servers are evicted after 20 minutes without edits (60 seconds
+when the workspace is ephemeral), which is the only in-session reset.

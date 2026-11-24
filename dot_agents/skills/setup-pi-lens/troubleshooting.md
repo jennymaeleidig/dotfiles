@@ -22,11 +22,11 @@ Diagnose before editing config. Each symptom below has one likely cause; confirm
   `tsconfig.json`, or an uninstalled dependency all produce zero diagnostics rather than
   a loud failure.
 - **Trust.** Project-supplied `command`, `args`, `extensions`, `rootMarkers`, `env`,
-  `initializationOptions`, `covers`, `enabled`, and `role` need project trust. On a custom
-  server entry they are refused and the entry is disabled; on a built-in override they are
-  dropped and the global value still runs. Mark the project trusted and restart.
-- **Stale server.** Configuration changes apply to the next server launch. Idle eviction is
-  the only in-session reset; otherwise restart the session.
+  `initializationOptions`, `covers`, `enabled`, and `role` need trust. Refused custom entries
+  are disabled; refused override fields are dropped and the global value runs. Mark the
+  project trusted and restart.
+- **Stale server.** Configuration changes apply to the next server launch; restart the session
+  (see [hosts/pi-lens.md](hosts/pi-lens.md#restart-rules)).
 
 ## The finding is noise
 
@@ -42,8 +42,9 @@ Diagnose before editing config. Each symptom below has one likely cause; confirm
 - **Shell.** `bash-language-server` refuses the zsh dialect. `.zsh` belongs to `shuck`;
   without it zsh is `unsupported` for LSP, though the shellcheck runner may still lint it. A
   `.sh` file with a zsh shebang follows the same rule.
-- **TypeScript 7.** A project `tsc --lsp` or `@effect/tsgo` replaces `typescript-language-server`.
-  If navigation and diagnostics disagree, confirm which launch won in `/lens-health`.
+- **TypeScript 7.** A project `tsc --lsp` or `@effect/tsgo` replaces
+  `typescript-language-server`. If navigation and diagnostics disagree, confirm the launch
+  winner in `/lens-health`.
 - **Python.** pyright launches from the project's virtualenv, not the one running the host.
   A missing `.venv` silently falls back to the managed install.
 - **Rust, Elixir, Nix, C#, Swift, and every server marked `trust` in

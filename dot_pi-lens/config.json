@@ -26,5 +26,16 @@
     "compactWidget": true,
     "compactLspStatus": true,
     "issuesStatus": true
+  },
+  "lsp": {
+    "serverOverrides": {
+      "toml": { "command": ["mise", "exec", "--", "taplo", "lsp", "stdio"] },
+      "marksman": { "command": ["mise", "exec", "--", "marksman", "server"] },
+      "yaml": { "command": ["mise", "exec", "--", "yaml-language-server", "--stdio"] },
+      "bash": { "command": ["mise", "exec", "--", "bash-language-server", "start"] },
+      "json": { "command": ["mise", "exec", "--", "vscode-json-language-server", "--stdio"] },
+      "css": { "command": ["mise", "exec", "--", "vscode-css-language-server", "--stdio"] },
+      "html": { "command": ["mise", "exec", "--", "vscode-html-language-server", "--stdio"] }
+    }
   }
 }

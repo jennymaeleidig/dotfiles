@@ -114,9 +114,14 @@ if OS.mac?
   cask "nikitabobko/tap/aerospace", trusted: true
   cask "beeper"
   cask "betterdisplay"
+  cask "bitwarden"
   cask "calibre"
   cask "font-commit-mono-nerd-font"
   cask "ghostty"
+  # Chrome for Testing has no cask, and puppeteer's stable channel — what
+  # dot_pi/agent/mcp.json's chrome-devtools server launches — resolves only
+  # /Applications/Google Chrome.app, so the stable channel comes from here.
+  cask "google-chrome"
   cask "grandperspective"
   cask "jdownloader"
   cask "karabiner-elements"
@@ -132,6 +137,7 @@ if OS.mac?
   # App plus CLI; see the platform note at the top of this file.
   cask "tailscale-app"
   cask "visual-studio-code"
+  cask "vlc"
   cask "vorssaint"
   cask "zen"
   cask "zotero"

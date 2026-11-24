@@ -9,7 +9,9 @@ without project trust.
 
 The host registry is the authority on ids, extensions, and root markers; this table is the
 working snapshot. A language absent here but present in the registry is supported — add a row.
-A language absent from both is `unsupported`.
+A language absent from both is `unsupported`. The Install column names the default owner only;
+an `lsp.serverOverrides` launcher can move any row to a runtime manager (see
+[hosts/pi-lens.md](hosts/pi-lens.md)).
 
 | Language | Extensions | id | Binary / package | Root markers | Install | Notes |
 | --- | --- | --- | --- | --- | --- | --- |

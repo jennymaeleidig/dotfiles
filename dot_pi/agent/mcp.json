@@ -26,7 +26,11 @@
     "arxiv": {
       "enabled": false,
       "command": "uvx",
-      "args": ["--from", "arxiv-mcp-server[pro,pdf]", "arxiv-mcp-server"],
+      "args": [
+        "--from",
+        "arxiv-mcp-server[pro,pdf]",
+        "arxiv-mcp-server"
+      ],
       "exposure": "codemode",
       "timeout": 120,
       "description": "arXiv literature work: search, original-LaTeX section reads, paper outlines, BibTeX from arXiv metadata, citation graphs, and topic watches; papers stay cached on disk."
@@ -61,7 +65,7 @@
       ],
       "exposure": "codemode",
       "timeout": 120,
-      "description": "Kagi search and research through the user's subscription: web search, quick answers, summarize (pass subscriber:true), news feeds, smallweb, translate, and assistant reads."
+      "description": "Kagi search and research through the user's subscription: web search, quick answers, URL/text summarize, news feeds, smallweb, translate, and assistant reads. `kagi_summarize` takes `subscriber: true`."
     },
     "playwright": {
       "enabled": false,
@@ -70,13 +74,25 @@
         "-y",
         "@playwright/mcp",
         "--browser",
-        "chromium",
+        "chrome",
         "--caps",
         "pdf,vision",
         "--allow-unrestricted-file-access"
       ],
       "exposure": "codemode",
-      "description": "Drive a local Chromium to load the built site, click through pages, take screenshots, and print PDFs."
+      "description": "Drive the installed Chrome to load the built site, click through pages, take screenshots, and print PDFs."
+    },
+    "chrome-devtools": {
+      "enabled": false,
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--no-usage-statistics"
+      ],
+      "exposure": "codemode",
+      "timeout": 120,
+      "description": "Drive a local Chrome through the DevTools protocol: inspect pages, read console and network traffic, record performance traces, emulate devices, and take screenshots."
     }
   }
 }
