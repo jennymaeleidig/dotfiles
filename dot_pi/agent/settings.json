@@ -66,6 +66,19 @@
         "apiType": "omlx",
         "models": [
           {
+            "id": "Inkling-2-Mini-oQ4e-mtp",
+            "name": "code-new",
+            "contextWindow": 1048576,
+            "maxTokens": 32768,
+            "reasoning": false,
+            "input": [
+              "text",
+              "image"
+            ],
+            "loaded": false,
+            "sizeBytes": 17689868022
+          },
+          {
             "id": "GLM-OCR-4bit",
             "name": "ocr",
             "contextWindow": 131072,
@@ -188,7 +201,10 @@
   },
   "enabledModels": [
     "opencode-go/deepseek-v4.1-flash",
-    "opencode-go/glm-5.3"
+    "opencode-go/glm-5.3",
+    "localllm-omlx/Inkling-2-Mini-oQ4e-mtp",
+    "localllm-omlx/Ornith-1.5-35B-A3B-OptiQ-4bit",
+    "localllm-omlx/Qwen3.8-27B-4bit"
   ],
   "defaultProvider": "opencode-go",
   "defaultModel": "deepseek-v4.1-flash",
