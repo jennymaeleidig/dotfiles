@@ -40,7 +40,10 @@ pi() {
   if [ "$online" = 1 ]; then
     [ "$fell_back" = 1 ] && printf 'pi: local model unavailable at {{ .chat.local.host }} — starting full remote\n' >&2
     # pi-warden: swap the judgment backend for sessions launched from here on.
-    [ -f "$HOME/.pi/agent/pi-warden/config.online.json" ] && cp "$HOME/.pi/agent/pi-warden/config.online.json" "$HOME/.pi/agent/pi-warden/config.json"
+    # `command cp -f`: an interactive shell aliases cp to `cp -iv`, and the alias
+    # is expanded into this body at definition time — it would prompt and default
+    # to "no", leaving the judge unswitched.
+    [ -f "$HOME/.pi/agent/pi-warden/config.online.json" ] && command cp -f "$HOME/.pi/agent/pi-warden/config.online.json" "$HOME/.pi/agent/pi-warden/config.json"
     local -a inject=()
     [ "$has_model" = 0 ] && inject+=(--model {{ .chat.remote.model }})
     [ "$has_provider" = 0 ] && inject+=(--provider {{ .chat.remote.provider }})
@@ -56,6 +59,6 @@ pi() {
     return
   fi
   # Local: restore the local judge config an online launch may have left behind.
-  [ -f "$HOME/.pi/agent/pi-warden/config.local.json" ] && cp "$HOME/.pi/agent/pi-warden/config.local.json" "$HOME/.pi/agent/pi-warden/config.json"
+  [ -f "$HOME/.pi/agent/pi-warden/config.local.json" ] && command cp -f "$HOME/.pi/agent/pi-warden/config.local.json" "$HOME/.pi/agent/pi-warden/config.json"
   command pi "${args[@]}"
 }
