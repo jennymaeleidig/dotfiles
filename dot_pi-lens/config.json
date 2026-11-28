@@ -17,6 +17,15 @@
     },
     "lens_diagnostic_mark": {
       "enabled": false
+    },
+    "module_report": {
+      "enabled": false
+    },
+    "symbol_search": {
+      "enabled": false
+    },
+    "read_enclosing": {
+      "enabled": false
     }
   },
   "widget": {
@@ -29,13 +38,70 @@
   },
   "lsp": {
     "serverOverrides": {
-      "toml": { "command": ["mise", "exec", "--", "taplo", "lsp", "stdio"] },
-      "marksman": { "command": ["mise", "exec", "--", "marksman", "server"] },
-      "yaml": { "command": ["mise", "exec", "--", "yaml-language-server", "--stdio"] },
-      "bash": { "command": ["mise", "exec", "--", "bash-language-server", "start"] },
-      "json": { "command": ["mise", "exec", "--", "vscode-json-language-server", "--stdio"] },
-      "css": { "command": ["mise", "exec", "--", "vscode-css-language-server", "--stdio"] },
-      "html": { "command": ["mise", "exec", "--", "vscode-html-language-server", "--stdio"] }
+      "toml": {
+        "command": [
+          "mise",
+          "exec",
+          "--",
+          "taplo",
+          "lsp",
+          "stdio"
+        ]
+      },
+      "marksman": {
+        "command": [
+          "mise",
+          "exec",
+          "--",
+          "marksman",
+          "server"
+        ]
+      },
+      "yaml": {
+        "command": [
+          "mise",
+          "exec",
+          "--",
+          "yaml-language-server",
+          "--stdio"
+        ]
+      },
+      "bash": {
+        "command": [
+          "mise",
+          "exec",
+          "--",
+          "bash-language-server",
+          "start"
+        ]
+      },
+      "json": {
+        "command": [
+          "mise",
+          "exec",
+          "--",
+          "vscode-json-language-server",
+          "--stdio"
+        ]
+      },
+      "css": {
+        "command": [
+          "mise",
+          "exec",
+          "--",
+          "vscode-css-language-server",
+          "--stdio"
+        ]
+      },
+      "html": {
+        "command": [
+          "mise",
+          "exec",
+          "--",
+          "vscode-html-language-server",
+          "--stdio"
+        ]
+      }
     }
   }
 }

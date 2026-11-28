@@ -41,7 +41,8 @@
     "npm:pi-context-view",
     "npm:@zigai/pi-tree",
     "git:github.com/jennymaeleidig/pi-lens-status",
-    "npm:pi-lens"
+    "npm:pi-lens",
+    "npm:@getpipher/vision"
   ],
   "quietStartup": true,
   "showHardwareCursor": true,
@@ -201,9 +202,7 @@
   "enabledModels": [
     "opencode-go/deepseek-v4.1-flash",
     "opencode-go/glm-5.3",
-    "localllm-omlx/Inkling-2-Mini-MLX-8bit",
-    "localllm-omlx/Ornith-1.5-35B-A3B-OptiQ-4bit",
-    "localllm-omlx/Qwen3.8-27B-4bit"
+    "localllm-omlx/Inkling-2-Mini-MLX-8bit"
   ],
   "defaultProvider": "localllm-omlx",
   "defaultModel": "Inkling-2-Mini-MLX-8bit",
