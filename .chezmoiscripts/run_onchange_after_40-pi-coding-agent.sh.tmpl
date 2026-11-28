@@ -8,10 +8,9 @@ PI_VERSION="1.4.0"
 
 # Neither brew's bin nor mise's shims are guaranteed here, for the reason given
 # in run_onchange_after_30-setup-mise-tools.sh.tmpl.
-case "$(uname -s)" in
-Darwin) eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || true)" ;;
-Linux) eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv 2>/dev/null || true)" ;;
-esac
+# shellcheck disable=SC1091
+. "{{ .chezmoi.sourceDir }}/packages/script-env.sh"
+brew_env
 
 # pnpm 12 refuses `add -g` unless its global bin directory is already on PATH,
 # and it derives that directory from PNPM_HOME. Mirror dot_bashrc's value so the

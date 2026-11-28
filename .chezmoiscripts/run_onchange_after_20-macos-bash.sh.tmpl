@@ -39,10 +39,9 @@ if [ "$LISTED" -eq 1 ] && [ "$CURRENT_SHELL" = "$BREW_BASH" ]; then
 fi
 
 # An unattended apply must never hang on a sudo prompt.
-if ! sudo -n true 2>/dev/null; then
-	echo "==> sudo needs a password: run 'sudo -v', then re-run chezmoi apply" >&2
-	exit 1
-fi
+# shellcheck disable=SC1091
+. "{{ .chezmoi.sourceDir }}/packages/script-env.sh"
+require_uncached_sudo
 
 # chsh refuses a shell that is not listed here, whatever the user database says.
 if [ "$LISTED" -eq 0 ]; then

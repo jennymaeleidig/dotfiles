@@ -9,10 +9,9 @@ if ! command -v apt-get >/dev/null 2>&1; then
 	exit 0
 fi
 
-if ! sudo -n true 2>/dev/null; then
-	echo "==> sudo needs a password: run 'sudo -v', then re-run chezmoi apply" >&2
-	exit 1
-fi
+# shellcheck disable=SC1091
+. "{{ .chezmoi.sourceDir }}/packages/script-env.sh"
+require_uncached_sudo
 
 apt() { sudo env DEBIAN_FRONTEND=noninteractive apt-get "$@"; }
 

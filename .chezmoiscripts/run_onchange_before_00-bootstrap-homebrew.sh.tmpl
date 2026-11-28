@@ -7,14 +7,10 @@ set -euo pipefail
 # Both hosts install Homebrew here, so 10-brew-bundle can assume the prefix it
 # resolves. The Command Line Tools that the macOS installer needs come from
 # 05-macos-prerequisites, which runs before this script.
-case "$(uname -s)" in
-Darwin) BREW=/opt/homebrew/bin/brew ;;
-Linux) BREW=/home/linuxbrew/.linuxbrew/bin/brew ;;
-*)
-	echo "==> unsupported host: $(uname -s)" >&2
-	exit 1
-	;;
-esac
+# shellcheck disable=SC1091
+. "{{ .chezmoi.sourceDir }}/packages/script-env.sh"
+
+BREW="$(brew_prefix)/bin/brew"
 
 if [ -x "$BREW" ]; then
 	echo "==> Homebrew already present"
@@ -22,10 +18,7 @@ if [ -x "$BREW" ]; then
 fi
 
 # An unattended apply must never hang on a sudo prompt.
-if ! sudo -n true 2>/dev/null; then
-	echo "==> sudo needs a password: run 'sudo -v', then re-run chezmoi apply" >&2
-	exit 1
-fi
+require_uncached_sudo
 
 if [ "$(uname -s)" = Darwin ]; then
 	# NONINTERACTIVE=1 skips the RETURN prompt and the analytics question, so this

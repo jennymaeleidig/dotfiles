@@ -9,10 +9,10 @@ set -euo pipefail
 # A script inherits no environment from the ones before it: `eval`ing shellenv
 # inside 00-bootstrap does nothing here. Resolve brew by path, then put it on
 # PATH, before anything tests for it.
-case "$(uname -s)" in
-Darwin) BREW=/opt/homebrew/bin/brew ;;
-Linux) BREW=/home/linuxbrew/.linuxbrew/bin/brew ;;
-esac
+# shellcheck disable=SC1091
+. "{{ .chezmoi.sourceDir }}/packages/script-env.sh"
+
+BREW="$(brew_prefix)/bin/brew"
 
 if [ ! -x "$BREW" ]; then
 	echo "==> $BREW not found; 00-bootstrap did not complete — aborting the apply" >&2

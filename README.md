@@ -61,7 +61,8 @@ gh auth setup-git
   (`xattr -dr com.apple.quarantine /Applications/qBittorrent.app`). Do not
   disable Gatekeeper itself. `transmission` is the cask that still installs.
 - `mkdir -p ~/.secrets && ${EDITOR:-nano} ~/.secrets/systemone.env` with
-  `OPENCODE_API_KEY` from https://opencode.ai/console; pi's `opencode` provider
+  `OPENCODE_API_KEY` from https://opencode.ai/console; pi's `opencode-go`
+  provider (the remote chat model in `.chezmoidata.toml`'s `[chat.remote]`)
   and pi-warden's judge endpoint both read it.
 - `pi` signs in and materializes its packages.
 - Start `herdr` once, then `chezmoi apply` again to link the vendored plugins.

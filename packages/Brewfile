@@ -36,6 +36,10 @@ if OS.mac?
   # repository that does not exist. This is the remote the tap is already on.
   tap "jundot/omlx", "https://github.com/jundot/omlx"
   tap "nikitabobko/tap"
+  # Sideloadly has no homebrew/cask cask. This tap wraps the official
+  # sideloadly.io DMG with `version :latest`, so it tracks upstream's releases
+  # without a pinned checksum.
+  tap "playcover/playcover", "https://github.com/PlayCover/homebrew-playcover"
 end
 
 # --- CLI utilities: same package on both platforms ---------------------------
@@ -112,10 +116,10 @@ if OS.mac?
   # looking orphaned, so cleanup scheduled the tap for untapping and then failed
   # loading the cask whose source it was removing.
   cask "nikitabobko/tap/aerospace", trusted: true
-  cask "beeper"
   cask "betterdisplay"
   cask "bitwarden"
   cask "calibre"
+  cask "discord"
   cask "font-commit-mono-nerd-font"
   cask "ghostty"
   # Chrome for Testing has no cask, and puppeteer's stable channel — what
@@ -132,6 +136,7 @@ if OS.mac?
   # qBittorrent variant on 2026-09-01 because the app does not pass the macOS
   # Gatekeeper check. Install it from qbittorrent.org instead; see README.
   cask "raycast"
+  cask "playcover/playcover/sideloadly", trusted: true
   cask "steam"
   cask "superwhisper"
   # App plus CLI; see the platform note at the top of this file.

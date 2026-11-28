@@ -3,4 +3,7 @@
 # Optional flags follow the name. Classic confinement is declared per snap by
 # its publisher, so the script passes flags through rather than assuming them.
 # Verify a name with: snap find <name>
+# Linux twin of the Brewfile's `cask "ghostty"`; the CLI wrapper
+# (dot_local/bin/executable_ghostty) routes to this snap. macOS counterparts of
+# the snaps in this file live in packages/Brewfile, mostly as casks.
 ghostty --classic

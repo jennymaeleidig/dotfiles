@@ -7,10 +7,9 @@ set -euo pipefail
 # process that launched chezmoi. On the Mac that already has brew's bin, so bare
 # `mise` resolves by accident. On a fresh Linux guest it never does, because
 # 00-bootstrap evals shellenv inside itself and nowhere else.
-case "$(uname -s)" in
-Darwin) eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || true)" ;;
-Linux) eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv 2>/dev/null || true)" ;;
-esac
+# shellcheck disable=SC1091
+. "{{ .chezmoi.sourceDir }}/packages/script-env.sh"
+brew_env
 
 # This must run in the after_ phase: it reads ~/.config/mise/config.toml, which
 # chezmoi writes during the target-state pass. As a plain run_onchange_ its target
