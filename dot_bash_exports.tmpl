@@ -92,8 +92,8 @@ export PI_HERDR_LAUNCH_PREFIX="bash -c 'set -a; [ -f \"\$HOME/.secrets/systemone
 #                       pi-typesafe still requires a nonempty key to consider
 #                       the provider usable, so the variable must exist.
 #
-# The remote chat models are a separate credential: `pi --online` (the shell
-# wrapper below) and `/online` (the host-toggle extension) use pi's
+# The remote chat models are a separate credential: `pi --online` (the launch
+# wrapper in ~/.config/bash/pi-launch.sh) and `/online` (the host-toggle extension) use pi's
 # `opencode-go` provider, which reads:
 #
 #   OPENCODE_API_KEY     pi's `opencode-go` provider (deepseek-v4.1-flash,
@@ -111,41 +111,15 @@ set -a
 
 # pi launches local by default: the oMLX server at localhost:8000 serves the
 # main model, and the judge block above serves the classifier. `pi --online`
-# swaps the launch-time default to the remote OpenCode gateway; inside a
-# session, `/online` and `/offline` (host-toggle extension) do the same swap.
-# Everything else — settings, subagent inheritance, tinysubagent config — is
-# shared: only the model hosting default moves.
-#
-# `--online` is rewritten, not passed through: it injects the remote default
-# only for the flags the caller didn't choose, so `pi --online --model glm-5.3`
-# keeps glm-5.3. A bare launch falls back to the remote model when the oMLX
-# server is unreachable (a down server only fails at the first message
-# otherwise); an explicit --model/--provider skips the probe: the caller has
-# already chosen.
-pi() {
-  local online=0 has_model=0 has_provider=0
-  local a
-  local -a args=()
-  for a in "$@"; do
-    case "$a" in
-      --online) online=1 ;;
-      --model|--model=*) has_model=1; args+=("$a") ;;
-      --provider|--provider=*) has_provider=1; args+=("$a") ;;
-      *) args+=("$a") ;;
-    esac
-  done
-  if [ "$online" = 1 ]; then
-    local -a inject=()
-    [ "$has_model" = 0 ] && inject+=(--model deepseek-v4.1-flash)
-    [ "$has_provider" = 0 ] && inject+=(--provider opencode-go)
-    command pi "${inject[@]}" "${args[@]}"
-    return
-  fi
-  if [ "$has_model" = 0 ] && [ "$has_provider" = 0 ] && ! curl -fsS --max-time 2 http://localhost:8000/v1/models >/dev/null 2>&1; then
-    printf 'pi: oMLX unreachable at localhost:8000 — starting with the remote model\n' >&2
-    command pi --provider opencode-go --model deepseek-v4.1-flash "${args[@]}"
-    return
-  fi
-  command pi "${args[@]}"
-}
+# goes full remote: the chat model from [chat.remote] and the judge from
+# [judge.online] (tinysubagent via PI_TINYSUBAGENT_CONFIG, pi-warden via a
+# config swap — per-launch, since both read their config once at load). Inside
+# a session, `/online` and `/offline` (host-toggle extension) switch only the
+# chat model; the judge stays as launched until the next `pi`. Everything else
+# — settings, subagent inheritance, tinysubagent config — is shared: only the
+# model hosting default moves. The routing function itself lives in
+# ~/.config/bash/pi-launch.sh (rendered from .chezmoidata.toml's
+# [chat.local]/[chat.remote] tables, same as host-toggle) so this file stays
+# declarative exports.
+. "$HOME/.config/bash/pi-launch.sh"
 set +a

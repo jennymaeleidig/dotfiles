@@ -1,0 +1,85 @@
+{{- /* The full pi-warden config body, parameterized on $judge so the local
+       and online mode variants render the same policy with different
+       judgment backends. Included from config.json.tmpl (local default),
+       config.local.json.tmpl, and config.online.json.tmpl. */ -}}
+{{- $judge := .judge -}}
+{{- $registry := list "typesafe" "openrouter" "commandcode" "liquid" "subq" "nace" -}}
+{{- $endpoint := not (has $judge.backend $registry) -}}
+{
+  "typesafe": true,
+  "typesafeBackend": {{ if $endpoint }}{{ dict "label" $judge.label "host" $judge.host "path" $judge.path "keyEnv" $judge.keyEnv "defaultModel" $judge.model | toJson }}{{ else }}"{{ $judge.backend }}"{{ end }},
+  "mode": "confirm",
+  {{- if false -}}
+    FUTURE WORK — one thing deliberately not on yet, a user-file-only key.
+
+    1. action.floor = "evidence" (the upstream default). Built-in pattern hits
+       become evidence strings for Jev instead of level-setters, so nothing is
+       deterministic: rm -rf / over a dangerous target, git reset --hard, and
+       printenv $TOKEN ride as floorHits and only hold when Jev scores
+       irreversible >= 0.9 (0.5..0.9 warns). Calibrated to drop false holds at
+       the cost of the mechanical floor. Today we run "level"; switching is a
+       one-line change here and nothing else.
+
+    Everything in this block is skipped by `if false` and renders nothing into
+    config.json; it lives here so the next change is a paste, not a decision.
+  {{- end }}
+  "action": {
+    "enabled": true,
+    {{- /*
+      "read" is here only so pathRules can see the read tool: a path rule is
+      inert unless its surface is inspected. Reads of any other path therefore
+      reach the ask gate and cost a Jev request each.
+    */}}
+    "tools": ["bash", "write", "edit", "read"],
+    {{- /*
+      A deny path rule blocks before the judge runs, so a hit costs nothing.
+      tools ["*"] reaches both the file tools and shell commands; access
+      "none" means any touch, and on the command surface a mere mention counts.
+    */}}
+    "pathRules": [
+      {
+        "id": "good-luck-no-read",
+        "paths": ["~/Library/Mobile Documents/com~apple~CloudDocs/good-luck.txt", "**/good-luck.txt"],
+        "access": "none",
+        "tools": ["*"],
+        "action": "block",
+        "onlyIfExists": false,
+        "message": "good-luck.txt is off-limits by user policy — do not read, grep, copy, or touch it; ask the user."
+      }
+    ],
+    "ask": { "enabled": true },
+    "floor": "level",
+    "traceSample": 0,
+    "feedbackLog": false
+  },
+  "rules": {
+    "enabled": true,
+    "files": [
+      "{{ .chezmoi.homeDir }}/.pi/agent/pi-warden/rules/global.md",
+      "warden-local-rules.md"
+    ],
+    "fallback": false,
+    "skip": [".scratch/**", "docs/agents/**", "CONTEXT-MAP.md"],
+    "threshold": 0.7,
+    "softThreshold": 0.5,
+    "auditExtensions": ["md", "css", "html", "json", "ts", "tsx", "js", "mjs", "yaml", "toml", "sh"]
+  },
+  "rulesAtTurnStart": {
+    "enabled": true
+  },
+  "stuck": { "enabled": false },
+  "done": { "enabled": true, "nudge": true },
+  "cause": { "enabled": false },
+  "slop": { "enabled": true, "prose": { "enabled": false } },
+  "security": { "enabled": true },
+  "context": { "enabled": false, "largeOutput": { "enabled": false }, "filter": { "enabled": false } },
+  "runaway": { "enabled": false },
+  "subagent": { "enabled": false },
+  "conscience": { "enabled": false },
+  "prefs": { "enabled": false },
+  "waste": { "enabled": false },
+  "notify": { "enabled": false },
+  "compaction": { "enabled": false },
+  "widget": { "enabled": false },
+  "trial": { "silentHalf": false }
+}

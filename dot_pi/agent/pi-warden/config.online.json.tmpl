@@ -1,0 +1,2 @@
+{{- /* The online-mode warden config: the judgment backend from [judge.online], so `pi --online` judges remotely too. The wrapper copies this over config.json on an online launch; a running session keeps its own load-time snapshot, so the swap never affects live sessions. */ -}}
+{{ includeTemplate "pi-warden-config.json" (dict "judge" .judge.online "chezmoi" .chezmoi) }}

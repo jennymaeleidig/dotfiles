@@ -29,3 +29,44 @@ label = "oMLX"
 host = "http://localhost:8000"
 path = "/v1/systemone"
 keyEnv = "OMLX_SYSTEMONE_KEY"
+
+# One chat-model pair per hosting mode, the same way [judge] above is one
+# classifier: `pi --online` and the `/online`-`/offline` host-toggle extension
+# render from these tables, so the wrapper and the extension cannot drift apart.
+# settings.json's `defaultProvider`/`defaultModel` must stay in sync with
+# [chat.local] — they pick the launch-time default when no wrapper intervenes.
+#
+# `provider` names the pi provider; `model` the model string it registers;
+# `host` the origin a reachability probe can use; `label` what the toggle
+# prints. Keys come from the unmanaged ~/.secrets/systemone.env (OPENCODE_API_KEY).
+[chat.local]
+provider = "localllm-omlx"
+model = "Inkling-2-Mini-MLX-8bit"
+host = "http://localhost:8000"
+label = "local oMLX code"
+
+[chat.remote]
+provider = "opencode-go"
+model = "deepseek-v4.1-flash"
+label = "remote OpenCode deepseek-v4.1-flash"
+
+# The online-mode judge: `pi --online` (and the bare-launch fallback when
+# oMLX is unreachable) go full remote — chat models from [chat.remote] above
+# and this judge for tinysubagent routing (tinysubagent.online.jsonc via
+# PI_TINYSUBAGENT_CONFIG) and pi-warden (config.online.json, copied over
+# config.json by the wrapper; a running session keeps its load-time snapshot,
+# so the swap never affects sessions already judging locally).
+#
+# Same shape as [judge]: `provider` is the pi provider (pi ships
+# `opencode/jev-1.13` as a classifier, keyed by OPENCODE_API_KEY);
+# `backend` is a name outside pi-typesafe's registry, so every consumer gets
+# an endpoint object. Billing is per input token ($0.042/M); `jev-1.13-free`
+# is the zero-cost variant of the same model.
+[judge.online]
+provider = "opencode"
+backend = "opencode-online"
+model = "jev-1.13"
+label = "OpenCode"
+host = "https://opencode.ai"
+path = "/inference/systemone/v1/systemone"
+keyEnv = "OPENCODE_API_KEY"

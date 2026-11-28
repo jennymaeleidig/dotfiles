@@ -2,8 +2,8 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 /**
  * Runtime host toggle: `/offline` and `/online` switch the session's model
- * between the local oMLX server (pi-localllm-provider's `localllm-omlx`) and
- * the remote OpenCode gateway, mirroring what the `pi` / `pi --online` shell
+ * between the local oMLX server (pi-localllm-provider's `localllm-omlx`) and the
+ * remote OpenCode gateway, mirroring what the `pi` / `pi --online` shell
  * wrappers pick at launch. The change applies to this session only — new
  * sessions use `defaultProvider`/`defaultModel` from settings.json — and
  * subagents spawned afterwards inherit it, since tinysubagent reads the
@@ -12,18 +12,23 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
  * The judge (`classifierModel`, pi-warden) is NOT switched: tinysubagent and
  * pi-warden read their classifier config once at load, so a mid-session
  * switch there requires a restart.
+ *
+ * Rendered from `.chezmoidata.toml`'s `[chat.local]`/`[chat.remote]` tables —
+ * the same tables the `pi --online` launch wrapper (dot_config/bash/
+ * pi-launch.sh) renders from — so the runtime toggle and the launch wrapper
+ * cannot drift apart.
  */
 
 const HOSTS = {
   offline: {
-    provider: "localllm-omlx",
-    model: "Inkling-2-Mini-MLX-8bit",
-    label: "local oMLX code",
+    provider: "{{ .chat.local.provider }}",
+    model: "{{ .chat.local.model }}",
+    label: "{{ .chat.local.label }}",
   },
   online: {
-    provider: "opencode-go",
-    model: "deepseek-v4.1-flash",
-    label: "remote OpenCode deepseek-v4.1-flash",
+    provider: "{{ .chat.remote.provider }}",
+    model: "{{ .chat.remote.model }}",
+    label: "{{ .chat.remote.label }}",
   },
 } as const;
 

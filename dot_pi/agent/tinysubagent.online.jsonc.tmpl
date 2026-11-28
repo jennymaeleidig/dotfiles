@@ -1,0 +1,4 @@
+{{- /* tinysubagent profile-routing classifier for online launches. The wrapper exports PI_TINYSUBAGENT_CONFIG pointing here on `pi --online`, because tinysubagent reads its config once at extension load. */ -}}
+{
+  "classifierModel": "{{ .judge.online.provider }}/{{ .judge.online.model }}"
+}
