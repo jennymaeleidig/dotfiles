@@ -48,14 +48,13 @@ label = "local oMLX code"
 [chat.remote]
 provider = "opencode-go"
 model = "deepseek-v4.1-flash"
+host = "https://opencode.ai"
 label = "remote OpenCode deepseek-v4.1-flash"
 
-# The online-mode judge: `pi --online` (and the bare-launch fallback when
-# oMLX is unreachable) go full remote — chat models from [chat.remote] above
-# and this judge for tinysubagent routing (tinysubagent.online.jsonc via
-# PI_TINYSUBAGENT_CONFIG) and pi-warden (config.online.json, copied over
-# config.json by the wrapper; a running session keeps its load-time snapshot,
-# so the swap never affects sessions already judging locally).
+# The online-mode judge: `pi --online` (and the bare-launch fallback) goes
+# full remote — chat models from [chat.remote] above and this judge. How the
+# mode reaches tinysubagent and pi-warden, which both read their config once
+# at load, is dot_pi/docs/adr/0001-per-launch-judge-mode.md.
 #
 # Same shape as [judge]: `provider` is the pi provider (pi ships
 # `opencode/jev-1.13` as a classifier, keyed by OPENCODE_API_KEY);

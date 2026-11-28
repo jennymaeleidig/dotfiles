@@ -1,0 +1,14 @@
+{{- /* Seed pi-warden's active config when missing. config.json is owned by the
+       pi launch wrapper (mode-dependent copy of config.local.json or
+       config.online.json); this script only converges a fresh machine or a
+       deleted file to the local default. See
+       dot_pi/docs/adr/0001-per-launch-judge-mode.md. */ -}}
+#!/bin/sh
+
+set -eu
+
+warden_dir="{{ .chezmoi.homeDir }}/.pi/agent/pi-warden"
+
+if [ ! -f "$warden_dir/config.json" ] && [ -f "$warden_dir/config.local.json" ]; then
+	cp "$warden_dir/config.local.json" "$warden_dir/config.json"
+fi

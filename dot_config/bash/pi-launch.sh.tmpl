@@ -1,7 +1,7 @@
-# pi launch routing, in its own file so dot_bash_exports stays declarative.
-# Sourced from ~/.bash_exports (a shell function, not a bin script: PNPM's bin
-# is prepended after ~/.local/bin in dot_bashrc, so a script there would be
-# shadowed by the real pi, while a function overrides PATH lookup outright).
+# pi launch routing. Sourced from ~/.bash_exports as a shell function, not a
+# bin script: PNPM's bin is prepended after ~/.local/bin in dot_bashrc, so a
+# script there would be shadowed by the real pi, while a function overrides
+# PATH lookup outright.
 #
 # Rendered from .chezmoidata.toml's [chat.local]/[chat.remote] tables, so the
 # shell and the data cannot drift apart.
@@ -9,16 +9,14 @@
 # `--online` is rewritten, not passed through: it injects the remote default
 # only for the flags the caller didn't choose, so `pi --online --model glm-5.3`
 # keeps glm-5.3. A bare launch falls back to full remote when the local server
-# is unreachable (a down server only fails at the first message otherwise); an
+# is unreachable or its catalog no longer serves the default model; an
 # explicit --model/--provider skips the probe: the caller has already chosen.
 #
-# Both remote paths are full remote: the chat model from [chat.remote] and the
-# judge stack from [judge.online]. tinysubagent reads its classifier config once
-# at extension load, so the switch is a PI_TINYSUBAGENT_CONFIG export; pi-warden
-# reads config.json once per session and never adopts a later file change, so
-# the switch is a config swap that cannot affect sessions already running —
-# they keep judging the way they launched. A local launch swaps the local
-# config back, so the file always reflects the most recent launch.
+# Both modes are complete: the chat model from [chat.local]/[chat.remote] and
+# the judge stack from [judge]/[judge.online]. Both judge consumers read their
+# config once at load, so the mode is per-launch and owned here — how
+# tinysubagent and pi-warden are switched, and why that is safe, is
+# dot_pi/docs/adr/0001-per-launch-judge-mode.md.
 pi() {
   local online=0 has_model=0 has_provider=0 fell_back=0
   local a
@@ -31,29 +29,33 @@ pi() {
       *) args+=("$a") ;;
     esac
   done
-  if [ "$online" = 0 ] && [ "$has_model" = 0 ] && [ "$has_provider" = 0 ] && ! curl -fsS --max-time 2 {{ .chat.local.host }}/v1/models >/dev/null 2>&1; then
+  # Reachable is not served: the probe requires the default model's id in the
+  # server's catalog, not just a listening port.
+  if [ "$online" = 0 ] && [ "$has_model" = 0 ] && [ "$has_provider" = 0 ] \
+    && ! curl -fsS --max-time 2 {{ .chat.local.host }}/v1/models/status 2>/dev/null \
+      | grep -q '"id":"{{ .chat.local.model }}"'; then
     online=1
     fell_back=1
   fi
   if [ "$online" = 1 ]; then
-    [ "$fell_back" = 1 ] && printf 'pi: local server unreachable at {{ .chat.local.host }} — starting full remote\n' >&2
-    # tinysubagent: point this launch's classifier routing at the online judge,
-    # unless the caller already chose a config. A later local launch in the
-    # same shell unsets exactly this value, never one the caller set.
-    if [ -z "${PI_TINYSUBAGENT_CONFIG:-}" ] && [ -f "$HOME/.pi/agent/tinysubagent.online.jsonc" ]; then
-      export PI_TINYSUBAGENT_CONFIG="$HOME/.pi/agent/tinysubagent.online.jsonc"
-    fi
+    [ "$fell_back" = 1 ] && printf 'pi: local model unavailable at {{ .chat.local.host }} — starting full remote\n' >&2
     # pi-warden: swap the judgment backend for sessions launched from here on.
     [ -f "$HOME/.pi/agent/pi-warden/config.online.json" ] && cp "$HOME/.pi/agent/pi-warden/config.online.json" "$HOME/.pi/agent/pi-warden/config.json"
     local -a inject=()
     [ "$has_model" = 0 ] && inject+=(--model {{ .chat.remote.model }})
     [ "$has_provider" = 0 ] && inject+=(--provider {{ .chat.remote.provider }})
-    command pi "${inject[@]}" "${args[@]}"
+    # tinysubagent: point this launch at the online judge, unless the caller
+    # already chose a config. A prefix assignment, not an export, so the
+    # variable never outlives this command.
+    if [ -z "${PI_TINYSUBAGENT_CONFIG:-}" ] && [ -f "$HOME/.pi/agent/tinysubagent.online.jsonc" ]; then
+      PI_TINYSUBAGENT_CONFIG="$HOME/.pi/agent/tinysubagent.online.jsonc" \
+        command pi "${inject[@]}" "${args[@]}"
+    else
+      command pi "${inject[@]}" "${args[@]}"
+    fi
     return
   fi
-  # Local: restore the local judge config an online launch may have left behind
-  # and clear our own tinysubagent override.
-  [ "${PI_TINYSUBAGENT_CONFIG:-}" = "$HOME/.pi/agent/tinysubagent.online.jsonc" ] && unset PI_TINYSUBAGENT_CONFIG
+  # Local: restore the local judge config an online launch may have left behind.
   [ -f "$HOME/.pi/agent/pi-warden/config.local.json" ] && cp "$HOME/.pi/agent/pi-warden/config.local.json" "$HOME/.pi/agent/pi-warden/config.json"
   command pi "${args[@]}"
 }

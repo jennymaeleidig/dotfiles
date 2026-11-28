@@ -1,2 +1,2 @@
-{{- /* The online-mode warden config: the judgment backend from [judge.online], so `pi --online` judges remotely too. The wrapper copies this over config.json on an online launch; a running session keeps its own load-time snapshot, so the swap never affects live sessions. */ -}}
+{{- /* The online-mode warden config: the judgment backend from [judge.online]. The wrapper copies this over config.json on an online launch — per-launch semantics, and why that is safe, are dot_pi/docs/adr/0001-per-launch-judge-mode.md. */ -}}
 {{ includeTemplate "pi-warden-config.tmpl" (dict "judge" .judge.online "chezmoi" .chezmoi) }}

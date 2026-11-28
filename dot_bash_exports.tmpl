@@ -118,8 +118,7 @@ set -a
 # remote; the judge stays as launched until the next `pi`. Everything else
 # — settings, subagent inheritance, tinysubagent config — is shared: only the
 # model hosting default moves. The routing function itself lives in
-# ~/.config/bash/pi-launch.sh (rendered from .chezmoidata.toml's
-# [chat.local]/[chat.remote] tables) so this file stays
-# declarative exports.
+# ~/.config/bash/pi-launch.sh, rendered from .chezmoidata.toml's
+# [chat.local]/[chat.remote] tables.
 . "$HOME/.config/bash/pi-launch.sh"
 set +a
