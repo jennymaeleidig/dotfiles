@@ -1,2 +1,2 @@
 {{- /* The local-mode warden config: the default judgment backend from [judge]. Same body as config.json.tmpl. */ -}}
-{{ includeTemplate "pi-warden-config.json" (dict "judge" .judge "chezmoi" .chezmoi) }}
+{{ includeTemplate "pi-warden-config.tmpl" (dict "judge" .judge "chezmoi" .chezmoi) }}

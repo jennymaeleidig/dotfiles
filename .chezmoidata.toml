@@ -31,8 +31,8 @@ path = "/v1/systemone"
 keyEnv = "OMLX_SYSTEMONE_KEY"
 
 # One chat-model pair per hosting mode, the same way [judge] above is one
-# classifier: `pi --online` and the `/online`-`/offline` host-toggle extension
-# render from these tables, so the wrapper and the extension cannot drift apart.
+# classifier: the `pi` / `pi --online` wrapper renders from these tables, so
+# the shell and the data cannot drift apart.
 # settings.json's `defaultProvider`/`defaultModel` must stay in sync with
 # [chat.local] — they pick the launch-time default when no wrapper intervenes.
 #

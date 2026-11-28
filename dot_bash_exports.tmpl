@@ -93,8 +93,8 @@ export PI_HERDR_LAUNCH_PREFIX="bash -c 'set -a; [ -f \"\$HOME/.secrets/systemone
 #                       the provider usable, so the variable must exist.
 #
 # The remote chat models are a separate credential: `pi --online` (the launch
-# wrapper in ~/.config/bash/pi-launch.sh) and `/online` (the host-toggle extension) use pi's
-# `opencode-go` provider, which reads:
+# wrapper in ~/.config/bash/pi-launch.sh) uses pi's `opencode-go` provider,
+# which reads:
 #
 #   OPENCODE_API_KEY     pi's `opencode-go` provider (deepseek-v4.1-flash,
 #                       glm-5.3). Get it from https://opencode.ai/console and
@@ -114,12 +114,12 @@ set -a
 # goes full remote: the chat model from [chat.remote] and the judge from
 # [judge.online] (tinysubagent via PI_TINYSUBAGENT_CONFIG, pi-warden via a
 # config swap — per-launch, since both read their config once at load). Inside
-# a session, `/online` and `/offline` (host-toggle extension) switch only the
-# chat model; the judge stays as launched until the next `pi`. Everything else
+# a session, Ctrl+P still cycles the enabledModels chat models, both local and
+# remote; the judge stays as launched until the next `pi`. Everything else
 # — settings, subagent inheritance, tinysubagent config — is shared: only the
 # model hosting default moves. The routing function itself lives in
 # ~/.config/bash/pi-launch.sh (rendered from .chezmoidata.toml's
-# [chat.local]/[chat.remote] tables, same as host-toggle) so this file stays
+# [chat.local]/[chat.remote] tables) so this file stays
 # declarative exports.
 . "$HOME/.config/bash/pi-launch.sh"
 set +a

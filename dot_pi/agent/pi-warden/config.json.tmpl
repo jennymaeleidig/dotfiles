@@ -1,2 +1,2 @@
 {{- /* The active warden config chezmoi materializes: the local judge from [judge]. The wrapper may overwrite this with config.online.json for an online launch; a bare local launch copies config.local.json back. */ -}}
-{{ includeTemplate "pi-warden-config.json" (dict "judge" .judge "chezmoi" .chezmoi) }}
+{{ includeTemplate "pi-warden-config.tmpl" (dict "judge" .judge "chezmoi" .chezmoi) }}

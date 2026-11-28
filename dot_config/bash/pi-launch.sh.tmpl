@@ -3,9 +3,8 @@
 # is prepended after ~/.local/bin in dot_bashrc, so a script there would be
 # shadowed by the real pi, while a function overrides PATH lookup outright).
 #
-# Rendered from .chezmoidata.toml's [chat.local]/[chat.remote] tables — the
-# same tables the /online and /offline host-toggle extension renders from — so
-# the wrapper and the extension cannot drift apart.
+# Rendered from .chezmoidata.toml's [chat.local]/[chat.remote] tables, so the
+# shell and the data cannot drift apart.
 #
 # `--online` is rewritten, not passed through: it injects the remote default
 # only for the flags the caller didn't choose, so `pi --online --model glm-5.3`
