@@ -116,26 +116,32 @@ set -a
 # Everything else — settings, subagent inheritance, tinysubagent config — is
 # shared: only the model hosting default moves.
 #
-# `--online` is rewritten, not passed through, and a bare launch falls back
-# to the remote model when the oMLX server is unreachable (a down server only
-# fails at the first message otherwise). An explicit --model/--provider skips
-# the probe: the caller has already chosen.
+# `--online` is rewritten, not passed through: it injects the remote default
+# only for the flags the caller didn't choose, so `pi --online --model glm-5.3`
+# keeps glm-5.3. A bare launch falls back to the remote model when the oMLX
+# server is unreachable (a down server only fails at the first message
+# otherwise); an explicit --model/--provider skips the probe: the caller has
+# already chosen.
 pi() {
-  local online=0 has_model=0
+  local online=0 has_model=0 has_provider=0
   local a
   local -a args=()
   for a in "$@"; do
     case "$a" in
       --online) online=1 ;;
-      --model|--provider) has_model=1; args+=("$a") ;;
+      --model|--model=*) has_model=1; args+=("$a") ;;
+      --provider|--provider=*) has_provider=1; args+=("$a") ;;
       *) args+=("$a") ;;
     esac
   done
   if [ "$online" = 1 ]; then
-    command pi --provider opencode-go --model deepseek-v4.1-flash "${args[@]}"
+    local -a inject=()
+    [ "$has_model" = 0 ] && inject+=(--model deepseek-v4.1-flash)
+    [ "$has_provider" = 0 ] && inject+=(--provider opencode-go)
+    command pi "${inject[@]}" "${args[@]}"
     return
   fi
-  if [ "$has_model" = 0 ] && ! curl -fsS --max-time 2 http://localhost:8000/v1/models >/dev/null 2>&1; then
+  if [ "$has_model" = 0 ] && [ "$has_provider" = 0 ] && ! curl -fsS --max-time 2 http://localhost:8000/v1/models >/dev/null 2>&1; then
     printf 'pi: oMLX unreachable at localhost:8000 — starting with the remote model\n' >&2
     command pi --provider opencode-go --model deepseek-v4.1-flash "${args[@]}"
     return
