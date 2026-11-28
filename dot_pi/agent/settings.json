@@ -78,8 +78,8 @@
             "sizeBytes": 1309551538
           },
           {
-            "id": "Inkling-2-Mini-oQ4e-mtp",
-            "name": "code-new",
+            "id": "Inkling-2-Mini-MLX-8bit",
+            "name": "code",
             "contextWindow": 1048576,
             "maxTokens": 32768,
             "reasoning": false,
@@ -201,12 +201,12 @@
   "enabledModels": [
     "opencode-go/deepseek-v4.1-flash",
     "opencode-go/glm-5.3",
-    "localllm-omlx/Inkling-2-Mini-oQ4e-mtp",
+    "localllm-omlx/Inkling-2-Mini-MLX-8bit",
     "localllm-omlx/Ornith-1.5-35B-A3B-OptiQ-4bit",
     "localllm-omlx/Qwen3.8-27B-4bit"
   ],
   "defaultProvider": "localllm-omlx",
-  "defaultModel": "gemma-4-26B-A4B-it-qat-4bit",
+  "defaultModel": "Inkling-2-Mini-MLX-8bit",
   "extensionChangelogVersions": {
     "{\"source\":\"npm:pi-extmgr\",\"scope\":\"user\"}": "0.4.2",
     "{\"source\":\"npm:pi-workspace-history\",\"scope\":\"user\"}": "0.5.3",
