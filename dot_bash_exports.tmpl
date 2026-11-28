@@ -79,25 +79,67 @@ export INCISE_PROFILE=auto
 # `direnv exec {cwd} bash -c '...' --` (`{cwd}` is substituted by tinysubagent).
 export PI_HERDR_LAUNCH_PREFIX="bash -c 'set -a; [ -f \"\$HOME/.secrets/systemone.env\" ] && . \"\$HOME/.secrets/systemone.env\"; set +a; exec \"\$@\"' --"
 
-# pi judges, one credential for every consumer. Today the judge is OpenCode's
-# Jev, `POST https://opencode.ai/inference/systemone/v1/systemone`, model
-# `jev-1.13`, set once in .chezmoidata.toml. pi ships
-# `opencode/jev-1.13` as a classifier model, and pi-warden reaches the same
-# host through an endpoint object.
+# pi judges plus model hosting. The judge defaults to the local oMLX System One
+# endpoint, `POST http://localhost:8000/v1/systemone`, model `decision` (the
+# d3-nano-oQ8e alias), set once in .chezmoidata.toml. `typesafe` is the pi
+# provider whose classifier dispatch speaks the System One protocol, so the
+# judge-classifier extension re-registers it against the oMLX origin; pi-warden
+# reaches the same endpoint through an endpoint object.
 #
-#   OPENCODE_API_KEY  pi's `opencode` provider (tinysubagent's `classifierModel`
-#                     for profile routing and the child report check) and
-#                     pi-warden's judgment endpoint. Get it from
-#                     https://opencode.ai/console and put it in the unmanaged
-#                     systemone.env below; no file means no export.
+#   OMLX_SYSTEMONE_KEY  oMLX's `auth.api_key`, from the unmanaged
+#                       ~/.secrets/systemone.env below; no file means no
+#                       export. oMLX serves /v1/systemone without auth, but
+#                       pi-typesafe still requires a nonempty key to consider
+#                       the provider usable, so the variable must exist.
 #
-# A local System One endpoint exports its own `keyEnv` here instead (the oMLX
-# path used `OMLX_SYSTEMONE_KEY`, oMLX's `auth.api_key`); the key names in
-# .chezmoidata.toml and this file must match. That variable must not be
-# TYPESAFE_API_KEY: pi-typesafe refuses an endpoint object that names the TypeSafe
-# key, which only ever goes to api.typesafe.ai.
+# The remote chat models are a separate credential: `pi --online` (the shell
+# wrapper below) and `/online` (the host-toggle extension) use pi's
+# `opencode-go` provider, which reads:
+#
+#   OPENCODE_API_KEY     pi's `opencode-go` provider (deepseek-v4.1-flash,
+#                       glm-5.3). Get it from https://opencode.ai/console and
+#                       put it in the unmanaged systemone.env below; no file
+#                       means no export.
+#
+# The key names in .chezmoidata.toml and this file must match. A judge key
+# must never be TYPESAFE_API_KEY: pi-typesafe refuses an endpoint object that
+# names the TypeSafe key, which only ever goes to api.typesafe.ai.
 #
 # `set -a` exports them so extensions and child panes read them from process.env.
 set -a
 [ -f "$HOME/.secrets/systemone.env" ] && . "$HOME/.secrets/systemone.env"
+
+# pi launches local by default: the oMLX server at localhost:8000 serves the
+# main model, and the judge block above serves the classifier. `pi --online`
+# swaps the launch-time default to the remote OpenCode gateway; inside a
+# session, `/online` and `/offline` (host-toggle extension) do the same swap.
+# Everything else — settings, subagent inheritance, tinysubagent config — is
+# shared: only the model hosting default moves.
+#
+# `--online` is rewritten, not passed through, and a bare launch falls back
+# to the remote model when the oMLX server is unreachable (a down server only
+# fails at the first message otherwise). An explicit --model/--provider skips
+# the probe: the caller has already chosen.
+pi() {
+  local online=0 has_model=0
+  local a
+  local -a args=()
+  for a in "$@"; do
+    case "$a" in
+      --online) online=1 ;;
+      --model|--provider) has_model=1; args+=("$a") ;;
+      *) args+=("$a") ;;
+    esac
+  done
+  if [ "$online" = 1 ]; then
+    command pi --provider opencode-go --model deepseek-v4.1-flash "${args[@]}"
+    return
+  fi
+  if [ "$has_model" = 0 ] && ! curl -fsS --max-time 2 http://localhost:8000/v1/models >/dev/null 2>&1; then
+    printf 'pi: oMLX unreachable at localhost:8000 — starting with the remote model\n' >&2
+    command pi --provider opencode-go --model deepseek-v4.1-flash "${args[@]}"
+    return
+  fi
+  command pi "${args[@]}"
+}
 set +a

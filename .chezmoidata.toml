@@ -8,30 +8,24 @@
 # names what pi-warden talks to: a registry backend, or anything else, which
 # renders an endpoint object from `label`/`host`/`path`/`keyEnv`/`model`.
 #
-# The other judge this repo has run is TypeSafe's hosted Jev:
-# `provider = "typesafe"`, `backend = "typesafe"`, `model = "jev-latest"`,
-# `host = "https://api.typesafe.ai"`, key `TYPESAFE_API_KEY` from the unmanaged
-# ~/.secrets/systemone.env.
+# The judge defaults to the local oMLX System One endpoint: `provider` stays
+# "typesafe" (the pi provider whose classifier dispatch speaks the System One
+# protocol), `backend` is "omlx", a name outside the registry, so every
+# consumer gets an endpoint object, and the judge-classifier extension
+# re-registers the `typesafe` provider against the oMLX origin.
 #
-# Any other System One endpoint changes only this block: set `backend` to a name
-# outside the registry, fill `label`/`host`/`path`/`keyEnv`, and keep `provider`
-# at the pi provider whose classifier dispatch speaks the endpoint's protocol.
-# `host` is the origin only, and `path` is the System One route on that origin.
-# `keyEnv` must name a variable other than TYPESAFE_API_KEY when `backend` is an
-# endpoint: pi-typesafe refuses an endpoint object whose keyEnv is
-# TYPESAFE_API_KEY, because that key is only ever sent to api.typesafe.ai. Any
-# nonempty value satisfies it. The variable itself is exported from
-# ~/.secrets/systemone.env.
-#
-# The judge is OpenCode's paid Jev: pi ships `opencode/jev-1.13` as a
-# classifier model, and pi-warden gets the same model through an endpoint object
-# because pi-typesafe has no `opencode` registry backend. Billing is per input
-# token ($0.042/M); `jev-1.13-free` is the zero-cost variant of the same model.
+# The other judges this repo has run are OpenCode's hosted Jev:
+# `provider = "opencode"`, `backend = "opencode"`, `model = "jev-1.13"`,
+# `host = "https://opencode.ai"`, `path = "/inference/systemone/v1/systemone"`,
+# key `OPENCODE_API_KEY`; and TypeSafe's hosted Jev: `provider = "typesafe"`,
+# `backend = "typesafe"`, `model = "jev-latest"`,
+# `host = "https://api.typesafe.ai"`, key `TYPESAFE_API_KEY`, both from the
+# unmanaged ~/.secrets/systemone.env.
 [judge]
-provider = "opencode"
-backend = "opencode"
-model = "jev-1.13"
-label = "OpenCode"
-host = "https://opencode.ai"
-path = "/inference/systemone/v1/systemone"
-keyEnv = "OPENCODE_API_KEY"
+provider = "typesafe"
+backend = "omlx"
+model = "decision"
+label = "oMLX"
+host = "http://localhost:8000"
+path = "/v1/systemone"
+keyEnv = "OMLX_SYSTEMONE_KEY"
