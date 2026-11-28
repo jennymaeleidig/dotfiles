@@ -5,7 +5,12 @@ background-opacity = 0.75
 background-blur = true
 
 # Font
-font-family = "CommitMonoNF"
+# Family name, not PostScript name: Ghostty matches families only, so
+# "CommitMonoNF" is not found and silently falls back to JetBrains Mono.
+font-family = "CommitMono Nerd Font Mono"
+# Fallback for codepoints CommitMono lacks (U+29C9 ⧉, U+21E1 ⇡), named so
+# fallback selection is deterministic rather than CoreText's search order.
+font-family = "STIX Two Math"
 font-size = 14
 
 # Quick terminal (ctrl+`): centered, unanimated. Defaults are top / 0.2s.
