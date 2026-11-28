@@ -17,8 +17,8 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 const HOSTS = {
   offline: {
     provider: "localllm-omlx",
-    model: "Inkling-2-Mini-oQ4e-mtp",
-    label: "local oMLX code-new",
+    model: "gemma-4-26B-A4B-it-qat-4bit",
+    label: "local oMLX prose-fast",
   },
   online: {
     provider: "opencode-go",
